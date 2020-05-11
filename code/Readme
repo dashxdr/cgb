@@ -1,0 +1,40 @@
+------- Monday May 11, 2020  -------
+
+1998 to 2001 or so I was working at Left Field Productions in Westlake Village,
+California doing color gameboy programming. I was co-developer on:
+
+Kobe Bryant 3 on 3
+Beauty And The Beast: A Boardgame Adventure
+
+I was sole developer on:
+Little Mermaid II Pinball Frenzy
+Thrillride Pinball
+
+There was some interest in archiving source and data for these ancient gaming
+machines so I dug it out and got it all to build on a modern recent linux
+OS (I use ubuntu 18.04 LTS).
+
+You'd just do
+
+make
+
+in this directory and hopefully everything will build.
+The emulator I wrote is in the mgb/ directory and it uses SDL 1.x. If you do
+
+make play
+
+in this directory after a successful build it should launch the emulator with
+the merm.gb image.
+
+
+The keyboard keys are tuned for the pinball game.
+
+Left + Right shift are flippers
+A is start
+Arrow keys do something
+Z does something (push the table right)
+/ does something (push the table left)
+space does something (push the table up)
+
+The emulator was used for development, it's much more convenient than an
+actual color gameboy.
