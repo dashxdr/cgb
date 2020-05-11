@@ -637,7 +637,7 @@ int main(int argc,char **argv) {
 		if(j) {printf("error in file %s\n",name);exit(2);}
 		striptail(name);
 		fixboard(name,count);
-surfacetopcx("/ram/out.pcx",&collision);
+surfacetopcx("/tmp/out.pcx",&collision);
 		if(!count)
 		{
 			lastxsize=boardgfx.xsize;
@@ -691,7 +691,7 @@ for(i=0;i<64;++i)
 	fixboard(BASENAME,0);
 	initcolors();
 
-surfacetopcx("/ram/out.pcx",&collision);
+surfacetopcx("/tmp/out.pcx",&collision);
 
 
 
