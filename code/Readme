@@ -38,3 +38,23 @@ space does something (push the table up)
 
 The emulator was used for development, it's much more convenient than an
 actual color gameboy.
+
+
+
+********* LITTLE MERMAID II PINBALL FRENZY *********
+
+There was a USA version that included 5 languages, and a Japanese version
+that had just english and japanese languages. The US version had a rumble pack
+but didn't support the gameboy printer. The Japanese version had no
+rumble pack but it did support the gameboy printer.
+
+The source copy I have is closer to the Japanese version and the build
+result merm.gb doesn't byte for byte match the released USA version, which
+is readily available on rom download sites. I spent some time trying to
+get the output to match but it's hopeless. I should have archived the code
+associated with the final USA release so I could always rebuild it... but
+oh well.
+
+The gameplay is the same. Some of the artwork changed between the two versions
+and the font data changed and there is the rumble/printer difference already
+mentioned.
