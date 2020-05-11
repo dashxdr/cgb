@@ -561,7 +561,7 @@ int xsize,ysize;
 unsigned char *p1,*p2;
 char tname[128];
 
-	sprintf(tname,"/ram/%s",name);
+	sprintf(tname,"/tmp/%s",name);
 	p2=p1=boardgfx.pic;
 	xsize=boardgfx.xsize;
 	ysize=boardgfx.ysize;
