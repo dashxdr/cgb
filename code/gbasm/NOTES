@@ -1,0 +1,38 @@
+The SET directive is now ESET. SET is the Z80 bit instruction.
+
+Macro invokactions can't have a label, it won't be seen by the assembler.
+
+SECTION directive just takes one argument, the bank #, as in
+	section 5
+There is no way to name a section, nor any need to.
+
+BSS directive takes one argument, it specifies where the data is to begin.
+	bss	$a000
+wTest:	ds 2
+...
+The RSSET and RB stuff shouldn't be used as the symbols won't appear in the
+MAP file for symbolic debugging. BSS applies to the entire file, and there
+is no mixing of non bss and bss. There is no distinction for BBRam area and
+other ram or high ram, the symbols all appear in the MAP file.
+
+LOW(label)
+HIGH(label)
+BANK(label)
+need to be used instead of
+255&label
+255&(label>>8)
+
+The LOW,HIGH and BANK apply only to a label, not an expression. Trying to
+do LOW(variable+1) won't work. There may be some confusion if the label
+inside is an EQUS variable...either way it won't work.
+
+The EQU, ESET and EQUS directives will break a group of local variables:
+Routine:
+ nop
+ nop
+.loop: ld a,e
+TIMER EQU 5
+ jr .loop  <-  generates error, unknown symbol.
+
+gblink outputs a gameboy ready .gb file, no need to fix the checksum or rom
+sizes. Unused rom space is filled with $FF bytes.

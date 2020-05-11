@@ -1,0 +1,82 @@
+#!/bin/bash
+rm -f *.map *.chr *.rgb *.equ swd/* *.trg
+rm -f *.dm? *.ch? *.pn?
+rm -f *.pmp *.chg
+
+. ../tools
+
+#for zzz in *.pcx; do
+# $XSGMB @bg.cmd $zzz
+#done
+
+#for  zzz in *.map ; do
+# $MAKEBG $zzz
+#done
+
+for zzz in *.spr; do
+ $XSGMB @cut.cmd $zzz
+done
+
+#for zzz in *.prj; do
+#  tumerd $zzz
+#done
+
+./resmaps
+
+$XSGMB @bgnomap.cmd digits.pcx
+$GBSWD -d *.chr *.map # *.dm? *.bg
+
+./conv \
+	flips000.pcx flips001.pcx flips002.pcx flips003.pcx flips004.pcx \
+	flips005.pcx flips006.pcx flips007.pcx flips008.pcx flips009.pcx \
+	flips010.pcx flips011.pcx flips012.pcx flips013.pcx flips014.pcx \
+	flips015.pcx flips016.pcx flips017.pcx flips018.pcx \
+	flips019.pcx flips020.pcx flips021.pcx flips022.pcx flips023.pcx \
+	flips024.pcx flips025.pcx flips026.pcx flips027.pcx flips028.pcx \
+	flips029.pcx flips030.pcx flips031.pcx flips032.pcx flips033.pcx \
+	-n l2.pcx \
+	-n subdet000.pcx subdet001.pcx subdet002.pcx subdet003.pcx \
+	subdet004.pcx subdet005.pcx subdet006.pcx subdet007.pcx \
+	subdet008.pcx subdet009.pcx subdet010.pcx subdet011.pcx \
+	subdet012.pcx subdet013.pcx subdet014.pcx subdet015.pcx subdet016.pcx \
+	subdet017.pcx subdet018.pcx subdet019.pcx subdet020.pcx \
+	subdet021.pcx subdet022.pcx subdet023.pcx subdet024.pcx \
+	subdet025.pcx subdet026.pcx subdet027.pcx subdet028.pcx \
+	subdet029.pcx subdet030.pcx subdet031.pcx \
+	-n oldsub.pcx \
+	icedet000.pcx icedet001.pcx icedet002.pcx icedet003.pcx icedet004.pcx \
+	icedet005.pcx icedet006.pcx icedet007.pcx icedet008.pcx icedet009.pcx \
+	icedet010.pcx icedet011.pcx icedet012.pcx icedet013.pcx icedet014.pcx \
+	icedet015.pcx icedet016.pcx \
+	scdet000.pcx scdet001.pcx scdet002.pcx scdet003.pcx scdet004.pcx \
+	scdet005.pcx scdet006.pcx scdet007.pcx scdet008.pcx scdet009.pcx \
+	scdet010.pcx scdet011.pcx \
+	shpdet000.pcx \
+	ksdet000.pcx ksdet001.pcx ksdet002.pcx ksdet003.pcx \
+	detchst.pcx \
+	udet000.pcx \
+	-n shrk000.pcx shrk001.pcx shrk002.pcx shrk003.pcx shrk004.pcx \
+	shrk005.pcx shrk006.pcx shrk007.pcx shrk008.pcx shrk009.pcx \
+	shrk010.pcx shrk011.pcx shrk012.pcx shrk013.pcx shrk014.pcx \
+	shrk015.pcx shrk016.pcx shrk017.pcx shrk018.pcx shrk019.pcx \
+	shrk020.pcx shrk021.pcx shrk022.pcx shrk023.pcx shrk024.pcx \
+	shrk025.pcx shrk026.pcx shrk027.pcx \
+	-n two000.pcx two001.pcx two002.pcx two003.pcx two004.pcx \
+	two005.pcx two006.pcx two007.pcx two008.pcx two009.pcx \
+	two010.pcx two011.pcx two012.pcx two013.pcx two014.pcx \
+	two015.pcx two016.pcx two017.pcx two018.pcx two019.pcx \
+	two020.pcx two021.pcx two022.pcx two023.pcx two024.pcx \
+	two025.pcx two026.pcx two027.pcx two028.pcx \
+	-n ramp2.pcx \
+	-n detfld000.pcx detfld001.pcx detfld002.pcx detfld003.pcx detfld004.pcx \
+	-n fltdt000.pcx fltdt001.pcx fltdt002.pcx \
+	-n ray000.pcx ray001.pcx ray002.pcx \
+	-n dshdet000.pcx dshdet001.pcx dshdet002.pcx dshdet003.pcx \
+	-n bear000.pcx bear001.pcx bear002.pcx bear003.pcx bear004.pcx \
+	bear005.pcx bear006.pcx bear007.pcx bear008.pcx bear009.pcx \
+	bear010.pcx bear011.pcx bear012.pcx bear013.pcx bear014.pcx \
+	bear015.pcx bear016.pcx bear017.pcx bear018.pcx bear019.pcx \
+	bear020.pcx bear021.pcx bear022.pcx bear023.pcx bear024.pcx \
+	bear025.pcx bear026.pcx bear027.pcx
+
+$GBSWD -d *.pmp

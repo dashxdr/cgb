@@ -1,0 +1,22 @@
+__DA__ 20200510
+
+Not sure how the files in this directory are used. The maketext tool is
+used elsewhere though.
+
+The issue is mainly for Japanese text. There are only a small number of
+all the glyphs that have been drawn, specifically those needed for the
+messages that appear in the game. The Japanese translators provide Japanese
+text and then this has to get mapped to glyphs that exist in the game. If
+they use any characters that don't exist we need to find out before the
+game goes to production.
+
+So we have the japanese.u16 file which is a list of known good glyphs that
+can be used since their artwork exists. Any text that tries to use a
+character that isn't available must generate an error.
+
+In the case of producing the all.b2b which is the US/Euro version with 5
+languages there are no missing glyphs. Producing the fullengl2.txt reports
+missing characters.
+
+I'm not sure if these files are even used though. The maketext tool is the
+primary export, I think.

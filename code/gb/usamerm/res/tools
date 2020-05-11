@@ -1,0 +1,7 @@
+#!/bin/bash
+export XSGMB=../../../../john/xsgmb/xsgmb
+export MAKEBG=../../../../util/makebg
+export GBSWD=../../../../util/gbswd
+export MAKEPKG=../../../../john/makepkg/makepkg
+export GMBFNT=../../../../john/gmbfnt/gmbfnt
+export MAKETEXT=../../../../john/maketext/maketext

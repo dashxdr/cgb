@@ -1,0 +1,5 @@
+rm filesys.asm filesys.b??
+gather filesys.lst 0c:4000
+rm sprites.b??
+gmbspr2 -a04:4400 sprites @sprites.lst
+animrgb sprites.lst

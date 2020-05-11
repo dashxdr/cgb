@@ -1,0 +1,159 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** SOUND.EQU                                                      MODULE **
+; **                                                                       **
+; ** Sound Driver And Music Data.                                          **
+; **                                                                       **
+; ** Last modified : 31 Oct 1998 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+
+FX_FLIPPER	EQU	64
+FX_BUMPER	EQU	63
+FX_SCOOPIN	EQU	62
+FX_SCOOPOUT	EQU	68
+FX_BALLFIRE	EQU	66
+FX_KICKBACK	EQU	66
+FX_AWARDLIT	EQU	59
+FX_DROP		EQU	07
+FX_SPINNER	EQU	12
+FX_MULTP1	EQU	65
+FX_BALLLOCKED	EQU	61
+FX_LIT		EQU	58
+FX_MULTIBALL	EQU	65
+FX_JACKPOT	EQU	42
+FX_SUPERJACK	EQU	56
+FX_COMBO1	EQU	20
+FX_COMBO2	EQU	72
+FX_COMBO3	EQU	73
+FX_COMBO4	EQU	74
+FX_RAMP1	EQU	60
+FX_RAMP2	EQU	70
+FX_RAMP4	EQU	71
+FX_LOSTBALL	EQU	69
+FX_BALLSAVED	EQU	27
+FX_SEALIT	EQU	58
+FX_LOCKOPEN	EQU	58
+FX_LIGHTON	EQU	75
+FX_LOSETABLE	EQU	69
+FX_TABLEADVANCE	EQU	58
+FX_BEAR_BREAK	EQU	63
+FX_BEAR_RELEASE	EQU	58
+FX_SUPERPOP	EQU	07
+
+FX_BEASTHIT	EQU	18 ;morgana/ursula getting hit
+FX_BEASTCRUSH	EQU	19 ;morgana/ursula losing a tentacle
+FX_BALLZAP	EQU	05 ;ball getting hit by lightning bolt
+
+FX_SOULHIT	EQU	08
+FX_SOULSAVE	EQU	50
+
+FX_SECONDBALL	EQU	60
+
+FX_SCUTTLEHIT	EQU	08
+FX_SCUTTLEGET	EQU	58
+
+FX_SHIPHIT	EQU	08
+FX_SHIPSAVE	EQU	58
+
+FX_FLOUNDERHIT	EQU	08
+FX_FLOUNDEREYE	EQU	60
+
+FX_FLOTSAMHIT	EQU	08
+
+FX_KISSHIT	EQU	08
+FX_KISSACTIVE	EQU	50
+
+FX_CLOAKHIT	EQU	08
+
+FX_ICEHIT	EQU	08
+FX_ICEGONE	EQU	19
+
+FX_VOLCHIT	EQU	08
+FX_VOLCSAVE	EQU	58
+
+FX_TRIDENTHIT	EQU	08
+FX_TRIDENTACTIVE EQU	50
+
+FX_TREASHIT	EQU	08
+FX_TREASOPEN	EQU	58
+FX_TREASSHARK	EQU	05
+
+FX_PRISONHIT	EQU	08
+
+FX_DASHGET	EQU	58
+
+FX_BONUS	EQU	59
+
+FX_EXTRABALL	EQU	44 ;50
+
+FX_ILLEGAL	EQU	49
+FX_MOVEBEEP	EQU	57
+FX_SELBEEP	EQU	58
+FX_BACKBEEP	EQU	48
+FX_SUBLIT	EQU	44
+
+SONG_TABLE1	EQU	21
+SONG_CAVE	EQU	06
+SONG_SCUTTLE	EQU	07
+SONG_SHIP	EQU	11
+SONG_FLOUNDER	EQU	03
+SONG_FLOTSAM	EQU	15
+SONG_KISS	EQU	09
+SONG_URSULA	EQU	17
+SONG_TREASURE	EQU	10
+SONG_TABLE2	EQU	02
+SONG_ICECAVE	EQU	05
+SONG_VOLCANO	EQU	18
+SONG_TRIDENT	EQU	08
+SONG_PRISON	EQU	19
+SONG_DASH	EQU	12
+SONG_MORGANA	EQU	16
+SONG_BEAR	EQU	04
+SONG_CLOAK	EQU	13
+
+SONG_HAPPY1	EQU	09
+SONG_HAPPY2	EQU	08
+
+SONG_HIGHSCORE	EQU	20
+SONG_MENUS	EQU	01
+SONG_OPENING	EQU	01
+SONG_CREDITS	EQU	14
+
+SAMPLE_MULTIBALL	EQU	1
+
+		GLOBAL	KillAllSoundB1
+		GLOBAL	KillTuneB1
+		GLOBAL	KillSfxB1
+		GLOBAL	InitTuneB1
+		GLOBAL	InitSfxB1
+
+		GLOBAL	KillAllSoundB2
+		GLOBAL	KillTuneB2
+		GLOBAL	KillSfxB2
+		GLOBAL	InitTuneB2
+		GLOBAL	InitSfxB2
+
+		GLOBAL	KillAllSound
+		GLOBAL	KillTune
+		GLOBAL	KillSfx
+		GLOBAL	InitTune
+		GLOBAL	InitSfx
+
+		GLOBAL	MzRefresh1
+		GLOBAL	MzRefresh2
+
+
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF SOUND.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************

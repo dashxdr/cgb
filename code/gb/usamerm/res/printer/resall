@@ -1,0 +1,13 @@
+#!/bin/bash
+rm -f swd/* *.map *.chr *.equ *.rgb *.pkg
+
+. ../tools
+
+for zzz in *.pcx; do
+ $XSGMB @bg.cmd $zzz
+done
+
+$XSGMB @copy.cmd dcopy.pcx
+$MAKEPKG -offset 16 dcopy.chr
+
+$GBSWD -d *.rgb *.pkg

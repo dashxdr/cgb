@@ -1,0 +1,14 @@
+#!/bin/bash
+rm -f swd/* *.map *.chr *.equ *.rgb *.gbf *.fnt
+. ../tools
+
+for zzz in *.cmd; do
+ $XSGMB $zzz
+done
+
+for zzz in *.fnt; do
+ $GMBFNT -m $zzz
+done
+
+$XSGMB olde.cmd
+

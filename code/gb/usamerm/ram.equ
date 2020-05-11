@@ -1,0 +1,316 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** RAM.EQU                                                        MODULE **
+; **                                                                       **
+; ** Variables, Structures and Data Tables.                                **
+; **                                                                       **
+; ** Last modified : 02 Apr 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+;
+;
+
+		GLOBAL	hTemp48
+
+		GLOBAL	wStackPointer
+		GLOBAL	wSprDumpStack
+
+		GLOBAL	wVblVector
+		GLOBAL	wLycVector
+
+		GLOBAL	wStructSmod
+		GLOBAL	wJmpVblVector
+		GLOBAL	wJmpLycVector
+		GLOBAL	wJmpTemporary
+		GLOBAL	wJmpDraw
+
+		GLOBAL	wMzChannel1
+		GLOBAL	wMzChannel2
+		GLOBAL	wMzChannel3
+		GLOBAL	wMzChannel4
+		GLOBAL	wFxChannel1
+		GLOBAL	wFxChannel2
+		GLOBAL	wFxChannel3
+		GLOBAL	wFxChannel4
+
+		GLOBAL	wMzSP
+		GLOBAL	wMzNumber
+		GLOBAL	wFxNumber
+		GLOBAL	wMzPlaying
+		GLOBAL	wMzWavePtr
+
+		GLOBAL	wMzBank
+		GLOBAL	wMzRefresh
+		GLOBAL	wMzShift
+
+		GLOBAL	wFileAddr
+		GLOBAL	wFileBank
+
+		GLOBAL	wSprPlotSP
+		GLOBAL	wSprDumpSP
+
+		GLOBAL	wTmpSP
+
+		GLOBAL	wJoy1Dir
+		GLOBAL	wJoy1Cur
+		GLOBAL	wJoy1Hit
+		GLOBAL	wJoy1Rpt
+
+		GLOBAL	wFontLo
+		GLOBAL	wFontHi
+		GLOBAL	wFontPal
+		GLOBAL	wFontPalXor
+		GLOBAL	wStringX
+		GLOBAL	wStringY
+		GLOBAL	wStringW
+		GLOBAL	wStringH
+		GLOBAL	wStringT
+		GLOBAL	wFontStrideLo
+		GLOBAL	wFontStrideHi
+
+		GLOBAL	wBoxX
+		GLOBAL	wBoxY
+		GLOBAL	wBoxW
+		GLOBAL	wBoxH
+
+		GLOBAL	wFigCount
+		GLOBAL	wFigTake
+		GLOBAL	wFigPhase
+		GLOBAL	wCelsPerFrame
+		GLOBAL	wPalCount
+		GLOBAL	wPalStart
+		GLOBAL	wGroupCount
+		GLOBAL	wGroups
+		GLOBAL	wGroup1
+		GLOBAL	wGroup2
+		GLOBAL	wGroup3
+		GLOBAL	wGroup4
+		GLOBAL	wGroup5
+		GLOBAL	wGroup6
+		GLOBAL	wGroup7
+		GLOBAL	wGroup8
+		GLOBAL	wTempSelect
+		GLOBAL	wTune
+		GLOBAL	wSndEffect
+
+		GLOBAL	wWantToPause
+
+		GLOBAL	wChrUsedLo
+		GLOBAL	wChrUsedHi
+
+		GLOBAL	wOamShadow
+		GLOBAL	wChrFinish
+		GLOBAL	wOamBuffer
+		GLOBAL	wTemp512
+
+		GLOBAL	wFlickerBuf
+
+		GLOBAL	wMapData
+		GLOBAL	wMapAnimType
+
+		GLOBAL	wAtrShadow
+		GLOBAL	wAtrDecode
+
+		GLOBAL	wBcpShadow
+		GLOBAL	wOcpShadow
+		GLOBAL	wBcpArcade
+		GLOBAL	wOcpArcade
+		GLOBAL	wBcpShadowTop
+		GLOBAL	wBcpArcadeTop
+		GLOBAL	wBcpShadowBtm
+		GLOBAL	wBcpArcadeBtm
+		GLOBAL	wPanelRGB
+		GLOBAL	wTblColorFade
+		GLOBAL	wCmapSwap
+		GLOBAL	wDirTable
+
+
+		GLOBAL	wShellAcc
+		GLOBAL	wShellVect
+		GLOBAL	wAvoidIntro
+		GLOBAL	wObjects
+		GLOBAL	wMapAnimChars
+		GLOBAL	wTemp1024
+		GLOBAL	wStore0
+		GLOBAL	wStore1
+		GLOBAL	wStore2
+		GLOBAL	wStore3
+		GLOBAL	wStore4
+		GLOBAL	wBalls
+		GLOBAL	wBallCount
+		GLOBAL	wStates
+		GLOBAL	wMessageList
+		GLOBAL	wMessage
+
+		GLOBAL	wPinInfo
+		GLOBAL	wPinJmpHit
+		GLOBAL	wPinJmpProcess
+		GLOBAL	wPinJmpSprites
+		GLOBAL	wPinJmpHitFlipper
+		GLOBAL	wPinJmpPerBall
+		GLOBAL	wPinJmpHitBumper
+		GLOBAL	wPinJmpScore
+		GLOBAL	wPinJmpLost
+		GLOBAL	wPinJmpEject
+		GLOBAL	wPinJmpChainRet
+		GLOBAL	wPinCutoff
+		GLOBAL	wPinLeftSet
+		GLOBAL	wPinRightSet
+		GLOBAL	wPinHitBank
+		GLOBAL	wPinCharBank
+		GLOBAL	wPinInfoEnd
+
+		GLOBAL	wActivePlayer
+		GLOBAL	wNumPlayers
+		GLOBAL	wNumBalls
+		GLOBAL	wHappyMode
+		GLOBAL	wStartHappy
+
+		GLOBAL	wRandTake
+		GLOBAL	wRandomBlock
+
+		GLOBAL	wMapXSize
+		GLOBAL	wMapYSize
+		GLOBAL	wMapXPos
+		GLOBAL	wMapYPos
+		GLOBAL	wMapDX
+		GLOBAL	wMapDY
+		GLOBAL	wMapUpperLeft
+		GLOBAL	wMapHitLo
+		GLOBAL	wMapHitHi
+		GLOBAL	wMapBGAnimLo
+		GLOBAL	wMapBGAnimHi
+		GLOBAL	wMapBGAnimPos
+		GLOBAL	wMapBGAnimCounts
+		GLOBAL	wMapBGAnimListLo
+		GLOBAL	wMapBGAnimListHi
+
+		GLOBAL	wMapDown
+		GLOBAL	wMapDirty
+		GLOBAL	wVideoBank
+		GLOBAL	wScore
+		GLOBAL	wLastJack
+
+		GLOBAL	wTime
+
+		GLOBAL	wSelected
+		GLOBAL	wMainSelected
+		GLOBAL	wLastMsg
+
+		GLOBAL	wWave
+
+		GLOBAL	wPrinterState
+		GLOBAL	wPrinterPossible
+
+		GLOBAL	wDemoMode
+		GLOBAL	wDemoL
+		GLOBAL	wDemoR
+
+		GLOBAL	wShellLastVariable
+
+		GLOBAL	hTemp48
+
+		GLOBAL	hRomBank
+		GLOBAL	hRamBank
+		GLOBAL	hWrkBank
+		GLOBAL	hVidBank
+
+		GLOBAL	hOamFlag
+		GLOBAL	hPalFlag
+		GLOBAL	hPosFlag
+
+		GLOBAL	hOamPointer
+
+		GLOBAL	hVblBank
+		GLOBAL	hVblFlag
+		GLOBAL	hVblCount
+		GLOBAL	hVblLCDC
+		GLOBAL	hVblBGP
+		GLOBAL	hVblOBP0
+		GLOBAL	hVblOBP1
+		GLOBAL	hVblSCX
+		GLOBAL	hVblSCY
+		GLOBAL	hVbl8
+
+		GLOBAL	hLycLCDC
+		GLOBAL	hLycBGP
+
+		GLOBAL	hWndY
+		GLOBAL	hPanelY
+
+		GLOBAL	hCycleCount
+
+		GLOBAL	hPadDir
+		GLOBAL	hPadCur
+		GLOBAL	hPadHit
+
+		GLOBAL	hTmpLo
+		GLOBAL	hTmpHi
+		GLOBAL	hTmp2Lo
+		GLOBAL	hTmp2Hi
+		GLOBAL	hTmp3Lo
+		GLOBAL	hTmp3Hi
+		GLOBAL	hTmp4Lo
+		GLOBAL	hTmp4Hi
+
+		GLOBAL	hSprXLo
+		GLOBAL	hSprXHi
+		GLOBAL	hSprYLo
+		GLOBAL	hSprYHi
+		GLOBAL	hSprPal
+		GLOBAL	hSprNxt
+		GLOBAL	hSprMax
+		GLOBAL	hSprCnt
+
+		GLOBAL	hOamBufLo
+		GLOBAL	hOamBufHi
+
+		GLOBAL	hIntroSeqLo
+		GLOBAL	hIntroSeqHi
+		GLOBAL	hIntroPkgLo
+		GLOBAL	hIntroPkgHi
+		GLOBAL	hIntroRtsLo
+		GLOBAL	hIntroRtsHi
+		GLOBAL	hIntroDone
+		GLOBAL	hIntroDelay
+		GLOBAL	hIntroFlags
+		GLOBAL	hIntroBlit
+
+		GLOBAL	hChannelVol
+		GLOBAL	hShadowNR12
+		GLOBAL	hShadowNR22
+		GLOBAL	hShadowNR32
+		GLOBAL	hShadowNR42
+		GLOBAL	hActualNR32
+
+		GLOBAL	hCutoff
+
+		GLOBAL	hOamXfer
+		GLOBAL	hSgb
+		GLOBAL	hMachine
+
+		GLOBAL	bMusicOff
+		GLOBAL	bKey
+		GLOBAL	bLocks
+		GLOBAL	bMenus
+		GLOBAL	bHighScores
+		GLOBAL	bHighPage
+		GLOBAL	bVariableMax
+
+		GLOBAL	bLanguage
+		GLOBAL	bLanguageHash
+		GLOBAL	wString
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF RAM.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************

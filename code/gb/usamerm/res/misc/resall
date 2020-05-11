@@ -1,0 +1,19 @@
+#!/bin/bash
+rm -rf *.hi *.lo *.map *.chr *.pkg *.equ *.rgb swd
+. ../tools
+for f in *.pcx; do
+ $XSGMB @cbitmap.cmd $f
+done
+
+for f in *.map; do
+ $MAKEPKG -offset 8 -split $f
+done
+
+$GBSWD -d *.chr *.hi
+
+for f in *.pcx; do
+ b=${f%.*}
+ $MAKEPKG -OutputFormat BIN -OutputHeader YES -OutputOrder LOHI swd/$b.chr swd/$b.hi $b.rgb
+done
+
+#mv swd/*.pkg .

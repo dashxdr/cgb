@@ -1,0 +1,61 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** BITMAP.EQU                                                     MODULE **
+; **                                                                       **
+; ** Bitmapped Screen Functions.                                           **
+; **                                                                       **
+; ** Last modified : 02 Mar 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+; LO-CODE
+;
+
+		GLOBAL	TblOffset0120
+		GLOBAL	TblOffset0140
+
+		GLOBAL	XferBitmap
+
+		GLOBAL	SetBitmap21x14
+		GLOBAL	DmaBitmap21x14
+		GLOBAL	DmaBitmapCol21
+		GLOBAL	SetMap21x14
+		GLOBAL	SloBitmap21x14
+
+		GLOBAL	SetBitmap20x18
+		GLOBAL	DmaBitmap20x18
+		GLOBAL	DmaBitmapCol20
+		GLOBAL	DmaBitbox20x18
+		GLOBAL	SetMap20x18
+		GLOBAL	SloBitmap20x18
+		GLOBAL	CgbAttrVbl
+
+		GLOBAL	SetScreenCol
+		GLOBAL	ClrAtr32x32
+		GLOBAL	ClrScr32x32
+
+		GLOBAL	PxlBox2ChrBox
+		GLOBAL	DumpShadowAtr
+		GLOBAL	InitShadowAtr
+		GLOBAL	FillShadowAtr
+		GLOBAL	FillShadowLst
+
+;
+; HI-CODE
+;
+
+		GLOBAL	John
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF BITMAP.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

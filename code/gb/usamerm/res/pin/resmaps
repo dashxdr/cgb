@@ -1,0 +1,87 @@
+#!/bin/bash
+./pinmap	-o allchr0a \
+	-mask board1mask.pcx board1.pcx -mask lights1mask.pcx lights1.pcx \
+	tv1.pcx tv2.pcx tv3.pcx tv4.pcx \
+	tv1g.pcx tv1f.pcx tv1i.pcx tv1s.pcx
+
+./pinmap	-o allchr0b \
+	-mask board2mask.pcx board2.pcx -mask lights2mask.pcx lights2.pcx \
+	tv5.pcx tv6.pcx tv7.pcx tv8.pcx \
+	tv5g.pcx tv5f.pcx tv5i.pcx tv5s.pcx
+
+./pinmap -o allchr1 \
+	-mask soulmask.pcx soulback.pcx souls.pcx \
+	-mask seamask.pcx seaback.pcx scuttle.pcx \
+	shipback.pcx \
+	iceback.pcx iceblocks.pcx \
+	chests.pcx chstback.pcx \
+	flounderback.pcx \
+	flotsamback.pcx \
+	kissback.pcx \
+	uback.pcx -mask ursulabsmask.pcx ursulabs.pcx \
+	-mask morganabsmask.pcx morganabs.pcx morgback.pcx \
+	-mask volcmask.pcx volcback.pcx \
+	tridentback.pcx \
+	-mask prisonmask.pcx prisonback.pcx \
+	breakice.pcx \
+	dashback.pcx \
+	-mask bearmask.pcx bearback.pcx bearbits.pcx \
+	bearvid.pcx \
+	rayback.pcx \
+	trapvid.pcx
+
+./pinmap -o allchr2 \
+	stormvideo.pcx \
+	treasvideo.pcx \
+	kissvideo.pcx \
+	soulvideo.pcx \
+	scuttlevideo.pcx \
+	floundvideo.pcx \
+	eelvideo.pcx \
+	ursulavideo.pcx \
+	dashvideo.pcx \
+	volcvideo.pcx \
+	tipvideo.pcx
+
+./pinmap -o allchr3 \
+	tables.pcx tablebits.pcx \
+	players.pcx playerbits.pcx \
+	gplayers.pcx fplayers.pcx iplayers.pcx splayers.pcx \
+	practicea0.pcx practicea1.pcx \
+	practiceb0.pcx practiceb1.pcx \
+	practicec0.pcx practicec1.pcx \
+	practiced0.pcx practiced1.pcx \
+	practicee0.pcx practicee1.pcx \
+	practicef0.pcx practicef1.pcx \
+	practiceg0.pcx practiceg1.pcx \
+	practiceh0.pcx practiceh1.pcx \
+	practicei0.pcx practicei1.pcx \
+	practicej0.pcx practicej1.pcx \
+	practicek0.pcx practicek1.pcx \
+	practicel0.pcx practicel1.pcx \
+	practicem0.pcx practicem1.pcx \
+	practicen0.pcx practicen1.pcx \
+	practiceo0.pcx practiceo1.pcx \
+	practicep0.pcx practicep1.pcx \
+	practicebits.pcx
+
+./pinmap -o allchr4 \
+	title2.pcx \
+	cloakvid.pcx \
+	tridentvid.pcx \
+	morgvid.pcx \
+	tvback.pcx \
+	mainx.pcx gmainx.pcx fmainx.pcx imainx.pcx smainx.pcx \
+	langx.pcx langxbits.pcx \
+	speed.pcx speedbits.pcx \
+	options.pcx optionbits.pcx \
+	goptions.pcx \
+	foptions.pcx \
+	ioptions.pcx \
+	soptions.pcx \
+	confirm.pcx confirmbits.pcx \
+	gconfirm.pcx gconfirmbits.pcx \
+	fconfirm.pcx fconfirmbits.pcx \
+	iconfirm.pcx iconfirmbits.pcx \
+	sconfirm.pcx sconfirmbits.pcx
+
