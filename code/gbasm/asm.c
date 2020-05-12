@@ -1235,15 +1235,24 @@ top:
 				{
 					if(pntr->symflags&ANEQUS) error2("OP(EQUS variable)");
 				}
-				rellist[relsp].sym=pntr;
-				rellist[relsp++].type=operval;
-				if(!(pntr->symflags&APUBLIC))
-				{
-					addpublic(pntr);
-					pntr->symflags|=APUBLIC;
+				if(pntr->symtype==RELTYPE) {
+					rellist[relsp].sym=pntr;
+					rellist[relsp++].type=operval;
+					if(!(pntr->symflags&APUBLIC))
+					{
+						addpublic(pntr);
+						pntr->symflags|=APUBLIC;
+					}
+					opertype=XREFTYPE;
+					operval=0;
+				} else {// must be ABSTYPE
+					opertype=ABSTYPE;
+					switch(operval) {
+					case REFLOW: operval=pntr->symvalue&0xff;break;
+					case REFHIGH: operval=(pntr->symvalue>>8)&0xff;break;
+					case REFBANK: operval=0;error2("BANK(<constant>) meaningless");break;
+					}
 				}
-				opertype=XREFTYPE;
-				operval=0;
 			} else
 			{
 				opertype=pntr->symtype;
