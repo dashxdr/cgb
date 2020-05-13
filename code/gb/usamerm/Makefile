@@ -135,6 +135,9 @@ clean: res
 
 res:
 	make -C res $(MAKECMDGOALS)
+.PHONY: res
+
+
 play:
 	mgb merm.gb
 

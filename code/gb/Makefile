@@ -1,4 +1,4 @@
-SUBDIRS:=usamerm
+SUBDIRS:=usamerm bb
 
 all: $(SUBDIRS)
 clean: $(SUBDIRS)
