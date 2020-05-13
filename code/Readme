@@ -35,6 +35,7 @@ Arrow keys do something
 Z does something (push the table right)
 / does something (push the table left)
 space does something (push the table up)
+v does something, like go back
 
 The emulator was used for development, it's much more convenient than an
 actual color gameboy.
@@ -58,3 +59,9 @@ oh well.
 The gameplay is the same. Some of the artwork changed between the two versions
 and the font data changed and there is the rumble/printer difference already
 mentioned.
+
+********* Beauty And The Beast: A Boardgame Adventure *********
+
+The gb/bb is source to this. This also seems to be closer to the Japanese
+version of the game. The USA version featured a spitting game that is
+disabled (at the moment). I think the artwork is all there though.
