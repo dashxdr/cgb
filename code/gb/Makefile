@@ -1,4 +1,4 @@
-SUBDIRS:=usamerm bb
+SUBDIRS:=usamerm bb thrill
 
 all: $(SUBDIRS)
 clean: $(SUBDIRS)

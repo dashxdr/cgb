@@ -270,5 +270,16 @@ int main(int argc,char **argv) {
 	for(i=0;i<MAXBANKS;i++)
 		if(ins[i])
 			dump(i,rootname);
-
+	int sorted[MAXRESOURCES];
+	int comp(const void *a, const void *b) {
+		return indexes[*(int *)a] - indexes[*(int *)b];
+	}
+	for(i=0;i<filenum;++i) sorted[i]=i;
+	qsort(sorted, filenum, sizeof(*sorted), comp);
+	for(i=0;i<filenum;++i) {
+		int t = sorted[i];
+		int actual = (indexes[t]>>16)*0x4000 + (indexes[t]&0xffff);
+		printf("%02x:%04x [%06x] %s\n", indexes[t]>>16, (indexes[t]&0xffff)|0x4000, actual, rnames[t]);
+	}
+	return 0;
 }
