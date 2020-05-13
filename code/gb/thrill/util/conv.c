@@ -628,7 +628,7 @@ unsigned char tmap[768];
 	writepcx(out,s->xsize,s->ysize,lfetch,tmap);
 }
 
-main(int argc,char **argv)
+int main(int argc,char **argv)
 {
 int i,j,code,exitflag;
 int x=0,y=0;
@@ -640,7 +640,7 @@ char *first;
 	if(argc<2)
 	{
 		printf("Use: %s <pcxfile> ...\n",argv[0]);
-		return;
+		return 1;
 	}
 	initcolors();
 	first=0;

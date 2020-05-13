@@ -409,7 +409,7 @@ void makefilename(void) {
 }
 
 
-int main(int argc,uchar **argv) {
+int main(int argc,char **argv) {
 	uchar temp[80];
 	uchar *pntr,ch,*outoffsave;
 	int i,j;

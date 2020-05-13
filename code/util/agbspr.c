@@ -213,7 +213,7 @@ int x,y;
 int numpalettes=0;
 int paletteoffs[MAXFRAMES];
 
-addpalette()
+void addpalette()
 {
 int i,j;
 int numcolors;
@@ -256,7 +256,7 @@ int r,g,b,c;
 int numframes=0;
 int frameoffs[MAXFRAMES];
 
-addframe(int tx,int ty,int sizex,int sizey)
+void addframe(int tx,int ty,int sizex,int sizey)
 {
 int i,j,x,y;
 int x2,y2;
@@ -579,7 +579,7 @@ int bestcost,ratio,bestratio,cost;
 	if(bestlen>1) return 1;
 	return 0;
 }
-dumpliteral(unsigned char *from,int len)
+void dumpliteral(unsigned char *from,int len)
 {
 	if(!len) return;
 	while(len)

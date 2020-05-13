@@ -163,7 +163,7 @@ unsigned int minpos,maxpos;
 
 }
 
-main(int argc,char **argv)
+void main(int argc,char **argv)
 {
 int f;
 	if(argc<2) return;

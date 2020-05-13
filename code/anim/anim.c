@@ -492,7 +492,7 @@ addkey(int code,int qual)
 	keyput=keyput+1&MAXKEYS-1;
 }
 
-processkey(int code,int qual)
+void processkey(int code,int qual)
 {
 
 	if(qual & KMOD_SHIFT)
@@ -2263,6 +2263,91 @@ void drawhelp()
 	drawstring(DX,0,helptext2);
 }
 
+long getlong(unsigned char *p)
+{
+	return *p | (p[1]<<8) | (p[2]<<16) | (p[3]<<24);
+}
+
+void putsprite(struct animfile *af,int x,int y,int which)
+{
+unsigned char *p1;
+char gx,gy,tx,ty;
+unsigned char info1,info2;
+int h,n;
+int i,j,k;
+int color,colorbase;
+
+	if(getlong(af->map)>>2 <= which+1) return; // invalid sprite #
+	p1=af->map+getlong(af->map + (which+1<<2));
+	gx=*p1++;
+	gy=*p1++;
+	info1=*p1++;
+	info2=*p1++;
+	h=1+(info2&1);
+	n=info2>>1;
+	colorbase=af->colorbase;
+	while(n--)
+	{
+		tx=*p1++;
+		ty=*p1++;
+		++spritesused;
+		for(i=0;i<h;i++)
+		{
+			k=*p1 | (p1[1]<<8);
+			color=(k>>8) & 7;
+			color=colorbase + (color<<2);
+			k&=255;
+			p1+=2;
+//			if(spritesused<=40)
+				putchr(af->chr + (k<<4),x+gx+tx,y+gy+ty+(i<<3),color);
+
+		}
+	}
+}
+
+void forcpy(unsigned short *dest,unsigned short *src,int len)
+{
+	while(len--)
+		*dest++=*src++;
+}
+
+void putcelnoclip(int num,int xpos,int ypos)
+{
+int i,j,k;
+unsigned short *p1,*p2;
+int offset;
+int xt;
+int dx,dy,cx,cy;
+
+	p1=compressed[num];
+	if(!p1) return;
+	for(;;)
+	{
+		dx=*p1++;
+		if(dx==0x8000) break;
+		dy=*p1++;
+		if(dx>0x7fff) dx-=0x10000L;
+		if(dy>0x7fff) dy-=0x10000L;
+		j=*p1++;
+		p2=p1;
+		p1+=j;
+		cx=xpos+dx;
+		cy=ypos+dy;
+		if(cy<0 || cy>=DY) continue;
+		if(cx+j<=0 || cx>=DX) continue;
+		if(cx<0)
+		{
+			j+=cx;
+			p2-=cx;
+			cx=0;
+		}
+		if(cx+j>DX)
+			j=DX-cx;
+		if(j>0)
+			forcpy(video+cy*videowidth+cx,p2,j);
+	}
+}
+
 void paint(int f,int sel1,int sel2,int flag)
 {
 cel *acel;
@@ -2353,11 +2438,7 @@ void revcpy(unsigned short *dest,unsigned short *src,int len)
 	while(len--)
 		*dest++=*--src;
 }
-void forcpy(unsigned short *dest,unsigned short *src,int len)
-{
-	while(len--)
-		*dest++=*src++;
-}
+
 
 void putcel(int num,int xpos,int ypos,int flags)
 {
@@ -2416,43 +2497,8 @@ int pixelidset;
 			memset(pixelid+pixelidset,pixelidval,j);
 	}
 }
-putcelnoclip(int num,int xpos,int ypos)
-{
-int i,j,k;
-unsigned short *p1,*p2;
-int offset;
-int xt;
-int dx,dy,cx,cy;
 
-	p1=compressed[num];
-	if(!p1) return;
-	for(;;)
-	{
-		dx=*p1++;
-		if(dx==0x8000) break;
-		dy=*p1++;
-		if(dx>0x7fff) dx-=0x10000L;
-		if(dy>0x7fff) dy-=0x10000L;
-		j=*p1++;
-		p2=p1;
-		p1+=j;
-		cx=xpos+dx;
-		cy=ypos+dy;
-		if(cy<0 || cy>=DY) continue;
-		if(cx+j<=0 || cx>=DX) continue;
-		if(cx<0)
-		{
-			j+=cx;
-			p2-=cx;
-			cx=0;
-		}
-		if(cx+j>DX)
-			j=DX-cx;
-		if(j>0)
-			forcpy(video+cy*videowidth+cx,p2,j);
-	}
-}
-putsimplecel(int num,int xpos,int ypos)
+void putsimplecel(int num,int xpos,int ypos)
 {
 int i,j,k;
 unsigned short *p1,*p2;
@@ -3049,10 +3095,7 @@ copyframe(int dest,int src)
 {
 	memcpy(frames+dest,frames+src,sizeof(struct frame));
 }
-long getlong(unsigned char *p)
-{
-	return *p | (p[1]<<8) | (p[2]<<16) | (p[3]<<24);
-}
+
 putchr(unsigned char *p1,int x,int y,int color)
 {
 int i,j;
@@ -3083,42 +3126,6 @@ unsigned char *sz;
 			}
 		}
 
-	}
-}
-putsprite(struct animfile *af,int x,int y,int which)
-{
-unsigned char *p1;
-char gx,gy,tx,ty;
-unsigned char info1,info2;
-int h,n;
-int i,j,k;
-int color,colorbase;
-
-	if(getlong(af->map)>>2 <= which+1) return; // invalid sprite #
-	p1=af->map+getlong(af->map + (which+1<<2));
-	gx=*p1++;
-	gy=*p1++;
-	info1=*p1++;
-	info2=*p1++;
-	h=1+(info2&1);
-	n=info2>>1;
-	colorbase=af->colorbase;
-	while(n--)
-	{
-		tx=*p1++;
-		ty=*p1++;
-		++spritesused;
-		for(i=0;i<h;i++)
-		{
-			k=*p1 | (p1[1]<<8);
-			color=(k>>8) & 7;
-			color=colorbase + (color<<2);
-			k&=255;
-			p1+=2;
-//			if(spritesused<=40)
-				putchr(af->chr + (k<<4),x+gx+tx,y+gy+ty+(i<<3),color);
-
-		}
 	}
 }
 

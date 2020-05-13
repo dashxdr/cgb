@@ -289,7 +289,7 @@ int historycount=0;
 	nexttime=gtime()+TIMESTEP;
 	memset(used2,0,sizeof(used2));
 
-	promsock=socket(PF_INET,SOCK_PACKET,htons(3));
+	promsock=socket(PF_INET,SOCK_RAW,htons(3));
 	if(promsock<0) {printf("error opening socket\n");exit(1);}
 
 	memset(&ifr,0,sizeof(ifr));

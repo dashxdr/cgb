@@ -421,13 +421,13 @@ int doneflag;
 }
 
 
-playsong(char *name)
+int playsong(char *name)
 {
 int f;
 int len;
 
 	f=open(name,O_RDONLY);
-	if(f<0) return;
+	if(f<0) return 1;
 	len=read(f,songdata,sizeof(songdata));
 	close(f);
 	return domidi(songdata,len);

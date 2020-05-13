@@ -1375,7 +1375,7 @@ int f;
 	sprintf(t,"%s%s",basefname,RAMNAME);
 	f=open(t,O_RDONLY|O_BINARY);
 	if(f<0) return;
-	res=read(f,ramblock+0xa000,0x2000);res=res;
+	res=read(f,ramblock+0xa000,0x2000);
 	close(f);
 }
 
@@ -1387,7 +1387,7 @@ int f;
 	sprintf(t,"%s%s",basefname,RAMNAME);
 	f=open(t,O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,0644);
 	if(f<0) return;
-	res=write(f,ramblock+0xa000,0x2000);res=res;
+	res=write(f,ramblock+0xa000,0x2000);
 	close(f);
 }
 

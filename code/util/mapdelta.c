@@ -62,7 +62,7 @@ int val;
 }
 
 
-dump(int num,int x,int y,int lohi)
+void dump(int num,int x,int y,int lohi)
 {
 int startpos;
 int i,j,k;

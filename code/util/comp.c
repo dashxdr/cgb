@@ -31,7 +31,7 @@ int get(int num)
 	return *takes[num]++;
 }
 
-main(int argc,char **argv)
+void main(int argc,char **argv)
 {
 	int i,j;
 	int ch[MAXIN];

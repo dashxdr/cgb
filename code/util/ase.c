@@ -93,7 +93,7 @@ int k;
 
 
 
-main(int argc,char **argv)
+void main(int argc,char **argv)
 {
 FILE *f;
 char line[1024];

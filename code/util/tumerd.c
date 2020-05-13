@@ -130,7 +130,7 @@ int x,y;
 }
 
 
-flushob(unsigned char *p,int n,char *name,int cnt)
+void flushob(unsigned char *p,int n,char *name,int cnt)
 {
 char nametemp[256];
 int ofile;
@@ -172,7 +172,230 @@ unsigned char b,*p,tempmask[64],*src;
 	collisionmap[num]=i;
 }
 
-processroom(char *name)
+void processtriggers(char *name)
+{
+int i,j,k,n,n2;
+unsigned char *p,*op;
+char tname[128];
+
+    op=oblock;
+
+
+    p=room+0x10+xsize*ysize*4;
+    for(j=0;j<ysize;++j)
+    {
+        for(i=0;i<xsize;++i)
+        {
+            n=((p[2]<<8) | p[3]) & 0x3ff;
+            p+=4;
+            if(!n) continue;
+            if(i<xsize-1)
+                n2=((p[2]<<8) | p[3]) & 0x3ff;
+            else
+                n2=0;
+//printf("Trigger %d at (%d,%d)\n",n,i,j);
+            *op++=n;
+            *op++=n2;
+            *op++=i;
+            *op++=i>>8;
+            *op++=j;
+            *op++=j>>8;
+            if(n2)
+            {
+                ++i;
+                p+=4;
+            }
+        }
+    }
+    *op++=0;
+    *op++=0;
+    sprintf(tname,"%s.trg",name);
+    i=open(tname,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
+    if(i<0)
+    {
+        printf("Failed to create trigger file %s\n",tname);
+        return;
+    }
+    write(i,oblock,op-oblock);
+    close(i);
+}
+
+void writecan(char *name,unsigned char *from,int len)
+{
+char nametemp[128];
+int canfile;
+
+    sprintf(nametemp,"%s.can",name);
+    canfile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC,0644);
+    if(canfile<0)
+    {
+        printf("Could not open CAN file %s\n",nametemp);
+        return;
+    }
+    write(canfile,from,len);
+    close(canfile);
+}
+
+void processbganim(char *name)
+{
+unsigned char *p,*base;
+int numchr;
+int width,height;
+unsigned char borderchr[64];
+int px,py,sx,sy,numframes;
+unsigned char *o1,*o2,*o1save;
+int i,j,k;
+int chrcount=0;
+char nametemp[128];
+unsigned char oblock1[8192*4];
+unsigned char oblock2[8192*4];
+unsigned char keytile[16];
+int n,c;
+int numcantiles;
+int which;
+
+    bganimchrs=0;
+    numinstances=0;
+    o1=oblock1;
+    o2=oblock2;
+
+    p=tmgc[0];
+    numchr=p[0]*256+p[1];
+    p+=10;
+    base=p;
+    memset(borderchr,255,64);
+    i=0;
+    while(i<numchr)
+        if(!memcmp(p,borderchr,64)) break;
+        else i++,p+=64;
+    if(i==numchr)
+    {
+        writecan(name,"",1);
+        return;
+    }
+    i=(p-base)/64;
+    width=1;
+    while(!memcmp(p,borderchr,64))
+    {
+        p+=64;
+        ++width;
+    }
+    height=numchr/width;
+    px=i%width+1;
+    py=i/width+1;
+    
+    xsize2=width;
+    ysize2=height;
+    chrcount=0;
+    numcantiles=0;
+    which=0;
+    while(py<height)
+    {
+        p=base+(px+py*width<<6);
+        if(!memcmp(p,borderchr,64))
+            break;
+        sy=0;
+        while(py+sy<height)
+        {
+            p=base+(px+(py+sy)*width<<6);
+            if(!memcmp(p,borderchr,64)) break;
+            ++sy;
+        }
+        sx=0;
+        while(px+sx<width)
+        {
+            p=base+(px+sx+py*width<<6);
+            if(!memcmp(p,borderchr,64)) break;
+            ++sx;
+        }
+        numframes=0;
+        while(px+(sx+1)*numframes<width)
+        {
+            p=base+(px+(sx+1)*numframes+py*width<<6);
+            if(!memcmp(p,borderchr,64)) break;
+            ++numframes;
+        }
+        printf("At (%d,%d), size (%d,%d),  %d frames\n",px,py,sx,sy,numframes);
+        if(!locateinstances(px,py,sx,sy,which)) goto skip;
+        remaparray();
+        *o1++=numframes;
+        o1save=o1;
+        *o1++=sx*sy;
+        for(j=0;j<sy;++j)
+        {
+            for(i=0;i<sx;++i)
+            {
+                n=which++;
+                *o1++=n;
+                *o1++=n>>8;
+                for(k=0;k<numframes;++k)
+                {
+                    gettile(0,keytile,k*(sx+1)+(px+i)+(py+j)*width);
+                    for(n=0;n<numcantiles;++n)
+                        if(!memcmp(oblock2+(n<<4),keytile,16)) break;
+                    if(n==numcantiles)
+                    {
+                        ++numcantiles;
+                        memcpy(o2,keytile,16);
+                        o2+=16;
+                    }
+                    n<<=4;
+                    *o1++=n;
+                    *o1++=n>>8;
+                }
+            }
+        }
+skip:
+        py+=sy+1;
+    }
+    bganimchrs=which;
+    for(k=0;k<numinstances;++k)
+    {
+        px=instances[k].x;
+        py=instances[k].y;
+        sx=instances[k].sx;
+        sy=instances[k].sy;
+        which=numtiles+instances[k].which;
+        for(j=0;j<sy;++j)
+            for(i=0;i<sx;++i)
+            {
+                p=temparray+16+(px+i+(py+j)*xsize<<1);
+                *p=which;
+                p[1]=(p[1]&~8) | (which>=256 ? 8 : 0);
+                ++which;
+            }
+    }
+
+    *o1++=0;
+    while((o1-oblock1)&15) *o1++=0;
+    k=o1-oblock1;
+    p=oblock1;
+    while(n=*p++)
+    {
+        c=*p++;
+        while(c--)
+        {
+            i=*p | (p[1]<<8);
+            i=numtiles+i<<4;
+            *p++=i;
+            *p++=i>>8;
+            i=n;
+            while(i--)
+            {
+                j=p[0] | (p[1]<<8);
+                j+=k;
+                *p++=j;
+                *p++=j>>8;
+            }
+        }
+    }
+    memcpy(o1,oblock2,o2-oblock2);
+    o1+=o2-oblock2;
+    writecan(name,oblock1,o1-oblock1);
+}
+
+
+void processroom(char *name)
 {
 unsigned char *p;
 int i,j,k,t;
@@ -313,231 +536,73 @@ unsigned char *tap;
 		processtriggers(name);
 
 }
-processtriggers(char *name)
+
+
+int locateinstances(int px,int py,int sx,int sy,int which)
 {
-int i,j,k,n,n2;
-unsigned char *p,*op;
-char tname[128];
+int x,y,i,j,k,n;
+int instancemap[16][16];
+unsigned char temptile[16],*p;
+int used;
+char first=1;
+int t;
 
-	op=oblock;
-
-
-	p=room+0x10+xsize*ysize*4;
-	for(j=0;j<ysize;++j)
-	{
-		for(i=0;i<xsize;++i)
-		{
-			n=((p[2]<<8) | p[3]) & 0x3ff;
-			p+=4;
-			if(!n) continue;
-			if(i<xsize-1)
-				n2=((p[2]<<8) | p[3]) & 0x3ff;
-			else
-				n2=0;
-//printf("Trigger %d at (%d,%d)\n",n,i,j);
-			*op++=n;
-			*op++=n2;
-			*op++=i;
-			*op++=i>>8;
-			*op++=j;
-			*op++=j>>8;
-			if(n2)
-			{
-				++i;
-				p+=4;
-			}
-		}
-	}
-	*op++=0;
-	*op++=0;
-	sprintf(tname,"%s.trg",name);
-	i=open(tname,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
-	if(i<0)
-	{
-		printf("Failed to create trigger file %s\n",tname);
-		return;
-	}
-	write(i,oblock,op-oblock);
-	close(i);
+    for(y=0;y<sy;++y)
+        for(x=0;x<sx;++x)
+        {
+            gettile(0,temptile,(px+x)+(py+y)*xsize2);
+            i=findtile(temptile);
+            if(i<0)
+            {
+                printf("Failed to find instance of bganim chr at (%d,%d)\n",px+x,py+y);
+                return 0;
+            }
+            instancemap[x][y]=i;
+        }
+    used=0;
+    for(j=0;j<=ysize-sy;++j)
+        for(i=0;i<=xsize-sx;++i)
+        {
+            for(y=0;y<sy;++y)
+            {
+                for(x=0;x<sx;++x)
+                {
+                    p=temparray+16+(i+x+(j+y)*xsize<<1);
+                    k=*p | ((p[1]&8) ? 256 : 0);
+                    if(k!=instancemap[x][y]) break;
+                }
+                if(x<sx) break;
+            }
+            if(y<sy) continue;
+//printf("Located instance at (%d,%d)\n",i,j);
+            instances[numinstances].x=i;
+            instances[numinstances].y=j;
+            instances[numinstances].px=px;
+            instances[numinstances].py=py;
+            instances[numinstances].sx=sx;
+            instances[numinstances].sy=sy;
+            instances[numinstances].which=which;
+            ++numinstances;
+            ++used;
+            t=0;
+            for(y=0;y<sy;++y)
+                for(x=0;x<sx;++x)
+                {
+                    p=temparray+16+(i+x+(j+y)*xsize<<1);
+                    if(first)
+                    {
+                        k=*p | ((p[1]&8) ? 256 : 0);
+                        bganimcollisions[which+t++]=collisionmap[k];
+                    }
+                    *p=255;
+                    p[1]|=8;
+                }
+            first=0;
+        }
+    return used;
 }
 
-
-processbganim(char *name)
-{
-unsigned char *p,*base;
-int numchr;
-int width,height;
-unsigned char borderchr[64];
-int px,py,sx,sy,numframes;
-unsigned char *o1,*o2,*o1save;
-int i,j,k;
-int chrcount=0;
-char nametemp[128];
-unsigned char oblock1[8192*4];
-unsigned char oblock2[8192*4];
-unsigned char keytile[16];
-int n,c;
-int numcantiles;
-int which;
-
-	bganimchrs=0;
-	numinstances=0;
-	o1=oblock1;
-	o2=oblock2;
-
-	p=tmgc[0];
-	numchr=p[0]*256+p[1];
-	p+=10;
-	base=p;
-	memset(borderchr,255,64);
-	i=0;
-	while(i<numchr)
-		if(!memcmp(p,borderchr,64)) break;
-		else i++,p+=64;
-	if(i==numchr)
-	{
-		writecan(name,"",1);
-		return;
-	}
-	i=(p-base)/64;
-	width=1;
-	while(!memcmp(p,borderchr,64))
-	{
-		p+=64;
-		++width;
-	}
-	height=numchr/width;
-	px=i%width+1;
-	py=i/width+1;
-	
-	xsize2=width;
-	ysize2=height;
-	chrcount=0;
-	numcantiles=0;
-	which=0;
-	while(py<height)
-	{
-		p=base+(px+py*width<<6);
-		if(!memcmp(p,borderchr,64))
-			break;
-		sy=0;
-		while(py+sy<height)
-		{
-			p=base+(px+(py+sy)*width<<6);
-			if(!memcmp(p,borderchr,64)) break;
-			++sy;
-		}
-		sx=0;
-		while(px+sx<width)
-		{
-			p=base+(px+sx+py*width<<6);
-			if(!memcmp(p,borderchr,64)) break;
-			++sx;
-		}
-		numframes=0;
-		while(px+(sx+1)*numframes<width)
-		{
-			p=base+(px+(sx+1)*numframes+py*width<<6);
-			if(!memcmp(p,borderchr,64)) break;
-			++numframes;
-		}
-		printf("At (%d,%d), size (%d,%d),  %d frames\n",px,py,sx,sy,numframes);
-		if(!locateinstances(px,py,sx,sy,which)) goto skip;
-		remaparray();
-		*o1++=numframes;
-		o1save=o1;
-		*o1++=sx*sy;
-		for(j=0;j<sy;++j)
-		{
-			for(i=0;i<sx;++i)
-			{
-				n=which++;
-				*o1++=n;
-				*o1++=n>>8;
-				for(k=0;k<numframes;++k)
-				{
-					gettile(0,keytile,k*(sx+1)+(px+i)+(py+j)*width);
-					for(n=0;n<numcantiles;++n)
-						if(!memcmp(oblock2+(n<<4),keytile,16)) break;
-					if(n==numcantiles)
-					{
-						++numcantiles;
-						memcpy(o2,keytile,16);
-						o2+=16;
-					}
-					n<<=4;
-					*o1++=n;
-					*o1++=n>>8;
-				}
-			}
-		}
-skip:
-		py+=sy+1;
-	}
-	bganimchrs=which;
-	for(k=0;k<numinstances;++k)
-	{
-		px=instances[k].x;
-		py=instances[k].y;
-		sx=instances[k].sx;
-		sy=instances[k].sy;
-		which=numtiles+instances[k].which;
-		for(j=0;j<sy;++j)
-			for(i=0;i<sx;++i)
-			{
-				p=temparray+16+(px+i+(py+j)*xsize<<1);
-				*p=which;
-				p[1]=(p[1]&~8) | (which>=256 ? 8 : 0);
-				++which;
-			}
-	}
-
-	*o1++=0;
-	while((o1-oblock1)&15) *o1++=0;
-	k=o1-oblock1;
-	p=oblock1;
-	while(n=*p++)
-	{
-		c=*p++;
-		while(c--)
-		{
-			i=*p | (p[1]<<8);
-			i=numtiles+i<<4;
-			*p++=i;
-			*p++=i>>8;
-			i=n;
-			while(i--)
-			{
-				j=p[0] | (p[1]<<8);
-				j+=k;
-				*p++=j;
-				*p++=j>>8;
-			}
-		}
-	}
-	memcpy(o1,oblock2,o2-oblock2);
-	o1+=o2-oblock2;
-	writecan(name,oblock1,o1-oblock1);
-}
-writecan(char *name,unsigned char *from,int len)
-{
-char nametemp[128];
-int canfile;
-
-	sprintf(nametemp,"%s.can",name);
-	canfile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC,0644);
-	if(canfile<0)
-	{
-		printf("Could not open CAN file %s\n",nametemp);
-		return;
-	}
-	write(canfile,from,len);
-	close(canfile);
-}
-
-
-
-processcmap(char *name)
+void processcmap(char *name)
 {
 int ofile;
 int i,j;
@@ -561,7 +626,7 @@ char nametemp[256];
 	close(ofile);
 
 }
-processtmgc(char *name)
+void processtmgc(char *name)
 {
 int ofile;
 int i,j;
@@ -792,68 +857,4 @@ unsigned char temp[16];
 	for(i=0;i<16;++i)
 		temp[i]=flipbits[tile[15-i]];
 	return findtile2(temp);
-}
-
-locateinstances(int px,int py,int sx,int sy,int which)
-{
-int x,y,i,j,k,n;
-int instancemap[16][16];
-unsigned char temptile[16],*p;
-int used;
-char first=1;
-int t;
-
-	for(y=0;y<sy;++y)
-		for(x=0;x<sx;++x)
-		{
-			gettile(0,temptile,(px+x)+(py+y)*xsize2);
-			i=findtile(temptile);
-			if(i<0)
-			{
-				printf("Failed to find instance of bganim chr at (%d,%d)\n",px+x,py+y);
-				return;
-			}
-			instancemap[x][y]=i;
-		}
-	used=0;
-	for(j=0;j<=ysize-sy;++j)
-		for(i=0;i<=xsize-sx;++i)
-		{
-			for(y=0;y<sy;++y)
-			{
-				for(x=0;x<sx;++x)
-				{
-					p=temparray+16+(i+x+(j+y)*xsize<<1);
-					k=*p | ((p[1]&8) ? 256 : 0);
-					if(k!=instancemap[x][y]) break;
-				}
-				if(x<sx) break;
-			}
-			if(y<sy) continue;
-//printf("Located instance at (%d,%d)\n",i,j);
-			instances[numinstances].x=i;
-			instances[numinstances].y=j;
-			instances[numinstances].px=px;
-			instances[numinstances].py=py;
-			instances[numinstances].sx=sx;
-			instances[numinstances].sy=sy;
-			instances[numinstances].which=which;
-			++numinstances;
-			++used;
-			t=0;
-			for(y=0;y<sy;++y)
-				for(x=0;x<sx;++x)
-				{
-					p=temparray+16+(i+x+(j+y)*xsize<<1);
-					if(first)
-					{
-						k=*p | ((p[1]&8) ? 256 : 0);
-						bganimcollisions[which+t++]=collisionmap[k];
-					}
-					*p=255;
-					p[1]|=8;
-				}
-			first=0;
-		}
-	return used;
 }

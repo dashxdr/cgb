@@ -27,7 +27,7 @@ int ins[MAXBANKS];
 int ins2[MAXBANKS];
 long starts[MAXBANKS];
 int allocated=0;
-long index[MAXITEMS];
+long index1[MAXITEMS];
 long lens[MAXITEMS];
 char *filenames[MAXFILES];
 int bases[MAXFILES];
@@ -71,7 +71,7 @@ top:
 	return *put;
 }
 
-dump(int n,char *rootname)
+void dump(int n,char *rootname)
 {
 char name[64];
 int file;
@@ -251,7 +251,7 @@ cant:
 			}
 			if(j==allocated)
 				allocbank();
-			index[i+base-1]=(j<<16) | starts[j]+ins[j];
+			index1[i+base-1]=(j<<16) | starts[j]+ins[j];
 			ins[j]+=len-len2; // header portion
 			ins2[j]+=len2; // character portion
 		} else
@@ -261,7 +261,7 @@ cant:
 				if(k==getlong(j))
 					break;
 			if(j==i) goto cant;
-			index[i+base-1]=index[j+base-1];
+			index1[i+base-1]=index1[j+base-1];
 		}
 
 	}
@@ -269,7 +269,7 @@ cant:
 	p=banks[0]+(base<<2);
 	for(i=1;i<numsprites;i++)
 	{
-		j=index[i+base-1];
+		j=index1[i+base-1];
 		*p++=j;
 		*p++=(j>>8) | 0x40;
 		*p++=(j>>16) + firstbank;
@@ -306,7 +306,7 @@ int len,len2;
 	for(i=1;i<numsprites;++i)
 	{
 		if(!lens[i+base-1]) continue;
-		j=index[i+base-1];
+		j=index1[i+base-1];
 		k=j>>16;
 		p=banks[k]+(j&0xffff)-starts[k]; // pointer to headers
 		j=lens[i+base-1]>>16;

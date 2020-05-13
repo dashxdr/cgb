@@ -41,6 +41,14 @@ The emulator was used for development, it's much more convenient than an
 actual color gameboy.
 
 
+macOS compilation requirements:
+
+Run this in any macOS terminal:
+
+````
+brew install https://raw.githubusercontent.com/lpla/homebrew-core/patch-1/Formula/sdl.rb --HEAD
+curl https://gist.githubusercontent.com/lunaczp/1a2ee039ec36361a732e079037b08874/raw/74bbae0ddbe2e387eca077eb1af24dbafa374529/elf.h > /usr/local/include/elf.h
+```
 
 ********* LITTLE MERMAID II PINBALL FRENZY *********
 

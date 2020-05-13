@@ -81,7 +81,7 @@ unsigned char *put,*p;
 	return put-to;
 }
 
-main(int argc,char **argv)
+void main(int argc,char **argv)
 {
 int f;
 long len;

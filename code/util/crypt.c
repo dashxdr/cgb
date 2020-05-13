@@ -4,7 +4,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <crypt.h>
+#ifdef __linux__
+    #include <crypt.h>
+#endif
 
 
 char saltletters[]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./";

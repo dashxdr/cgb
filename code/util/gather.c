@@ -106,6 +106,10 @@ void allocbank(void)
 	++allocated;
 }
 
+int comp(const void *a, const void *b) {
+    return indexes[*(int *)a] - indexes[*(int *)b];
+}
+
 int main(int argc,char **argv) {
 	int file;
 	int i,j,k;
@@ -271,9 +275,7 @@ int main(int argc,char **argv) {
 		if(ins[i])
 			dump(i,rootname);
 	int sorted[MAXRESOURCES];
-	int comp(const void *a, const void *b) {
-		return indexes[*(int *)a] - indexes[*(int *)b];
-	}
+	
 	for(i=0;i<filenum;++i) sorted[i]=i;
 	qsort(sorted, filenum, sizeof(*sorted), comp);
 	for(i=0;i<filenum;++i) {

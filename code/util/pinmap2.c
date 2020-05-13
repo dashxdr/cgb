@@ -377,7 +377,7 @@ unsigned char t[32],*p;
 	}
 }
 
-processcmap(char *name)
+void processcmap(char *name)
 {
 int ofile;
 int i,j;
