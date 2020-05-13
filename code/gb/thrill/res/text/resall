@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+. ../tools
+
+rm -f some.b??
+$MAKETEXT -BANK 0x00 -SKIP 0 -LANGUAGES 5 some.txt

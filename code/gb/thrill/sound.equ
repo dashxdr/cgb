@@ -1,0 +1,184 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** SOUND.EQU                                                      MODULE **
+; **                                                                       **
+; ** Sound Driver And Music Data.                                          **
+; **                                                                       **
+; ** Last modified : 31 Oct 1998 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+
+FX_BALLFIRE	EQU	1	;ball firing
+FX_MOVEBEEP	EQU	2	;menus, when cursor moves
+FX_ILLEGAL	EQU	3	;illegal menu slection
+FX_SELBEEP	EQU	4	;menus, making selection
+FX_BACKBEEP	EQU	5	;menus, moving back
+FX_AWARDLIT	EQU	6	;award ready when all clocks lit (not used)
+FX_COMBO1	EQU	7	;Combo
+FX_COMBO2	EQU	8	;Double combo
+FX_COMBO3	EQU	9	;Triple combo
+FX_COMBO4	EQU	$0a	;Super combo
+FX_CAREFUL	EQU	$0b	;2 away from tilt
+FX_DANGER	EQU	$0c	;1 away from tilt
+FX_TILT		EQU	$0d	;tilt
+FX_LIGHTON	EQU	$0e	;Spare, not used
+FX_LIT		EQU	$0f	;Extra ball is lit
+FX_FANTASYBIT	EQU	$10	;Red arrow in fantasy game
+FX_FANTASYSTART	EQU	$4b	;Start fantasy
+FX_FANTASYYELLOW EQU	$4c	;Yellow fantasy arrow
+FX_FANTASYWON	EQU	$4d	;Fantasy won
+FX_LIGHTSBIT	EQU	$11	;Lights out tablegame red arrow
+FX_MULTIBALL	EQU	$12	;Start of any multiball
+FX_MULTP1	EQU	$13	;Bonus multiplier +1
+FX_SCOOPOUT	EQU	$14	;Exit any scoop
+FX_LOCKOPEN	EQU	$15	;Lock now open
+FX_SUPERJACK	EQU	$16	;Collected a super jackpot
+FX_LOSTBALL	EQU	$17	;Lost the ball
+FX_BALLSAVED	EQU	$18	;Ball was saved
+FX_FLIPPER	EQU	$1a	;Either flipper button hit
+
+FX_HAPPYBIT	EQU	$25	;One light of HAPPY
+FX_HAPPYALL	EQU	$26	;HAPPY finished
+FX_RIDESBIT	EQU	$25	;One light of RIDES
+FX_RIDESALL	EQU	$26	;RIDES finished
+
+FX_KICKLIT	EQU	$26	;Kickback lit
+
+FX_CLOCKBIT	EQU	$27	;One of the clocks
+FX_CLOCKALL	EQU	$28	;all clocks lit
+FX_CATBIT	EQU	$27	;1 letter of CAT
+FX_CATALL	EQU	$28	;All CAT spelled and lock open
+FX_POPSBIT	EQU	$27	;1 letter of POPS
+FX_POPSALL	EQU	$28	;all POPS
+
+FX_BUMPER	EQU	$29	;Hit any pop bumper
+FX_BUMPERMAX	EQU	$2a	;Top orange bumper
+
+FX_TREAT	EQU	$2b	;Treat given
+
+FX_EXTRABALL	EQU	$2d	;Collected an extra ball
+FX_RAMP		EQU	$2e	;Right ramp
+FX_JACKPOT	EQU	$2f	;Normal 1,2,3 jackpot
+FX_RIDEPHOTO	EQU	$30	;Any ride photo
+
+FX_ORBIT	EQU	$43	;Either orbit loop
+FX_BRASSRING	EQU	$31	;Collected a brass ring
+FX_SPINNER	EQU	$42	;Spinner
+FX_KICKBACK	EQU	$45	;Kickback
+
+FX_CHAINSUB	EQU	$33	;Chaining to any subgame
+FX_BALLLOCKED	EQU	$34	;Ball locked
+
+FX_SCOOPIN	EQU	$56	;Enter any scoop
+
+FX_THRILLRIDESTART EQU	$4a	;Start Thrillride tablegame
+FX_THRILLLETTER	EQU	$49	;Thrillride, letter award
+
+FX_HIDESTART	EQU	$4e
+FX_HIDEAPPEAR	EQU	$4f
+FX_HIDEFOUND	EQU	$50
+FX_HIDETAKEN	EQU	$51
+
+FX_SUBLOST	EQU	$37	;Lost any subgame
+
+FX_KISSBASE	EQU	$35	;Hit the base
+FX_KISSDROP	EQU	$36	;Hit any drop target
+FX_KISSWON	EQU	$38	;Won
+
+FX_BUMPERCARHIT	EQU	$39	;Hit a bumper car, it is still there
+FX_BUMPERCARGONE EQU	$3a	;Hit a bumper car, it is removed
+FX_BUMPERCARWON	EQU	$38	;Won bumper cars
+
+FX_RAPIDROCK	EQU	$3b	;when rock hit
+FX_RAPIDBOAT	EQU	$3c	;when boat leaves
+FX_RAPIDWON	EQU	$38	;won rapids
+
+FX_BUILDHIT	EQU	$27	;Hitting normal target
+FX_BUILDWHITE	EQU	$41	;Hitting white target
+FX_BUILDWON	EQU	$38	;Won build
+
+FX_FALCONHIT	EQU	$3d	;Hit the base
+FX_FALCONDROP	EQU	$27	;Hit a drop target
+FX_FALCONEJECT	EQU	$3f	;Ejected a ball
+FX_FALCONWON	EQU	$38	;Won falcon
+
+FX_BEARPASS	EQU	$48	;Roller coaster passing
+FX_BEARDROP	EQU	$27	;Hit a drop target
+FX_BEARRAISE	EQU	$40	;Drop target raised
+FX_BEARSET	EQU	$3c	;Completed set
+FX_BEARWON	EQU	$38	;Won bear
+
+FX_RACEHIT	EQU	$27	;Hitting normal target
+FX_RACEWHITE	EQU	$41	;Hitting white target
+FX_RACEWON	EQU	$38	;Won race
+
+FX_SIDEHIT	EQU	$27	;Hit the drop targets
+FX_SIDEBARRIER	EQU	$41	;Hit a barrier
+FX_SIDERAMP	EQU	$48	;Traverse the ramp
+FX_SIDEWON	EQU	$38	;Won side
+
+FX_LOOPERRAMP	EQU	$2e	;Looper ramp
+FX_LOOPERWON	EQU	$38	;Won looper
+
+FX_BOATDROP	EQU	$27	;Boat drop target
+FX_BOATLAUNCH	EQU	$43	;Boat launch, not full
+FX_BOATFULL	EQU	$44	;Boat launch, full
+FX_BOATWON	EQU	$38	;Won Boat
+
+FX_OUTSTART	EQU	$52	;Starting lights out
+FX_OUTBULB	EQU	$53	;Hitting a bulb
+FX_OUTSWITCH	EQU	$54	;Hitting switch before all bulbs out
+FX_OUTWON	EQU	$55	;Won out
+
+SONG_TABLE	EQU	9	;main table song
+SONG_THRILL	EQU	4	;Table game, trying to spell THRILLRIDE
+SONG_ROLLERMULTI EQU	2	;Wildcat roller multiball
+SONG_HAPPY	EQU	5	;Lights out tablegame, after winning subgame
+SONG_FANTASY	EQU	6	;Fantasy table game
+SONG_FLUMEMULTI	EQU	3	;Flume multiball
+SONG_HIDE	EQU	7	;Hide + seek tablegame
+SONG_BUMPER	EQU	1	;Bumper cars tablegame, a funzone event
+
+SONG_FALCON	EQU	3	;Falcon subgame
+SONG_KISS	EQU	2	;Kissing tower subgame
+SONG_RAPIDS	EQU	4	;Canyon River Rapids subgame
+SONG_BUILD	EQU	10	;Lightning Racer I subgame
+
+SONG_LOOPER	EQU	6	;Super Duper looper subgame
+SONG_BEAR	EQU	5	;Great Bear subgame
+SONG_BOAT	EQU	1	;Tidal Force subgame
+SONG_RACE	EQU	10	;Lightning Racer II subgame
+SONG_SIDE	EQU	7	;Sidewinder subgame
+
+SONG_OUT	EQU	5	;Lights out subgame
+
+SONG_HIGHSCORE	EQU	8	;Got a high score
+SONG_MENUS	EQU	8	;Opening menus
+SONG_CREDITS	EQU	8	;When credits are being displayed.
+
+		GLOBAL	KillAllSound
+		GLOBAL	KillTune
+		GLOBAL	KillSfx
+		GLOBAL	InitTune
+		GLOBAL	InitSfx
+
+		GLOBAL	SoundBase
+
+
+SOUNDTUNE	EQU	$4000	;e = tune #, call first with 0 to initialize
+SOUNDREFRESH	EQU	$4006
+SOUNDFX		EQU	$4003	;e = fx #
+
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF SOUND.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************

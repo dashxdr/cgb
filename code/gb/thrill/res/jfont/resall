@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+. ../tools
+
+rm -f *.hi *.lo *.map *.chr *.pkg *.equ *.fnt *.gbf
+
+for zzz in *.cmd; do
+ $XSGMB $zzz
+done
+
+for zzz in *.fnt; do
+ $GMBFNT -m $zzz
+done
+
+#$XSGMB olde.cmd

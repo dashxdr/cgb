@@ -1,0 +1,6 @@
+#!/bin/bash
+. ../tools
+
+rm -f swd/* *.map *.chr *.rgb *.equ
+$XSGMB @bw.cmd choke.pcx
+$GBSWD -d choke.map choke.chr

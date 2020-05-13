@@ -1,0 +1,75 @@
+#!/bin/bash
+set -e
+. ../tools
+rm -f *.map *.chr *.rgb *.equ *.dm? swd/* *.trg *.ch0 *.ch1 *.ch2 *.ch3 *.ch4 *.pmp *.pn? *.pkg *.chg
+
+../../util/crossfade
+
+#for zzz in *.pcx; do
+# $XSGMB @bg.cmd $zzz
+#done
+
+#for zzz in *.map; do
+# $MAKEPKG $zzz
+#done
+
+for zzz in *.spr; do
+ $XSGMB @cut.cmd $zzz
+done
+
+./bumperpackages
+
+#for zzz in *.prj; do
+# tumerd $zzz
+#done
+
+./resmaps
+
+$XSGMB @bgnomap.cmd digits.pcx
+$GBSWD -d *.chr *.map # *.dm? *.bg
+
+$CONV \
+	-n main0001.pcx main0002.pcx main0003.pcx main0004.pcx \
+	main0005.pcx main0006.pcx main0007.pcx main0008.pcx main0009.pcx \
+	main0010.pcx main0011.pcx main0012.pcx main0013.pcx main0014.pcx \
+	main0015.pcx main0016.pcx main0017.pcx main0018.pcx main0019.pcx \
+	main0020.pcx main0021.pcx main0022.pcx main0023.pcx main0024.pcx \
+	main0025.pcx main0026.pcx main0027.pcx \
+	main0028.pcx main0029.pcx main0030.pcx main0031.pcx \
+	-n ramp2.pcx \
+	-n falc0001.pcx falc0002.pcx falc0003.pcx falc0004.pcx \
+	falc0005.pcx falc0006.pcx falc0007.pcx falc0008.pcx \
+	falc0009.pcx falc0010.pcx falc0011.pcx falc0012.pcx \
+	falc0013.pcx falc0014.pcx falc0015.pcx falc0016.pcx \
+	-n kiss0001.pcx kiss0002.pcx kiss0003.pcx kiss0004.pcx \
+	kiss0005.pcx kiss0006.pcx kiss0007.pcx kiss0008.pcx \
+	kiss0009.pcx kiss0010.pcx kiss0011.pcx kiss0012.pcx \
+	kiss0013.pcx kiss0014.pcx kiss0015.pcx kiss0016.pcx \
+	-n rapid0001.pcx rapid0002.pcx rapid0003.pcx rapid0004.pcx \
+	rapid0005.pcx rapid0006.pcx rapid0007.pcx rapid0008.pcx \
+	rapid0009.pcx rapid0010.pcx \
+	-n loop0001.pcx \
+	-n build0001.pcx \
+	-n bear0001.pcx bear0002.pcx bear0003.pcx bear0004.pcx \
+	bear0005.pcx bear0006.pcx bear0007.pcx bear0008.pcx \
+	bear0009.pcx bear0010.pcx bear0011.pcx \
+	-n boat0001.pcx boat0002.pcx boat0003.pcx boat0004.pcx \
+	boat0005.pcx boat0006.pcx boat0007.pcx boat0008.pcx \
+	boat0009.pcx boat0010.pcx \
+	-n race0001.pcx \
+	-n side0001.pcx side0002.pcx side0003.pcx side0004.pcx \
+	side0005.pcx side0006.pcx side0007.pcx \
+	-n out0001.pcx out0002.pcx out0003.pcx out0004.pcx \
+	out0005.pcx out0006.pcx out0007.pcx out0008.pcx out0009.pcx \
+	out0010.pcx out0011.pcx out0012.pcx out0013.pcx out0014.pcx \
+	out0015.pcx out0016.pcx out0017.pcx out0018.pcx out0019.pcx \
+	out0020.pcx out0021.pcx out0022.pcx out0023.pcx out0024.pcx \
+	out0025.pcx out0026.pcx out0027.pcx out0028.pcx out0029.pcx \
+	out0030.pcx out0031.pcx out0032.pcx out0033.pcx out0034.pcx \
+	out0035.pcx out0036.pcx \
+	-n sub0001.pcx sub0002.pcx sub0003.pcx sub0004.pcx \
+	sub0005.pcx sub0006.pcx sub0007.pcx sub0008.pcx sub0009.pcx \
+	sub0010.pcx sub0011.pcx sub0012.pcx sub0013.pcx sub0014.pcx \
+	sub0015.pcx sub0016.pcx sub0017.pcx sub0018.pcx
+
+$GBSWD -d *.pmp

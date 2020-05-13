@@ -1,0 +1,227 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** FONT.EQU                                                       MODULE **
+; **                                                                       **
+; ** Bitmapped Font Functions.                                             **
+; **                                                                       **
+; ** Last modified : 24 Mar 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+; Icons from FontOlde.
+;
+
+ANSI_INVPOINT	EQU	($7B0)
+ANSI_INVQMARK	EQU	($7B1)
+ANSI_Abak	EQU	($7B2)
+ANSI_Afwd	EQU	($7B3)
+ANSI_Ahat	EQU	($7B4)
+ANSI_Aumlaut	EQU	($7B5)
+ANSI_Ccedilla	EQU	($7B6)
+ANSI_Ebak	EQU	($7B7)
+ANSI_Efwd	EQU	($7B8)
+ANSI_Ehat	EQU	($7B9)
+ANSI_Ibak	EQU	($7B+10)
+ANSI_Ifwd	EQU	($7B+11)
+ANSI_Ihat	EQU	($7B+12)
+ANSI_Ntilde	EQU	($7B+13)
+ANSI_Obak	EQU	($7B+14)
+ANSI_Ofwd	EQU	($7B+15)
+ANSI_Ohat	EQU	($7B+16)
+ANSI_Oumlaut	EQU	($7B+17)
+ANSI_OE		EQU	($7B+18)
+ANSI_Ubak	EQU	($7B+19)
+ANSI_Ufwd	EQU	($7B+20)
+ANSI_Uumlaut	EQU	($7B+21)
+
+ANSI_abak	EQU	($7B+22)
+ANSI_afwd	EQU	($7B+23)
+ANSI_ahat	EQU	($7B+24)
+ANSI_aumlaut	EQU	($7B+25)
+ANSI_ccedilla	EQU	($7B+26)
+ANSI_ebak	EQU	($7B+27)
+ANSI_efwd	EQU	($7B+28)
+ANSI_ehat	EQU	($7B+29)
+ANSI_ibak	EQU	($7B+30)
+ANSI_ifwd	EQU	($7B+31)
+ANSI_ihat	EQU	($7B+32)
+ANSI_ntilde	EQU	($7B+33)
+ANSI_obak	EQU	($7B+34)
+ANSI_ofwd	EQU	($7B+35)
+ANSI_ohat	EQU	($7B+36)
+ANSI_oumlaut	EQU	($7B+37)
+ANSI_oe		EQU	($7B+38)
+ANSI_ubak	EQU	($7B+39)
+ANSI_ufwd	EQU	($7B+40)
+ANSI_uumlaut	EQU	($7B+41)
+ANSI_BS		EQU	($7B+42)
+
+;
+;
+;
+
+		IF	VERSION_JAPAN
+
+;
+; Japanese Icons
+;
+
+ICON_ZERO	EQU	(2)
+ICON_ALPHABET	EQU	(12)
+ICON_SPACE	EQU	(207)
+ICON_REALSPACE	EQU	(207)
+ICON_PLUS	EQU	(226)
+ICON_MINUS	EQU	(227)
+ICON_EQUALS	EQU	(228)
+
+ICON_HUMAN	EQU	(226)
+ICON_CPU	EQU	(227)
+ICON_CHECK	EQU	(228)
+ICON_COPYRIGHT	EQU	(229)
+ICON_NOBODY	EQU	(230)
+ICON_DIFFICULTY	EQU	(231)
+
+ICON_BALL1	EQU	(229)
+ICON_BALL0	EQU	(230)
+ICON_STAR1	EQU	(231)
+ICON_STAR0	EQU	(232)
+ICON_DICE	EQU	(233)
+ICON_SHIELD	EQU	(234)
+ICON_RIGHT	EQU	(235)
+ICON_DIE1	EQU	(236)
+ICON_DIE2	EQU	(237)
+ICON_DIE3	EQU	(238)
+ICON_DIE4	EQU	(239)
+ICON_DIE5	EQU	(240)
+ICON_DIE6	EQU	(241)
+ICON_SHOE	EQU	(242)
+ICON_TRAP	EQU	(243)
+ICON_LEFT	EQU	(244)
+
+ICON_AGAIN	EQU	(245)
+
+		ELSE
+
+;
+; US/European Icons
+;
+
+ICON_ZERO	EQU	("0")
+ICON_ALPHABET	EQU	("A")
+ICON_SPACE	EQU	("[")
+ICON_REALSPACE	EQU	(" ")
+ICON_PLUS	EQU	("+")
+ICON_MINUS	EQU	("-")
+ICON_EQUALS	EQU	("=")
+
+ICON_HUMAN	EQU	($7B+43)
+ICON_CPU	EQU	($7B+44)
+ICON_CHECK	EQU	($7B+45)
+ICON_COPYRIGHT	EQU	($7B+46)
+ICON_NOBODY	EQU	("-")
+ICON_DIFFICULTY	EQU	("*")
+
+ICON_BALL1	EQU	($7B+43)
+ICON_BALL0	EQU	($7B+44)
+ICON_STAR1	EQU	($7B+45)
+ICON_STAR0	EQU	($7B+46)
+ICON_DICE	EQU	($7B+47)
+ICON_SHIELD	EQU	($7B+48)
+ICON_RIGHT	EQU	($7B+49)
+ICON_DIE1	EQU	($7B+50)
+ICON_DIE2	EQU	($7B+51)
+ICON_DIE3	EQU	($7B+52)
+ICON_DIE4	EQU	($7B+53)
+ICON_DIE5	EQU	($7B+54)
+ICON_DIE6	EQU	($7B+55)
+ICON_SHOE	EQU	($7B+56)
+ICON_TRAP	EQU	($7B+57)
+ICON_LEFT	EQU	($7B+58)
+
+ICON_AGAIN	EQU	($7B+59)
+ICON_AGAIN_GER	EQU	($7B+60)
+ICON_AGAIN_FRA	EQU	($7B+61)
+ICON_AGAIN_ITA	EQU	($7B+62)
+ICON_AGAIN_SPA	EQU	($7B+63)
+
+		ENDC
+
+;
+;
+
+wTmpString	EQU	$DFE0
+
+;
+; Font Header
+;
+
+FHDR_KRNP	EQU	0		;pub__fntKern
+FHDR_FLGS	EQU	4		;ub___fntFlgs
+FHDR_KRNN	EQU	5		;ub___fntKrnN
+FHDR_CHR0	EQU	6		;ub___fntChr0
+FHDR_CHRN	EQU	7		;ub___fntChrN
+FHDR_XSPC	EQU	8		;sb___fntXSpc
+FHDR_YSPC	EQU	9		;sb___fntYSpc
+FHDR_XLFT	EQU	10		;sb___fntXLft
+FHDR_XRGT	EQU	11		;sb___fntXRgt
+FHDR_YTOP	EQU	12		;sb___fntYTop
+FHDR_YBTM	EQU	13		;sb___fntYBtm
+FHDR_YCAP	EQU	14		;sb___fntYCap
+FHDR_YOVR	EQU	15		;sb___fntYOvr
+
+FIDX_P		EQU	0		;uw___idxData
+FIDX_X		EQU	2		;sb___idxX
+FIDX_Y		EQU	3		;sb___idxY
+FIDX_W		EQU	4		;ub___idxW
+FIDX_H		EQU	5		;ub___idxH
+FIDX_DX		EQU	6		;sb___idxDX
+FIDX_PAD	EQU	7		;sb___idxPadding
+
+;
+; LO-CODE
+;
+
+		GLOBAL	TestString
+
+		GLOBAL	DrawStringLstN
+		GLOBAL	DrawStringLstP
+		GLOBAL	DrawStringLst
+		GLOBAL	DrawStringXY
+		GLOBAL	DrawStringLft
+		GLOBAL	DrawStringCtr
+		GLOBAL	DrawStringRgt
+
+		GLOBAL	CalcString
+		GLOBAL	DrawString
+
+		GLOBAL	StrCpy
+
+;
+; HI-CODE
+;
+
+		GLOBAL	DrawStringHi
+		GLOBAL	CalcStringHi
+
+		GLOBAL	TblRotations
+
+		GLOBAL	FontLite
+
+		IF	VERSION_JAPAN
+		GLOBAL	FontLarge
+		GLOBAL	FontSmall
+		ENDC
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF FONT.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

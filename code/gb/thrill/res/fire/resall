@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+. ../tools
+
+rm -f swd/* *.chr *.equ *.map *.rgb *.bg
+
+$XSGMB  @fire.cmd fire.pcx
+for f in *highscore.pcx; do
+ $XSGMB @bg.cmd $f
+done
+
+#$XSGMB @bg.cmd *highscore.pcx
+
+for f in *.map; do
+ $MAKEBG $f
+done
+
+$GBSWD -d *.bg

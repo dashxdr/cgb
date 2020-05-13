@@ -1,0 +1,640 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** EQUATES.EQU                                                    MODULE **
+; **                                                                       **
+; ** Variables, Structures and Data Tables.                                **
+; **                                                                       **
+; ** Last modified : 28 Oct 1998 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; VERSION CONTROL
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+
+; VERSION CONTROL
+VERSION_USA     EQU     1
+VERSION_EUROPE  EQU     0
+VERSION_JAPAN   EQU     0
+
+		INCLUDE	"gameboy.equ"
+
+INTERFACE:	MACRO
+		GLOBAL	\1
+\1_b:		ld	[wShellAcc],a
+		ld	a,LOW(\1)
+		ld	[wShellVect+1],a
+		ld	a,HIGH(\1)
+		ld	[wShellVect+2],a
+		ld	a,$c3
+		ld	[wShellVect],a
+		ld	a,BANK(\1)
+		ld	[wShellVect+3],a
+		jp	bank_link
+		ENDM
+
+SETVBL:		MACRO
+		LD	A,LOW(\1)
+		LD	[wVblVector],A
+		LD	A,HIGH(\1)
+		LD	[wVblVector+1],A
+		ENDM
+
+SETLYC:		MACRO
+		LD	A,LOW(\1)
+		LD	[wLycVector],A
+		LD	A,HIGH(\1)
+		LD	[wLycVector+1],A
+		ENDM
+
+BANKED:		MACRO
+		GLOBAL	\1
+\1_B::		LDH	A,[hRomBank]
+		PUSH	AF
+		LD	A,BANK(\1)
+		LDH	[hRomBank],A
+		LD	[rMBC_ROM],A
+		CALL	\1
+		POP	AF
+		LDH	[hRomBank],A
+		LD	[rMBC_ROM],A
+		RET
+		ENDM
+
+;
+;
+;
+
+DEBUG		EQU	0
+
+DEBUG_MSG	EQU	0
+USE_GMB_SPR	EQU	0
+
+;
+;
+
+YES		EQU	1
+NO		EQU	0
+
+ROM		EQU	YES
+
+TIMER		EQU	YES
+
+
+;############################################################################
+;############################################################################
+;############################################################################
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; PROGRAM EQUATES
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; CGB Work RAM Usage.
+;
+
+WRKBANK_NRM	EQU	1		;Regular memory.
+WRKBANK_MAP	EQU	2
+WRKBANK_MAP2	EQU	6	;sub game char map
+WRKBANK_MAP3	EQU	7
+WRKBANK_COLL	EQU	3
+WRKBANK_BG	EQU	6
+WRKBANK_BM	EQU	7
+
+WRKBANK_PINMAP1	EQU	4	;main map
+WRKBANK_PINMAP2	EQU	5	;second level
+
+;
+; New scroll equates
+
+NEWSCROLLHEIGHT	EQU	19
+
+;
+; Sprite Flags for SPR_FLAGS
+;
+
+FLG_EXEC	EQU	0
+FLG_DRAW	EQU	1
+FLG_PLOT	EQU	2
+FLG_ANM		EQU	3
+FLG_NEW		EQU	4
+FLG_CHK		EQU	5
+FLG_HIT		EQU	6
+
+MSK_EXEC	EQU	$01
+MSK_DRAW	EQU	$02
+MSK_PLOT	EQU	$04
+MSK_ANM		EQU	$08
+MSK_NEW		EQU	$10
+MSK_CHK		EQU	$20
+MSK_HIT		EQU	$40
+
+;
+; FADE related equates
+;
+
+FADE_DELAY	EQU	4
+
+;
+; SPRITE_0 - SPRITE_7 control block offsets.
+;
+		RSRESET
+SPR_FLAGS	RB	1
+SPR_OAM_CNT	RB	1
+SPR_OAM_LO	RB	1
+SPR_OAM_HI	RB	1
+SPR_SCR_X	RW	1
+SPR_SCR_Y	RW	1
+SPR_FLIP	RB	1
+SPR_COLR	RB	1
+SPR_FRAME	RW	1
+;
+SPR_STACK	EQU	12		;Space to allow before sprite.
+;
+SIZE_SPR	EQU	26
+
+;Collision masks
+COLLFLG_SOLID	EQU	0
+COLLFLG_SEMISOLID EQU	1
+COLLFLG_LADDER EQU	2
+COLLFLG_DEADLY	EQU	3
+COLLFLG_SLIPPERY EQU	4
+COLLFLG_BOUNCY	EQU	5
+COLLFLG_MOVABLE EQU	6
+
+;Object structure
+		RSRESET
+OBJ_FLAGS	RB	1
+OBJ_HANDLER	RW	1
+OBJ_XPOS	RW	1
+OBJ_YPOS	RW	1
+OBJ_FRAME	RW	1
+OBJ_PAL		RB	1
+OBJ_DATA0	RB	1
+OBJ_DATA1	RB	1
+OBJ_DATA2	RB	1
+OBJ_DATA3	RB	1
+OBJ_DATA4	RB	1
+OBJ_DATA5	RB	1
+OBJ_DATA6	RB	1
+OBJ_DATA7	RB	1
+OBJ_DATA8	RB	1
+OBJ_DATA9	RB	1
+OBJ_DATAA	RB	1
+OBJ_DATAB	RB	1
+OBJ_HEIGHT	RB	1	;in characters, stored as a negative #
+OBJ_ATTR1	RB	1	;attribute set by triggering
+OBJ_SIZE	EQU	32	;Trouble when larger than 16!!!!DrawObjects
+
+;Object flags
+OBJFLG_ACTIVE	EQU	0
+OBJFLG_VISIBLE	EQU	1
+OBJFLG_SIGNAL1	EQU	2
+OBJFLG_BACK	EQU	3
+OBJFLG_MISC	EQU	4
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; INTERNAL WORK RAM ($FF80-$FFFE)
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; Interrupt control variables.
+;
+
+;
+;
+;
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; INTERNAL WORK RAM ($FF80-$FFFE)
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; Bank $00
+;
+		GLOBAL	ClrRect18
+
+		GLOBAL	SoundTest
+
+		GLOBAL	AbortGame
+		GLOBAL	MainLoop
+
+		GLOBAL	SramVerify
+		GLOBAL	SaveBackup
+		GLOBAL	LoadBackup
+
+		GLOBAL	IndirectHL
+
+		GLOBAL	BgInFileSys
+		GLOBAL	MemCopyInFileSys
+		GLOBAL	SwdInFileSys
+		GLOBAL	DumpChrsInFileSys
+		GLOBAL	GetString
+		GLOBAL	FindInFileSys
+		GLOBAL	FindInPkgFile
+		GLOBAL	RebootMachine
+		GLOBAL	VblDoNothing
+		GLOBAL	LycDoNothing
+		GLOBAL	VblNormal
+		GLOBAL	LycNormal
+		GLOBAL	LycStatus
+		GLOBAL	VblIntro
+		GLOBAL	LycIntro
+		GLOBAL	VblScroll
+		GLOBAL	LycScroll
+		GLOBAL	VblTargetRange
+		GLOBAL	LycTargetRange
+		GLOBAL	VblGmbBoard
+		GLOBAL	LycGmbBoard0
+		GLOBAL	LycGmbBoard1
+		GLOBAL	LycGmbBoard2
+
+		GLOBAL	StructSmodGmb
+		GLOBAL	StructSmodCgb
+		GLOBAL	TblPanelGmb
+		GLOBAL	TblPanelCgb
+		GLOBAL	TblJoyA2Dirn
+		GLOBAL	TblJoyB2Dirn
+		GLOBAL	TblDirn2DULR
+		GLOBAL	TblDirn2Info
+
+		GLOBAL	MultiplyBBW
+		GLOBAL	MultiplyBWW
+		GLOBAL	MultiplyBWW
+		GLOBAL	SDivideWWW
+		GLOBAL	UDivideWWW
+
+		GLOBAL	WaitForVBL
+
+		GLOBAL	ReadJoypad
+		GLOBAL	ReadJoypadNoReset
+		GLOBAL	WaitForRelease
+
+		GLOBAL	InitAutoRepeat
+		GLOBAL	ProcAutoRepeat
+		GLOBAL	InitDoubleTap
+		GLOBAL	ProcDoubleTap1
+		GLOBAL	ProcDoubleTap2
+
+		GLOBAL	MemClear
+		GLOBAL	RomOamDma
+		GLOBAL	MemCopy
+		GLOBAL	MemFill
+
+		GLOBAL	SprBlank
+		GLOBAL	SprOff
+
+		GLOBAL	InitControls
+		GLOBAL	InitAllSprPlot
+
+		GLOBAL	ArcadeStart
+		GLOBAL	ArcadeRestart
+		GLOBAL	ArcadeLoop
+		GLOBAL	ArcadeCycle
+
+		GLOBAL	DumpChrs
+		GLOBAL	FastDumpChr
+		GLOBAL	SafeDumpChrs
+		GLOBAL	GmbChrDump
+		GLOBAL	GmbChrDumpDone
+		GLOBAL	CgbChrDump
+		GLOBAL	CgbChrDumpDone
+
+		GLOBAL	InitGroups
+		GLOBAL	RegisterGroup
+		GLOBAL	AddPalette
+		GLOBAL	Palette3now
+		GLOBAL	Palette4now
+		GLOBAL	Palette5now
+		GLOBAL	Palette6now
+		GLOBAL	Palette7now
+		GLOBAL	IDXPalette4now
+		GLOBAL	IDXPalette5now
+		GLOBAL	IDXPalette6now
+		GLOBAL	IDXPalette7now
+		GLOBAL	Palette6
+		GLOBAL	Palette7
+		GLOBAL	ReplacePalette
+		GLOBAL	InitFigures
+		GLOBAL	InitFigures64
+		GLOBAL	AddFrame
+		GLOBAL	AddFigure
+		GLOBAL	OutFigures
+		GLOBAL	OutFiguresPassive
+		GLOBAL	Wait15
+		GLOBAL	Wait30
+		GLOBAL	Wait60
+		GLOBAL	AnyWait
+		GLOBAL	AccurateWait
+		GLOBAL	FadeIn
+		GLOBAL	FadeOut
+
+		GLOBAL	DoNothing
+
+		GLOBAL	RideVector0
+		GLOBAL	RideVector1
+		GLOBAL	RideVector2
+		GLOBAL	CellarVector0
+		GLOBAL	CellarVector1
+
+		GLOBAL	MakeChanges
+		GLOBAL	UndoChanges
+
+		GLOBAL	PauseMenu_B
+		GLOBAL	StdStage
+		GLOBAL	LoadPalHL
+		GLOBAL	AnyApply
+
+		GLOBAL	InitBBRam
+		GLOBAL	CheckBBRam
+		GLOBAL	SumBBRam
+
+		GLOBAL	picklite
+		GLOBAL	InitTunePref
+
+		GLOBAL	SetMachineJcb
+		GLOBAL	BlitVideoYX
+
+		GLOBAL	LoadBigMap
+		GLOBAL	CheckCollision
+		GLOBAL	FetchAnimType
+		GLOBAL	FetchTileInfo
+		GLOBAL	StoreTileInfo
+
+		GLOBAL	ProcessBGAnim
+		GLOBAL	StepBGAnim
+
+		GLOBAL	FetchPinInfo
+
+		GLOBAL	BBRAMZap
+		GLOBAL	BBRAMInit
+		GLOBAL	RandInit
+
+		GLOBAL	BANK0_END
+
+
+;
+; Bank $01
+;
+		GLOBAL	BANK1_END
+;
+; Bank $02
+;
+		GLOBAL	BANK2_END
+
+;
+; Bank $03
+
+		GLOBAL	loadbg
+		GLOBAL	doshell
+
+
+		GLOBAL	AllPalettes
+		GLOBAL	AllSprites
+
+		GLOBAL	FileSys
+;
+; SHELL.ASM
+;
+
+		GLOBAL	newbank
+		GLOBAL	bankhl
+		GLOBAL	bank_link
+		GLOBAL	addahl
+		GLOBAL	shellpal
+		GLOBAL	sprblank
+		GLOBAL	housekeep
+		GLOBAL	ShellCode
+		GLOBAL	getanybg
+		GLOBAL	getanybigbg
+		GLOBAL	scanpad
+		GLOBAL	getpad
+		GLOBAL	checkpad
+		GLOBAL	normalgmbfade
+		GLOBAL	random
+		GLOBAL	waitsome
+		GLOBAL	wait3
+
+;
+;scroll.asm
+;
+		GLOBAL	HandleScroll
+		GLOBAL	InitScroll
+		GLOBAL	RefreshScroll
+		GLOBAL	NewInitScroll
+		GLOBAL	NewScroll
+		GLOBAL	NewLoadMap
+		GLOBAL	SendRow
+		GLOBAL	NewMapOffsets
+		GLOBAL	UpdateRowPals
+		GLOBAL	BGRect
+		GLOBAL	TV
+		GLOBAL	MarkDirty
+		GLOBAL	SecondHalf
+		GLOBAL	OtherPage1
+		GLOBAL	OtherPage2
+		GLOBAL	OtherPage3
+		GLOBAL	OtherPage4
+		GLOBAL	Bits
+;scrollhi.asm
+		GLOBAL	ProcessDirties_real
+
+;gmbchoke.asm
+;
+		GLOBAL	GmbChoke
+
+;
+;pinball stuff
+;
+		GLOBAL	PinTiles
+
+;
+;pin.asm
+;
+		GLOBAL	board1hitflipper
+		GLOBAL	board2hitflipper
+		GLOBAL	SubHitFlipper
+		GLOBAL	OnFlippers
+		GLOBAL	OffFlippers
+
+;
+;result.asm
+;
+		GLOBAL	ResultScreen_b
+
+;
+;pinlo.asm score values
+;
+		GLOBAL	subsaver
+		GLOBAL	bonusmul
+		GLOBAL	settabletime
+		GLOBAL	DemoMode
+		GLOBAL	scoopscore
+		GLOBAL	spinnerscore
+		GLOBAL	dropscore
+		GLOBAL	loopscore
+		GLOBAL	rampscore
+		GLOBAL	scorerolloverunlit
+		GLOBAL	score1m
+		GLOBAL	ProcessDirties
+		GLOBAL	RectList
+		GLOBAL	SubAddBall
+		GLOBAL	SubSaver
+
+;
+;pinlo.asm
+;
+
+		GLOBAL	AddBall
+		GLOBAL	AnyDecTime
+		GLOBAL	TimeCountStatus
+		GLOBAL	AnyDec2
+		GLOBAL	AnyInc2
+		GLOBAL	LoadPinMap
+		GLOBAL	SetPinInfo
+		GLOBAL	CountBalls
+		GLOBAL	MakeCollisions
+		GLOBAL	LongVector
+		GLOBAL	SubFlippers
+		GLOBAL	Nothing
+		GLOBAL	SubAddBall
+		GLOBAL	SubAddBall2
+		GLOBAL	SubAddBall3
+		GLOBAL	SubEnd
+		GLOBAL	addtimed
+		GLOBAL	processtimed
+		GLOBAL	FetchMessage
+		GLOBAL	addscore
+		GLOBAL	saveclock
+		GLOBAL	incmax1
+		GLOBAL	incmax2
+		GLOBAL	saver5
+		GLOBAL	saver20
+		GLOBAL	saver30
+		GLOBAL	saver60
+		GLOBAL	addthousandshl
+		GLOBAL	addthousandshlinform
+		GLOBAL	hltolastjack
+		GLOBAL	InitBalls
+		GLOBAL	bcmula
+		GLOBAL	passedby
+		GLOBAL	dohits
+		GLOBAL	SetCount2
+		GLOBAL	AnyQuit
+		GLOBAL	AnyEnd
+		GLOBAL	AnyVideo
+		GLOBAL	StepVideo
+		GLOBAL	IncBonusVal
+		GLOBAL	ClearBonusVal
+		GLOBAL	AnyMessages
+		GLOBAL	PinScore
+		GLOBAL	BonusScore
+		GLOBAL	statusde
+		GLOBAL	statusstring
+		GLOBAL	statusflash
+		GLOBAL	statusjackvalue
+		GLOBAL	pinmsg
+		GLOBAL	pinclear
+		GLOBAL	Eject
+		GLOBAL	BonusProcess
+		GLOBAL	flashlist
+		GLOBAL	ComboSound
+		GLOBAL	ChainSub
+		GLOBAL	ResultScreen
+		GLOBAL	TblCos
+		GLOBAL	TblSin
+		GLOBAL	SavePlayer
+		GLOBAL	RestorePlayer
+		GLOBAL	SwitchPlayers
+		GLOBAL	Credit1
+		GLOBAL	Credit2
+		GLOBAL	Credit3
+		GLOBAL	SetTime
+		GLOBAL	SubSong
+		GLOBAL	SetDifficulty
+		GLOBAL	dorelit
+		GLOBAL	RumbleLow
+		GLOBAL	RumbleMedium
+		GLOBAL	RumbleHigh
+		GLOBAL	loadpic
+		GLOBAL	copyshow
+		GLOBAL	PrefTune1
+		GLOBAL	PrefTune2
+		GLOBAL	fxmove
+		GLOBAL	fxsel
+		GLOBAL	fxback
+		GLOBAL	fxillegal
+		GLOBAL	menutune
+		GLOBAL	TVSet
+
+;
+;soul.asm
+;
+
+		GLOBAL	SoulInit
+
+;
+; Chars for maps
+;
+		GLOBAL	Char00
+;
+;msg.asm  (Temporary message data)
+;
+
+		GLOBAL	MessageData
+
+;
+; Include all the other equates files
+;
+
+		INCLUDE	"ram.equ"
+		INCLUDE	"sprites.equ"
+		INCLUDE	"spritesb.equ"
+		INCLUDE	"fade.equ"
+		INCLUDE	"swd.equ"
+		INCLUDE	"sound.equ"
+		INCLUDE	"bitmap.equ"
+		INCLUDE	"font.equ"
+		INCLUDE "res/sprites.asm"
+		INCLUDE	"res/sprites.equ"
+		INCLUDE	"res/filesys.asm"
+
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF EQUATES.ASM
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************

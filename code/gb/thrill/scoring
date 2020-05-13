@@ -1,0 +1,364 @@
+--- Requirement for completing the table ---
+3+2 X # of warps brass rings
+3+2 X # of warps ride photos
+Complete Log Flume multiball
+Complete Roller Coaster multiball
+complete all 5 funzone rides at least once
+complete all 5 thrillzone rides at least once
+Complete nighttime fantasy
+Get enough snack bar treats (12,24,36 for easy,medium,hard)
+When all these are complete, left and right scoop lights are open for
+starting the lights out subgame.
+
+---- Warps ----
+A warp is a term used in this document to mean completing the table. The
+warp counter starts out at 0, and increases by 1 each time the table is
+completed. The warp counter is shown on the high score table.
+
+
+---- Snack bar awards ----
+Hitting all three clock targets lights the (?) snack bar award light.
+Awards are as follows. First number indicates probability.
+6:   250,000 points
+5:   500,000 points
+4:   750,000 points
+4: 1,000,000 points
+6: 25,000 added to both multiball jackpots
+5: 50,000 added to both multiball jackpots
+7: bonus multiplier +1
+6: bonus multiplier +2
+5: bonus multiplier +3
+4: bonus multiplier +4
+6: light thrill zone game light if unlit and games not complete
+6: light fun zone game light if unlit and games not complete
+6: advance one of the top pops to next level
+3: set all 3 top pops to max level
+4: hold bonus multiplier
+1: extra ball, once only per game
+4: hold pops
+5: 30 second ball saver
+4: 60 second ball saver
+6: super kickback, both kickbacks on and locked until loss of ball
+5: Light roller lock, if unlit
+5: Light flume lock, if unlit
+6: Add 1 thrill point (one letter of THRILLRIDE)
+5: add 2 thrill points
+4: add 3 thrill points
+3: add 4 thrill points
+
+---- Bonus ----
+The bonus multiplier has a maximum value of 250. The design spec called for
+an unlimited multiplier but I think this is a reasonable compromise. Large
+numbers are hard to deal with on this 8 bit machine.
+
+The bonus value increases as follows:
+ 2,000 for any ramp or loop
+ 5,000 for each thrill point (1 letter of THRILLRIDE)
+10,000 for each brass ring
+15,000 for each ride photo
+
+The bonus value has a maximum value of 99,999,000. Once this value is reached,
+it will stay there and not wrap around to 0.
+
+---- Skill shot ----
+After ball launch, skill shot is possible for 5 seconds.
+Left ramp, right ramp and snackbar are normal skill shot. Value starts at
+50,000 and increases by 10,000 for each normal skill shot.
+Left loop and right loop are super skill shot. Value starts at
+150,000 and increases by 50,000 for each super skill shot.
+Both skill shots advance bonus multiplier 4x.
+Skill shot is indicated by yellow arrows for normal and red arrows for super.
+
+---- snack bar items ----
+Match 50 listed items exactly in name + score
+The following are too long for our line of text.
+   HERSHEY'S MILK CHOCOLATE BAR WITH ALMONDS
+   HERSHEY'S COOKIES 'N' CREME
+   REESE'S PEANUT BUTTER CUPS
+   HERSHEY'S MILK CHOCOLATE BAR
+
+---- Hide and seek mode ----
+Starts after 50 snack bar treats collected.
+7 objects each are associated with a ramp, scoop or loop. They appear
+in random order (except the cow at the snackbar is always last). After hitting
+the appropriate target, the ball must be shot into the snackbar to score.
+First scores 100k, second 200k, third 300k, etc. There is no time limit between
+hitting the first target and getting the ball into the snackbar.
+
+---- Wild cat roller coaster multiball ----
+Jackpot base is 100,000. Hitting either bottom pop increases it by 2,000.
+Hitting a blue top pop increases it by 2,000, a green by 5,000, and an
+orange by 10,000.
+
+Lock is lit by hitting all 3 CAT targets. Ball is locked by the upper left
+scoop. When 3 balls locked, 3 balls are shot out of the snack bar to start
+the multiball. Single, double and triple jackpots are collected at the left
+ramp. The super jackpot is collected at the right ramp.
+
+To complete the multiball, you must get enough jackpots. Easy, medium and hard
+require 7,9,11 jackpots respectively. Single, double, triple and super jackpots
+count as 1,2,3 and 5 respectively. With this mechanism the player can complete
+the multiball in several attempts. Each warp adds 2 more jackpots to the
+requirement.
+
+On medium and hard difficulty the jackpot must be re-enabled by shooting
+the snackbar and left loop, respectively. On easy difficulty the jackpot is
+always enabled.
+
+Snackbar awards exist to increase the jackpot value by 25k and 50k.
+After collecting jackpot, it is reset to 100,000. Maximum jackpot value is
+1,999,000.
+
+---- Log flume multiball ----
+Jackpot base is 100,000. Each spinner revolution increases the jackpot by 5,000
+throughout the game. Lock is lit by doing 3 right ramps. Ball is
+locked by the upper right scoop. When 3 balls locked, 3 balls are shot out
+of the snack bar to start the multiball. Single, double and triple jackpots
+are collected at the right ramp. The super jackpot is collected at the left
+ramp. For this multiball balls may be locked in the left and right scoops, if
+at least 2 balls are in play. Hitting the snackbar will lock the ball if either
+left or right is free and there are at least 2 balls in play. If one ball is
+locked, the jackpot will be at least a double. If two balls are locked, the
+jackpot will be at least a triple. Locked balls are ejected after 15 seconds,
+after collecting any jackpot, or if any ball is lost.
+
+To complete the multiball, you must get enough jackpots. Easy, medium and hard
+require 7,9,11 jackpots respectively. Single, double, triple and super jackpots
+count as 1,2,3 and 5 respectively. With this mechanism the player can complete
+the multiball in several attempts. Each warp adds 2 more jackpots to the
+requirement.
+
+On medium and hard difficulty the jackpot must be re-enabled by shooting
+the snackbar and right loop, respectively. On easy difficulty the jackpot is
+always enabled.
+
+Snackbar awards exist to increase the jackpot value by 25k and 50k.
+After collecting jackpot, it is reset to 100,000.
+
+---- Right ramp awards ----
+The right ramp awards the following:
+Advance bonus by 1 at 3,9,21,27,33,39,45,51 ramps, etc.
+Hold bonus multiplier at 6,18,30,42,54,66 ramps, etc.
+Extra ball at 15 and 85 ramps.
+The counter wraps around after 255 ramps back to 0.
+
+---- Thrillride mode ----
+Starts when timer is 0 (each clock hit subtracts 4,2,1 for easy,medium,hard)
+Timer is initially 30, but increases by 5 after each time, a maximum of 99.
+There is a 12guage indicator with 12 lights. When all 12 lights are lit,
+they go off and another letter of THRILLRIDE is lit. When all 10
+letters of THRILLRIDE are lit, Nighttime Fantasy mode begins.
+12guage credits:
+o  Either loop = 8,6,4 for easy,medium,hard
+o  Either ramp = 6,4,2 for easy,medium,hard
+o  Top pop, low = 1,1/2,1/3 for easy,medium,hard
+o  Top pop, medium = 2,1,1/2 for easy,medium,hard
+o  Top pop, high = 3,2,1 for easy,medium,hard
+
+---- Nighttime Fantasy ----
+Starts when all 10 letters of THRILLRIDE are lit.
+Player must do each of the following at least once
+    left loop
+    right loop
+    left ramp
+    right ramp
+    snack bar
+    left scoop
+    right scoop
+Each is indicated by a red arrow, which turns yellow when completed.
+Getting a red arrow adds time to the clock:6,4,2 for easy,medium,hard
+Getting a yellow arrow adds time to the clock:3,2,1 for easy,medium,hard
+1,000,000 is awarded for successfully completing the nighttime fantasy
+
+---- spinner ----
+Each spinner adds to the kickback power level. When the kickback power is
+full, the kickback is lit.
+
+On easy, the kickback is always lit and the power level is always full.
+On medium, the kickback starts lit but is lost after use, and must be recharged.
+On hard, the kickback starts off, must be recharged, and is lost when used.
+   In addition, the power level drains away slowly unless it is full.
+Spinner scores 333 points.
+Each revolution increases the Flume multiball jackpot by 1,000.
+
+---- misc scoring ----
+Either loop is 2,000 points
+Either ramp is 2,000 points
+Drop targets (CAT) are 1,000 points each
+Unlit rollover (RIDES or HAPPY) is 700 points each
+Each scoop scores 1,111 points
+
+---- pops + bumpers ----
+top pops, low = 1,000
+top pops, medium = 10,000
+top pop,s high = 100,000
+low is 0-32 hits
+medium 33-65 hits
+high is 66-99 hits
+bottom bumpers = 2,000 and no other effect
+Unless a hold pops award has been received, pops reset to low level at
+loss of ball. Hitting any of the pops increases the Roller multiball jackpot
+by 1,000.
+
+---- Ride photos ----
+# of Left ramps
+ 3 = 100,000 + ride photo
+ 7 = 250,000 + ride photo
+12 = extra ball + ride photo
+17,22,27,32, etc = 250,000 + ride photo
+
+---- Brass rings ----
+# of left or right loops (orbits)
+ 3 = 100,000 + brass ring
+ 7 = 250,000 + brass ring
+12 = extra ball + brass ring
+17,22,27,32, etc = 250,000 + brass ring
+
+---- combo scoring ----
+50,000 for either combo
+100,000 for either double combo
+250,000 for either triple combo
+500,000 for either super combo
+Combo is right loop, right ramp, left loop, left ramp, snackbar
+Reverse combo is left loop, left ramp, right loop, right ramp, snackbar
+
+---- lights out tablegame ----
+Starts immediately after return of successful lights out subgame.
+All ramps, scoops and loops are marked with red arrows.
+  250,000 for each red arrow. Arrow turns yellow.
+   10,000 for each yellow arrow.
+5,000,000 for completing set of 7 red arrows. They all turn red again.
+
+---- Subgame scoring ----
+All subgames award 1,000,000 points for completion
+Completion requirement is the same for easy, medium and hard, the difficulty
+level changes how much time is allowed for completion (60,45,30 on the clock
+for easy, medium, hard) and how fast some stuff changes.
+
+o  Great Bear
+   Each set of 3 gets reset as coaster passes.
+   1st of 3 worth 25k and counts as 1
+   2nd of 3 worth 100k and counts as 2
+   3rd of 3 worth 250k and counts as 3
+   12 targets hit for completion
+
+o  Race I
+   25,000 for each section of track built.
+   (hitting the white target causes 2 track sections to be built)
+   32 sections of track required for completion.
+   Difficulty level affects speed of white light
+
+o  Race II
+   25,000 for each step your car makes.
+   (hitting the white target causes 2 track sections to be built)
+   21 car steps required for completion.
+   Difficulty level affects speed of white light
+
+o  Falcon
+   200,000 for locking a matching ball
+   100,000 for locking a wildcard ball
+   25,000 for hitting the base
+   3 balls locked for completion
+
+o  Kiss
+   50,000 for each level platform was raised at end of game
+   Raised to height of 7 required for completion
+
+o  Looper
+   25,000 for non-arrow loop
+   50,000 for first arrow loop, and counts as 2
+   100,000 for second arrow loop, and counts as 2
+   200,000 for third arrow loop, and couns as 2
+   400,000 for fourth and further arrow loop, and counts as 2
+   15 loops required for completion.
+   Difficulty level affects speed of arrow
+
+o  Sidewinder
+   100,000 for going through the ramp
+   5,000 for hitting normal drop target
+   10,000 for hitting one of the blocker targets
+   4 trips through the ramp required for completion
+   Difficulty level affects how long targets remain down after hitting
+   all non-blocker drop targets.
+
+o  Rapids
+   100,000 for saving a raft
+   5,000 for submerging a rock
+   Saving 5 rafts required for completion.
+   Difficulty level affects how long rocks remain submerged
+   
+o  Tidal Force
+   0 riders:  5,000, no passenger credits
+   1 rider:  25,000, 1 passenger credit
+   2 riders: 50,000, 2 passenger credits
+   3 riders: 75,000, 3 passenger credits
+   4 riders:100,000, 4 passenger credits
+   5 riders:250,000, 8 passenger credits
+   20 passemgers required for completion.
+
+o  Bumper cars
+   This is a table game. 4 bumper cars appear on the table. Each
+   requires 5 hits to make it vanish. 1st hit scores 10,000, second
+   20,000, etc. First bumper car removed scores extra 50,000, second
+   100,000, etc. 1,000,000 on completion just like other fun/thrill zone games.
+
+o  Lights out
+     100,000 for each light hit (34 total)
+   9,999,000 for completion
+
+---- Differences in difficulty levels ----
+Easy
+Medium
+Hard
+
+Slower game speed (26)
+Slighty slower game speed (28)
+Full game speed (30)
+
+5 balls per game
+4 balls per game
+3 balls per game
+
+Kickback is lit at start of each new ball
+Kickback is lit at start of each new ball
+Kickback is off on first ball and retains last state at start of each succesive ball
+
+20 second ball saver lit with each new ball
+15 second ball saver lit with each new ball
+10 second ball saver lit with each new ball
+
+Skill shot awards 30 second saver
+Skill shot awards 20 second saver
+Skill shot awards 10 second saver
+
+Super skill shot awards 60 second saver and lights super kickback
+Super skill shot awards 40 second saver and lights kickback
+Super skill shot awards 20 second saver and lights kickback
+
+20 second saver at start of subgame
+15 second saver at start of subgame
+10 second saver at start of subgame
+
+Games last for 100 seconds
+Games last for 80 seconds
+Games last for 60 seconds
+
+Fantasy game progress carries over
+Some Fantasy game progress carries over (scoops)
+No Fantasy game progress carries over
+
+15 second saver after sub-game ends
+10 second saver after sub-game ends
+No ball saver after sub-game ends
+
+30 second saver after completed sub-game
+20 second saver after completed sub-game
+10 second saver after completed sub-game
+
+10 second saver after ball lock
+5 second saver after ball lock
+No ball saver after ball lock
+
+Multiball saver for 60 seconds
+Multiball saver for 30 seconds
+Multiball saver for 15 seconds

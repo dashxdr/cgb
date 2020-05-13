@@ -1,0 +1,308 @@
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; NINTENDO GAMEBOY HARDWARE EQUATES
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; RGBDS MACRO FOR THE LDHL INSTRUCTION
+;
+
+LDHL:		MACRO
+		LD	HL,[SP+(\2)]
+		ENDM
+
+;
+; RGBDS MACRO FOR THE DCB DATA BLOCK
+;
+
+DCB:		MACRO
+		REPT	\1
+		DB	\2
+		ENDR
+		ENDM
+
+;
+; STANDARD GAMEBOY
+;
+
+rP1		EQU	$FF00			;KEY PORT
+rSB		EQU	$FF01			;SERIAL DATA
+rSD		EQU	$FF01			;SERIAL DATA (ALIAS)
+rSC		EQU	$FF02			;SERIAL CONTROL
+rDIV		EQU	$FF04			;DIVIDER
+rTIMA		EQU	$FF05			;TIMER REGISTER
+rTMA		EQU	$FF06			;MODULO REGISTER
+rTAC		EQU	$FF07			;TIMER CONTROL
+rIF		EQU	$FF0F			;INTERRUPT REQUEST FLAG
+
+rNR10		EQU	$FF10			;SOUND-1 SWEEP
+rNR11		EQU	$FF11			;  DUTY/LENGTH
+rNR12		EQU	$FF12			;  ENVELOPE
+rNR13		EQU	$FF13			;  FREQUENCY (LOW BYTE)
+rNR14		EQU	$FF14			;  FREQUENCY (HIGH BYTE)
+
+rNR21		EQU	$FF16			;SOUND-2 DUTY/LENGTH
+rNR22		EQU	$FF17			;  ENVELOPE
+rNR23		EQU	$FF18			;  FREQUENCY (LOW BYTE)
+rNR24		EQU	$FF19			;  FREQUENCY (HIGH BYTE)
+
+rNR30		EQU	$FF1A			;SOUND-3 OFF
+rNR31		EQU	$FF1B			;  LENGTH
+rNR32		EQU	$FF1C			;  OUTPUT LENGTH
+rNR33		EQU	$FF1D			;  FREQUENCY (LOW BYTE)
+rNR34		EQU	$FF1E			;  FREQUENCY (HIGH BYTE)
+
+rNR41		EQU	$FF20			;SOUND-3 LENGTH
+rNR42		EQU	$FF21			;  ENVELOPE
+rNR43		EQU	$FF22			;  FREQUENCY
+rNR44		EQU	$FF23			;  INITAL/SEQUENCE
+
+rNR50		EQU	$FF24			; SO1/SO2 LEVEL
+rNR51		EQU	$FF25			; SO1/SO2 ALLOCATION
+rNR52		EQU	$FF26			; END FLAG
+
+rLCDC		EQU	$FF40			;LCD CONTROL
+rSTAT		EQU	$FF41			;LCDC STATUS
+rSCY		EQU	$FF42			;SCROLL-Y
+rSCX		EQU	$FF43			;SCROLL-X
+rLY		EQU	$FF44			;LCDC-Y POSITION
+rLYC		EQU	$FF45			;LY COMPARE REGISTER
+rDMA		EQU	$FF46			;DMA TRANSFER
+rBGP		EQU	$FF47			;BG  PALETTE
+rOBP0		EQU	$FF48			;OBJ PALETTE-0
+rOBP1		EQU	$FF49			;OBJ PALETTE-1
+rWY		EQU	$FF4A			;WINDOW Y-POSITION
+rWX		EQU	$FF4B			;WINDOW X-POSITION
+
+rIE		EQU	$FFFF			;INTERRUPT ACKNOWLEDGE FLAG
+
+;
+; COLOUR GAMEBOY
+;
+
+rKEY1		EQU	$FF4D			;SPEED SWITCH
+rRP		EQU	$FF56			;INFRARED PORT
+
+rVBK		EQU	$FF4F			;VIDEO RAM BANK SELECT
+rSVBK		EQU	$FF70			;WORK RAM BANK SELECT
+
+rHDMA1		EQU	$FF51			;HDMA SRC-ADDR HI
+rHDMA2		EQU	$FF52			;HDMA SRC-ADDR LO
+rHDMA3		EQU	$FF53			;HDMA DST-ADDR HI
+rHDMA4		EQU	$FF54			;HDMA DST-ADDR LO
+rHDMA5		EQU	$FF55			;HDMA LENGTH
+
+rBCPS		EQU	$FF68			;BG  PALETTE ADDRESS
+rBCPD		EQU	$FF69			;BG  PALETTE DATA
+rOCPS		EQU	$FF6A			;OBJ PALETTE ADDRESS
+rOCPD		EQU	$FF6B			;OBJ PALETTE DATA
+
+;
+; MEMORY BANK CONTROLLERS
+;
+
+rMBC_GATE	EQU	$0000			;MBC WRITE-PROTECT GATE
+rMBC_ROM	EQU	$2000			;MBC ROM BANK
+rMBC_RAM	EQU	$4000			;MBC RAM BANK
+
+rMBC1_GATE	EQU	$0000			;MBC1 WRITE-PROTECT GATE
+rMBC1_ROM	EQU	$2000			;MBC1 ROM BANK
+rMBC1_RAM	EQU	$4000			;MBC1 RAM BANK
+rMBC1_FLAG	EQU	$6000			;MBC1 ROM/RAM BANK SWITCH
+
+rMBC2_GATE	EQU	$0000			;MBC2 WRITE-PROTECT GATE
+rMBC2_ROM	EQU	$2100			;MBC2 ROM BANK
+
+rMBC3_GATE	EQU	$0000			;MBC3 WRITE-PROTECT GATE
+rMBC3_ROM	EQU	$2000			;MBC3 ROM BANK
+rMBC3_RAM	EQU	$4000			;MBC3 RAM BANK
+rMBC3_LATCH	EQU	$6000			;MBC3 ROM/RAM BANK SWITCH
+
+rMBC5_GATE	EQU	$0000			;MBC5 WRITE-PROTECT GATE
+rMBC5_ROML	EQU	$2000			;MBC5 ROM BANK (lo-bit)
+rMBC5_ROMH	EQU	$3000			;MBC5 ROM BANK (hi-bit)
+rMBC5_RAM	EQU	$4000			;MBC5 RAM BANK
+
+;
+; LCDC BITS
+;
+
+LCDC_BG_OFF	EQU	0
+LCDC_BG_ON	EQU	1
+LCDC_OBJ_OFF	EQU	0
+LCDC_OBJ_ON	EQU	2
+LCDC_OBJ_1	EQU	0
+LCDC_OBJ_2	EQU	4
+LCDC_BG_9800	EQU	0
+LCDC_BG_9C00	EQU	8
+LCDC_CS_8800	EQU	0
+LCDC_CS_8000	EQU	16
+LCDC_WN_OFF	EQU	0
+LCDC_WN_ON	EQU	32
+LCDC_WN_9800	EQU	0
+LCDC_WN_9C00	EQU	64
+LCDC_OFF	EQU	0
+LCDC_ON		EQU	128
+
+;
+; JOYPAD
+;
+
+JOY_START	EQU	7
+JOY_SELECT	EQU	6
+JOY_B		EQU	5
+JOY_A		EQU	4
+JOY_D		EQU	3
+JOY_U		EQU	2
+JOY_L		EQU	1
+JOY_R		EQU	0
+
+MSK_JOY_START	EQU	128
+MSK_JOY_SELECT	EQU	64
+MSK_JOY_B	EQU	32
+MSK_JOY_A	EQU	16
+MSK_JOY_D	EQU	8
+MSK_JOY_U	EQU	4
+MSK_JOY_L	EQU	2
+MSK_JOY_R	EQU	1
+
+;
+; ROM REGISTRATION DATA
+;
+
+MACHINE_GMB	EQU	$01
+MACHINE_SGB	EQU	$FF
+MACHINE_CGB	EQU	$11
+
+ROM_ONLY	EQU	$00			;32k ROM only.
+
+MBC1_ROM	EQU	$01			;ROM
+MBC1_RAM	EQU	$02			;ROM+RAM
+MBC1_BACKUP	EQU	$03			;ROM+RAM+battery
+
+MBC2_ROM	EQU	$05			;ROM
+MBC2_BACKUP	EQU	$06			;ROM+RAM+battery
+
+MBC3_RTC	EQU	$0F			;ROM+clock+battery
+MBC3_RTC_BACKUP	EQU	$10			;ROM+RAM+clock+battery
+MBC3_ROM	EQU	$11			;ROM
+MBC3_RAM	EQU	$12			;ROM+RAM
+MBC3_BACKUP	EQU	$13			;ROM+RAM+battery
+
+MBC5_ROM	EQU	$19			;ROM
+MBC5_RAM	EQU	$1A			;ROM+RAM
+MBC5_BACKUP	EQU	$1B			;ROM+RAM+battery
+
+; $00:ONLY ROM
+; $01:ROM+MBC1
+; $02:ROM+MBC1+SRAM
+; $03:ROM+MBC1+SRAM(Battery)
+; $05:ROM+MBC2
+; $06:ROM+MBC2(Battery)
+; $08:ROM+SRAM
+; $09:ROM+SRAM(Battery)
+; $0B:ROM+MMM01
+; $0C:ROM+MMM01+SRAM
+; $0D:ROM+MMM01+SRAM(Battery)
+; $0F:ROM+MBC3(Timer,Battery)
+; $10:ROM+MBC3(Timer)+SRAM(Battery)
+; $11:ROM+MBC3
+; $12:ROM+MBC3+SRAM
+; $13:ROM+MBC3+SRAM(Battery)
+; $15:ROM+MBC4
+; $16:ROM+MBC4+SRAM
+; $17:ROM+MBC4+SRAM(Battery)
+; $19:ROM+MBC5
+; $1A:ROM+MBC5+SRAM
+; $1B:ROM+MBC5+SRAM(Battery)
+; $1C:ROM+MBC5(Rumble)
+; $1D:ROM+MBC5(Rumble)+SRAM
+; $1E:ROM+MBC5(Rumble)+SRAM(Battery)
+; $FC: Pocket Camera
+; $FD: Bandai TAMA5
+; $FE: Hudson HuC-3
+; $FF: Hudson HuC-1
+
+ROM_256K	EQU	0			;32k bytes.
+ROM_512K	EQU	1			;64k bytes.
+ROM_1M		EQU	2			;128k bytes.
+ROM_2M		EQU	3			;256k bytes.
+ROM_4M		EQU	4			;512k bytes.
+ROM_8M		EQU	5			;1024k bytes.
+ROM_16M		EQU	6			;2048k bytes.
+
+ROM_9M		EQU	82			;1152k bytes.
+ROM_10M		EQU	83			;1280k bytes.
+ROM_12M		EQU	84			;1536k bytes.
+
+RAM_NONE	EQU	0			;0k bytes.
+RAM_16K		EQU	1			;2k bytes.
+RAM_64K		EQU	2			;8k bytes.
+RAM_256K	EQU	3			;32k bytes.
+
+JAPAN_CODE	EQU	0			;Product for Japan
+WORLD_CODE	EQU	1			;Product for Elsewhere
+
+
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; SCREEN TIMINGS
+;
+; Model DMG-01 (c) 1989 Serial number G03614618
+;
+; Basic screen layout (no scroll, no window, no sprites).
+;
+; Line Stat Duration
+;
+; 0    1    114
+;      2    20
+;      3    42
+;      0    52
+; 1    2    20
+;      3    42
+;      0    52
+; 2    2    20
+;      3    42
+;      0    52
+;
+; ...
+;
+; 142  2    20
+;      3    42
+;      0    52
+; 143  2    20
+;      3    42
+;      0    52
+; 144  1    114
+; 145  1    114
+; 146  1    114
+; 147  1    114
+; 148  1    114
+; 149  1    114
+; 150  1    114
+; 151  1    114
+; 152  1    114
+;
+; Total time for 144 line display 16416 cycles (+/- 9 cycles).
+;
+; Line time 114 cycles.
+; VBL time 1140 cycles.
+; HBL time 52 cycles (+/- 4 cycles).
+;
+; Important system timings :
+;
+; HBLANK    37 cycles max (software synchronization)
+;           25 cycles (HALT synchronization)
+;
+;############################################################################
+;############################################################################
+;############################################################################
+

@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+. ../tools
+
+$PINMAP -o allchr0 \
+	-mask boardmask.pcx board.pcx lights.pcx \
+	players.pcx -mask playerbitsmask.pcx playerbits.pcx \
+	tv1.pcx tv2.pcx tv3.pcx tv4.pcx
+
+$PINMAP -o allchr1 \
+	falconback.pcx falconlights.pcx \
+	rapidback.pcx rapidlights.pcx \
+	loopback.pcx looplights.pcx \
+	buildback.pcx buildlights.pcx \
+	bearback.pcx -mask bearlightsmask.pcx bearlights.pcx \
+	boatback.pcx boatlights.pcx \
+	-mask racemask.pcx raceback.pcx racelights.pcx \
+	-mask sidemask.pcx sideback.pcx -mask sidelightmask.pcx sidelights.pcx \
+	-mask kissmask.pcx kissback.pcx kisslights.pcx \
+	funresult.pcx -mask funlightmask.pcx funlights.pcx \
+	thrillresult.pcx -mask thrilllightmask.pcx thrilllights.pcx \
+	outback.pcx outlights.pcx
+
+$PINMAP -o allchr2 \
+	mainx.pcx \
+	speed.pcx speedbits.pcx \
+	options.pcx optionbits.pcx \
+	confirm.pcx confirmbits.pcx
+
+$XSGMB @colors.cmd falconred.pcx
+$XSGMB @colors.cmd falcongreen.pcx
+$XSGMB @colors.cmd falconblue.pcx
+$XSGMB @colors.cmd falconyellow.pcx
+$XSGMB @colors.cmd night.pcx

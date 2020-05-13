@@ -1,0 +1,12 @@
+Kissing tower:
+Sound #36 ($27) can't be used now, since the game has been changed so every
+time a drop target is hit the car is lowered. $35,$36,$37 and $38 are used.
+
+Bumper cars:
+Sound effect for scoring bonus is used for when a car is removed, after 5
+hits. This effect ($3a) must be lower priority than the winning sound effect
+($38).
+
+Canyon River Rapids
+$3b and $3c sound fx just placeholders now.
+

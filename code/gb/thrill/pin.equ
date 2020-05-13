@@ -1,0 +1,263 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** PIN.EQU                                                               **
+; **                                                                       **
+; ** Created : 20000302 by David Ashley                                    **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+MESSAGESIZE	EQU	40
+
+CUTOFFY		EQU	335<<5
+CUTOFFY2	EQU	144<<5
+
+HOLDTIME	EQU	50	;When ball is trapped, how long to hold
+SHRINKTIME	EQU	3
+BACKCLOSETIME	EQU	4
+
+SUBSAVERTIME	EQU	19	;hard Ball saver for subgames
+				;in units of 4/15ths of a second
+
+SPINNERBONUS	EQU	50	;# of spinner turns on easy to increment bonusX
+
+MINFLIPPER	EQU	0
+MAXFLIPPER	EQU	8
+
+GROUP_BALL	EQU	0
+GROUP_FLIPPERS	EQU	1
+GROUP_PEARL	EQU	7
+
+GRAVITY		EQU	4
+GRAVITYDIV	EQU	32
+SPINDIV		EQU	4
+
+AUTOFIRERATE	EQU	$00b8
+
+PUSHVAL		EQU	12	;this effects strength of pushing table
+
+EJECTSPEED	EQU	11	;ejected from traps at this speed
+
+BUMPERACTIVATE	EQU	150
+
+FLIPPERWIDTH	EQU	10<<5
+
+FLIPPERYB2	EQU	609<<4
+FLIPPERX1B2	EQU	138<<4
+FLIPPERX2B2	EQU	241<<4
+FLIPPERCX12B2	EQU	(FLIPPERX1B2+FLIPPERX2B2)/2
+FLIPPERX3B2	EQU	124<<4
+FLIPPERY3B2	EQU	295<<4
+FLIPPERX4B2	EQU	227<<4
+FLIPPERY4B2	EQU	295<<4
+FLIPPERCX34B2	EQU	(FLIPPERX3B2+FLIPPERX4B2)/2
+FLIPPERCY24B2	EQU	(FLIPPERYB2+FLIPPERY3B2)/2
+
+LB2FLIPPERX	EQU	124<<4
+RB2FLIPPERX	EQU	227<<4
+B2CENTERX	EQU	(LB2FLIPPERX+RB2FLIPPERX)/2
+B2FLIPPERY	EQU	256<<4
+
+KICKBACKVEL	EQU	-1<<5
+LANEDELAY	EQU	10
+
+
+PANELSTART	EQU	144-8
+
+BALLFLG_USED	EQU	7
+BALLFLG_LAYER	EQU	6
+;bits 0 and 1 are for specifying a colored ball, 1=red,2=green,3=blue
+
+MAXBALLS	EQU	3
+;ball structure
+BALL_FLAGS	EQU	0
+BALL_X		EQU	1
+BALL_VX		EQU	3
+BALL_Y		EQU	5
+BALL_VY		EQU	7
+BALL_THETA	EQU	9
+BALL_DTHETA	EQU	10
+BALL_BALLPAUSE	EQU	11
+BALLSIZE	EQU	12
+
+pin_flags	EQUS	"hTemp48+00"
+pin_ballflags	EQUS	"hTemp48+01"
+pin_x		EQUS	"hTemp48+02" ;2 bytes
+pin_vx		EQUS	"hTemp48+04" ;2 bytes
+pin_y		EQUS	"hTemp48+06" ;2 bytes
+pin_vy		EQUS	"hTemp48+08" ;2 bytes
+pin_theta	EQUS	"hTemp48+10"
+pin_dtheta	EQUS	"hTemp48+11"
+pin_ballpause	EQUS	"hTemp48+12"
+pin_lflipper	EQUS	"hTemp48+13"
+pin_rflipper	EQUS	"hTemp48+14"
+pin_lflipperdlt	EQUS	"hTemp48+15"
+pin_rflipperdlt	EQUS	"hTemp48+16"
+pin_grcount	EQUS	"hTemp48+17"
+pin_rtilt	EQUS	"hTemp48+18"
+pin_ltilt	EQUS	"hTemp48+19"
+pin_utilt	EQUS	"hTemp48+20"
+pin_xpush	EQUS	"hTemp48+21"
+pin_ypush	EQUS	"hTemp48+22"
+pin_spcount	EQUS	"hTemp48+23"
+pin_spinner	EQUS	"hTemp48+24"
+pin_dspinner	EQUS	"hTemp48+25"
+pin_flash	EQUS	"hTemp48+26"
+pin_board	EQUS	"hTemp48+27"
+pin_cos		EQUS	"hTemp48+28"
+pin_sin		EQUS	"hTemp48+29"
+pin_hittype	EQUS	"hTemp48+30"
+pin_xfliplo	EQUS	"hTemp48+31"
+pin_xfliphi	EQUS	"hTemp48+32"
+pin_yfliplo	EQUS	"hTemp48+33"
+pin_yfliphi	EQUS	"hTemp48+34"
+pin_textpal	EQUS	"hTemp48+35"
+pin_flags2	EQUS	"hTemp48+36"
+pin_chainwant	EQUS	"hTemp48+37"
+pin_firedelay	EQUS	"hTemp48+38"
+pin_difficulty	EQUS	"hTemp48+39"
+
+PINFLG_FIRST	EQU	0
+PINFLG_CLOSED	EQU	1
+PINFLG_RIGHT	EQU	2
+PINFLG_FLIPPED	EQU	3
+PINFLG_FORCEL	EQU	4
+PINFLG_SCORE	EQU	5
+PINFLG_RAMPDOWN	EQU	6
+PINFLG_EXIT	EQU	7
+
+PINFLG2_HARD	EQU	0
+PINFLG2_TV	EQU	1
+PINFLG2_QUIT	EQU	2
+PINFLG2_RAMPDOWN EQU	3
+
+;XSTART		EQU	170<<5
+;YSTART		EQU	258<<5
+XSTART		EQU	38<<5
+YSTART		EQU	150<<5
+YVEL		EQU	0	;2<<5
+XVEL		EQU	0
+;YVEL		EQU	-3<<5
+YVEL2		EQU	-3<<4
+
+XSTART2		EQU	(95<<5)+16
+XSTART2a		EQU	(40<<5)
+XSTART2b		EQU	(159<<5)+31-XSTART2a	;(133<<5)+31
+YSTART2		EQU	220<<5
+
+CLOSEOFFX	EQU	70<<5
+
+any_time	EQUS	"wTemp1024+188" ;4 bytes
+any_count2	EQUS	"wTemp1024+186" ;2 bytes
+any_clock	EQUS	"wTemp1024+182" ;4 bytes
+any_gothappy	EQUS	"wTemp1024+181" ;1
+any_ballsaver	EQUS	"wTemp1024+180" ;1 byte
+any_table	EQUS	"wTemp1024+179" ;1 byte
+any_tofire	EQUS	"wTemp1024+178"	;1 byte
+any_democlock	EQUS	"wTemp1024+176" ;2
+any_rumbleshift	EQUS	"wTemp1024+175" ;1
+any_weakball	EQUS	"wTemp1024+174" ;1
+any_selected	EQUS	"wTemp1024+173" ;1 byte
+any_maxsel	EQUS	"wTemp1024+172" ;1 byte
+any_skill	EQUS	"wTemp1024+171" ;1
+any_combo2	EQUS	"wTemp1024+170" ;1
+any_combo1	EQUS	"wTemp1024+169" ;1
+any_comboclear	EQUS	"wTemp1024+168" ;1
+any_bonusval	EQUS	"wTemp1024+163" ;5
+any_bonusmul	EQUS	"wTemp1024+162" ;1
+any_ballsleft	EQUS	"wTemp1024+161" ;1
+any_tabletime	EQUS	"wTemp1024+160" ;1
+any_lockedout	EQUS	"wTemp1024+159" ;1
+any_bonusmaxed	EQUS	"wTemp1024+158" ;1
+any_inmulti	EQUS	"wTemp1024+157" ;1
+any_tv		EQUS	"wTemp1024+156" ;1
+any_bonusinfo1	EQUS	"wTemp1024+155" ;1
+any_bonusinfo2	EQUS	"wTemp1024+154" ;1
+any_extra	EQUS	"wTemp1024+153" ;1
+any_extraball	EQUS	"wTemp1024+152" ;1
+any_firing	EQUS	"wTemp1024+151" ;1
+any_awardextra	EQUS	"wTemp1024+150" ;1
+any_mlock1	EQUS	"wTemp1024+149" ;1
+any_mlock2	EQUS	"wTemp1024+148" ;1
+any_1234	EQUS	"wTemp1024+147" ;1
+any_spitout	EQUS	"wTemp1024+146" ;1
+any_rumble	EQUS	"wTemp1024+145" ;1
+any_wantswitch	EQUS	"wTemp1024+144" ;1
+any_wantfire	EQUS	"wTemp1024+143" ;1
+any_switchcount	EQUS	"wTemp1024+142" ;1
+any_credit1	EQUS	"wTemp1024+141" ;1
+any_done	EQUS	"wTemp1024+140" ;1
+any_tvshow	EQUS	"wTemp1024+132" ;8
+any_messagelist	EQUS	"wTemp1024+128" ;4
+any_tvput	EQUS	"wTemp1024+127" ;1
+any_tvtake	EQUS	"wTemp1024+126" ;1
+any_tvhold	EQUS	"wTemp1024+125" ;1
+any_happyfire	EQUS	"wTemp1024+124" ;1
+any_samplewant	EQUS	"wTemp1024+123" ;1
+any_shutdown	EQUS	"wTemp1024+122" ;1
+any_tilt	EQUS	"wTemp1024+121" ;1
+
+any_timedpnt	EQUS	"wTemp1024+512" ;1 byte
+any_messagecnt	EQUS	"wTemp1024+513"	;1 byte
+any_subshoot	EQUS	"wTemp1024+514"	;1 byte
+
+any_timed	EQUS	"wTemp1024+256" ;256 bytes
+
+MAXMESSAGES	EQU	4
+MESSAGETIME	EQU	6
+SWITCHHOLD	EQU	120 ;# of ticks to hold score before switching players.
+RUMBLETIME	EQU	30 ;# of ticks of rumble
+COMBOCLEARTIME	EQU	255
+SHUTDOWNTIME	EQu	180
+
+SUBGAME_TABLE	EQU	0
+SUBGAME_FALCON	EQU	1
+SUBGAME_KISS	EQU	2
+SUBGAME_RAPIDS	EQU	3
+SUBGAME_LOOPER	EQU	4
+SUBGAME_BUILD	EQU	5
+SUBGAME_BEAR	EQU	6
+SUBGAME_BOAT	EQU	7
+SUBGAME_RACE	EQU	8
+SUBGAME_SIDE	EQU	9
+SUBGAME_OUT	EQU	10
+
+NEED_FALCON	EQU	3
+NEED_KISS	EQU	7
+NEED_RAPIDS	EQU	5
+NEED_LOOPER	EQU	15
+NEED_BUILD	EQU	32
+NEED_BEAR	EQU	12
+NEED_BOAT	EQU	20
+NEED_RACE	EQU	21
+NEED_SIDE	EQU	4
+NEED_OUT	EQU	35
+
+TIME_FALCON	EQU	60
+TIME_KISS	EQU	60
+TIME_RAPID	EQU	60
+TIME_LOOPER	EQU	60
+TIME_BUILD	EQU	60
+TIME_BEAR	EQU	60
+TIME_BOAT	EQU	60
+TIME_RACE	EQU	60
+TIME_SIDE	EQU	60
+TIME_OUT	EQU	60
+
+;********************************************************************
+;********************************************************************
+
+;bMenus settings
+OPT_NUMPLAYERS	EQU	0
+OPT_DIFFICULTY	EQU	1
+
+OPT_OPTIONS	EQU	9
+
+ARROWMAX	EQU	3
+
+NUMHIGHS	EQU	5
+HIGHSIZE	EQU	20
+

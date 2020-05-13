@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+. ../tools
+
+$MAKEPKG -length 8 redbump.rgb
+$MAKEPKG -length 8 red2.rgb
+$MAKEPKG -length 8 red3.rgb
+$MAKEPKG -length 8 red4.rgb
+$MAKEPKG -length 8 red5.rgb
+$MAKEPKG -length 8 greenbump.rgb
+$MAKEPKG -length 8 green2.rgb
+$MAKEPKG -length 8 green3.rgb
+$MAKEPKG -length 8 green4.rgb
+$MAKEPKG -length 8 green5.rgb
+$MAKEPKG -length 8 yellowbump.rgb
+$MAKEPKG -length 8 yellow2.rgb
+$MAKEPKG -length 8 yellow3.rgb
+$MAKEPKG -length 8 yellow4.rgb
+$MAKEPKG -length 8 yellow5.rgb
+$MAKEPKG -length 8 bluebump.rgb
+$MAKEPKG -length 8 blue2.rgb
+$MAKEPKG -length 8 blue3.rgb
+$MAKEPKG -length 8 blue4.rgb
+$MAKEPKG -length 8 blue5.rgb
