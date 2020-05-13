@@ -1,0 +1,7 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		cmsultn0.chr
+		cmsultn0.hi
+

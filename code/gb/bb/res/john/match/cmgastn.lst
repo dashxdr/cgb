@@ -1,0 +1,7 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		cmgastn0.chr
+		cmgastn0.hi
+

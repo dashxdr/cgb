@@ -1,0 +1,263 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** INTRO.EQU                                                      MODULE **
+; **                                                                       **
+; ** Subgame introductions.                                                **
+; **                                                                       **
+; ** Last modified : 31 Mar 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+;
+;
+
+BUTTON_UP_DELAY	EQU	24
+BUTTON_DN_DELAY	EQU	8
+
+;
+;
+;
+
+FLG_ABORTABLE	EQU	0
+FLG_NOENDFADE	EQU	1
+
+MSK_ABORTABLE	EQU	1
+MSK_NOENDFADE	EQU	2
+
+;
+;
+;
+
+hDaveAnimXFlip	EQUS	"hTemp48+$24"		;$01 bytes * 1
+hDaveAnimYFlip	EQUS	"hTemp48+$25"		;$01 bytes * 1
+hDaveAnimXMove	EQUS	"hTemp48+$26"		;$01 bytes * 1
+hDaveAnimYMove	EQUS	"hTemp48+$27"		;$01 bytes * 1
+hDaveAnimRemap	EQUS	"hTemp48+$28"		;$01 bytes * 1
+hDaveAnimCnt	EQUS	"hTemp48+$29"		;$01 bytes * 1
+hDaveAnimFrm	EQUS	"hTemp48+$2A"		;$01 bytes * 1
+hDaveAnimDly	EQUS	"hTemp48+$2B"		;$01 bytes * 1
+hDaveAnimPtrLo	EQUS	"hTemp48+$2C"		;$01 bytes * 1
+hDaveAnimPtrHi	EQUS	"hTemp48+$2D"		;$01 bytes * 1
+hDaveAnimTblLo	EQUS	"hTemp48+$2E"		;$01 bytes * 1
+hDaveAnimTblHi	EQUS	"hTemp48+$2F"		;$01 bytes * 1
+
+wSprite0	EQUS	"(wTemp512+$1D0+SPR_STACK)"	;$30 bytes * 1
+wSprite1	EQUS	"(wTemp512+$1A0+SPR_STACK)"	;$30 bytes * 1
+wSprite2	EQUS	"(wTemp512+$170+SPR_STACK)"	;$30 bytes * 1
+wSprite3	EQUS	"(wTemp512+$140+SPR_STACK)"	;$30 bytes * 1
+wSprite4	EQUS	"(wTemp512+$110+SPR_STACK)"	;$30 bytes * 1
+wSprite5	EQUS	"(wTemp512+$0E0+SPR_STACK)"	;$30 bytes * 1
+wSprite6	EQUS	"(wTemp512+$0B0+SPR_STACK)"	;$30 bytes * 1
+wSprite7	EQUS	"(wTemp512+$080+SPR_STACK)"	;$30 bytes * 1
+wSprite8	EQUS	"(wTemp512+$050+SPR_STACK)"	;$30 bytes * 1
+wSprite9	EQUS	"(wTemp512+$020+SPR_STACK)"	;$30 bytes * 1
+
+;
+;
+;
+
+ICMD_END	EQU	0
+ICMD_HALT	EQU	1
+ICMD_FADEDN	EQU	2
+ICMD_FADEUP	EQU	3
+ICMD_FADEUPSCR	EQU	4
+ICMD_DUMP	EQU	5
+ICMD_WIPE	EQU	6
+ICMD_KILLSOUND	EQU	7
+ICMD_PLAYMUSIC	EQU	8
+ICMD_PREFMUSIC	EQU	9
+ICMD_FONT	EQU	10
+ICMD_FONTXOR	EQU	11
+ICMD_NEWPKG	EQU	12
+ICMD_USEPKG	EQU	13
+ICMD_SLOWSTR	EQU	14
+ICMD_FASTSTR	EQU	15
+ICMD_SLOWSTRP	EQU	16
+ICMD_FASTSTRP	EQU	17
+ICMD_SLOWSTRN	EQU	18
+ICMD_FASTSTRN	EQU	19
+ICMD_SPRON	EQU	20
+ICMD_SPROFF	EQU	21
+ICMD_ATTRLIST	EQU	22
+ICMD_ABORTOFF	EQU	23
+ICMD_ABORTON	EQU	24
+ICMD_DELAY	EQU	25
+ICMD_JUMP	EQU	26
+ICMD_CALL	EQU	27
+ICMD_RETN	EQU	28
+ICMD_NOENDFADE	EQU	29
+ICMD_STRBOUNDS	EQU	30
+ICMD_GETSTR	EQU	31
+ICMD_SPLITSTR	EQU	32
+ICMD_INTROSTR	EQU	33
+ICMD_LUCKYSTR	EQU	34
+ICMD_GASTNSTR	EQU	35
+ICMD_WHOMSTR	EQU	36
+
+;
+;
+;
+
+GMB_PALN	EQU	0
+GMB_PALF	EQU	1
+CGB_PALN	EQU	0
+CGB_PALF	EQU	2
+
+CGB_PAL0	EQU	0
+CGB_PAL1	EQU	4
+CGB_PAL2	EQU	8
+CGB_PAL3	EQU	12
+CGB_PAL4	EQU	16
+CGB_PAL5	EQU	20
+CGB_PAL6	EQU	24
+CGB_PAL7	EQU	28
+
+;
+; LO-CODE
+;
+
+		GLOBAL	TalkingHeads
+
+		GLOBAL	InitIntro
+		GLOBAL	ProcIntroSeq
+
+		GLOBAL	InitIntroSpr
+		GLOBAL	ProcIntroSpr
+		GLOBAL	DumpIntroSpr
+		GLOBAL	DrawIntroSpr
+
+		GLOBAL	ProcStaticSpr
+		GLOBAL	DumpStaticSpr
+		GLOBAL	DrawStaticSpr
+
+		GLOBAL	InitDaveAnim
+		GLOBAL	MakeDaveAnim
+		GLOBAL	IncDaveAnim
+		GLOBAL	SetDaveAnim
+
+		GLOBAL	ProcICmd
+		GLOBAL	NextICmd
+
+		GLOBAL	ICmdEnd
+		GLOBAL	ICmdHalt
+		GLOBAL	ICmdFadeDn
+		GLOBAL	ICmdFadeUp
+		GLOBAL	ICmdDump
+		GLOBAL	ICmdWipe
+		GLOBAL	ICmdKillSound
+		GLOBAL	ICmdPlayMusic
+		GLOBAL	ICmdPrefMusic
+		GLOBAL	ICmdFont
+		GLOBAL	ICmdNewPkg
+		GLOBAL	ICmdUsePkg
+		GLOBAL	ICmdSlowStr
+		GLOBAL	ICmdFastStr
+		GLOBAL	ICmdSprOn
+		GLOBAL	ICmdSprOff
+
+		GLOBAL	DoBubbleLhs
+		GLOBAL	DoBubbleRhs
+		GLOBAL	DoButtonIcon
+		GLOBAL	DoButtonIcon2
+		GLOBAL	DoSmallMarker
+
+;
+; HI-CODE
+;
+
+		GLOBAL	PlyrICmdLucky
+		GLOBAL	PlyrICmdLuckyC
+		GLOBAL	PlyrICmdLuckyF
+		GLOBAL	PlyrICmdLucky0
+		GLOBAL	PlyrICmdLucky1
+		GLOBAL	PlyrICmdLucky2
+		GLOBAL	PlyrICmdLucky3
+		GLOBAL	PlyrICmdLucky4
+		GLOBAL	PlyrICmdLucky5
+		GLOBAL	PlyrICmdLucky6
+		GLOBAL	PlyrICmdLucky7
+		GLOBAL	PlyrICmdLucky8
+
+		GLOBAL	PlyrICmdGastn
+		GLOBAL	PlyrICmdGastnX
+		GLOBAL	PlyrICmdGastnC
+		GLOBAL	PlyrICmdGastnB
+		GLOBAL	PlyrICmdGastn0
+		GLOBAL	PlyrICmdGastn1
+		GLOBAL	PlyrICmdGastn2
+		GLOBAL	PlyrICmdGastn3
+		GLOBAL	PlyrICmdGastn4
+		GLOBAL	PlyrICmdGastn5
+
+		GLOBAL	IntroLogo
+		GLOBAL	IntroBoom
+
+		GLOBAL	IntroCellar
+		GLOBAL	IntroChip
+		GLOBAL	IntroChopper
+		GLOBAL	IntroRide
+		GLOBAL	IntroStove
+		GLOBAL	IntroSultan
+		GLOBAL	IntroTarget
+		GLOBAL	IntroTrivia
+		GLOBAL	IntroWhack
+		GLOBAL	IntroQS
+
+		GLOBAL	RulesCellar
+		GLOBAL	RulesChip
+		GLOBAL	RulesChopper
+		GLOBAL	RulesRide
+		GLOBAL	RulesStove
+		GLOBAL	RulesSultan
+		GLOBAL	RulesTarget
+		GLOBAL	RulesWhack
+
+		GLOBAL	IntroBonus
+		GLOBAL	IntroMind
+		GLOBAL	IntroSpit
+		GLOBAL	RulesMind
+		GLOBAL	RulesSpit
+
+		GLOBAL	IntroStory1
+		GLOBAL	IntroFinish1
+		GLOBAL	IntroStory2
+		GLOBAL	IntroFinish2
+		GLOBAL	IntroStory3
+		GLOBAL	IntroStoryWin
+		GLOBAL	IntroStoryLose
+
+		GLOBAL	IntroStarSqr
+
+		GLOBAL	IntroKnight
+
+		GLOBAL	ICmdIntroStr
+		GLOBAL	ICmdLuckyStr
+		GLOBAL	ICmdGastnStr
+		GLOBAL	ICmdWhomStr
+
+		GLOBAL	MultiWinBeast
+		GLOBAL	MultiWinBelle
+		GLOBAL	MultiWinPotts
+		GLOBAL	MultiWinLumir
+
+		GLOBAL	TargetStg1ICmd
+		GLOBAL	TargetStg2ICmd
+		GLOBAL	TargetStg3ICmd
+		GLOBAL	TargetStg4ICmd
+		GLOBAL	TargetStg5ICmd
+
+		GLOBAL	IntroUnlockMap
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF INTRO.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

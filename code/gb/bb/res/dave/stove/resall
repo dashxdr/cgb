@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.chr *.equ *.map *.rgb *.bg *.bin
+. ../../tools
+
+$XSGMB @cut.cmd fire.abm
+for f in *.spr; do
+ $XSGMB @cut.cmd $f
+done
+
+for f in stv*.pcx; do
+ $XSGMB @bg2.cmd $f
+done
+
+$XSGMB @bg.cmd stovebg.pcx
+$GBSWD -d stovebg.chr
+
+for f in stbw*.pcx; do
+ $XSGMB @bgbw2.cmd $f
+done
+
+$XSGMB @bgbw.cmd stovebw.pcx
+$GBSWD -d stovebw.chr
+
+$XSGMB @bg.cmd stlose.pcx
+$MAKEBG stlose.map
+$GBSWD -d stlose.bg
+
+$XSGMB @bgbw.cmd stlosebw.pcx
+$MAKEBG stlosebw.map
+$GBSWD -d stlosebw.bg
+
+$MAPDELTA stv stbw 14 stv.bin
+$GBSWD -d stovebg.map
+$GBSWD -d stovebw.map
+

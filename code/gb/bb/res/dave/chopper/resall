@@ -1,0 +1,42 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.chr *.equ *.map *.rgb *.bin
+. ../../tools
+
+$XSGMB @cut.cmd log.abm
+
+for zzz in mr0*.pcx; do
+ $XSGMB @bg2.cmd $zzz
+done
+
+$XSGMB @bg.cmd mr000.pcx
+$GBSWD -d mr000.chr
+
+for zzz in axe*.pcx; do
+ $XSGMB @axe2.cmd $zzz
+done
+
+$XSGMB @axe.cmd axe000.pcx
+$GBSWD -d axe000.chr
+
+for zzz in mrbw*.pcx; do
+ $XSGMB @bgbw2.cmd $zzz
+done
+
+$XSGMB @bgbw.cmd mrbw000.pcx
+$GBSWD -d mrbw000.chr
+
+for zzz in axbw*.pcx; do
+ $XSGMB @axbw2.cmd $zzz
+done
+
+$XSGMB @axbw.cmd axbw000.pcx
+$GBSWD -d axbw000.chr
+
+$GBSWD -d mrbw000.map
+$GBSWD -d mr000.map
+
+$MAPDELTA mr mrbw 18 mr.bin
+$MAPDELTA axe axbw 5 axe.bin
+
+./chopseq

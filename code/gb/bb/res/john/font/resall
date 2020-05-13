@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.hi *.lo *.map *.chr *.pkg *.equ *.rgb
+. ../../tools
+
+for f in *.cmd; do
+ $XSGMB $f
+done
+
+for f in *.fnt; do
+ $GMBFNT $f
+done

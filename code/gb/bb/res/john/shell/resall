@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.hi *.lo *.map *.chr *.pkg *.equ *.rgb
+. ../../tools
+
+for f in b*.lbm; do
+ $XSGMB @bbitmap.cmd $f
+done
+
+for f in c*.lbm; do
+ $XSGMB @cbitmap.cmd $f
+done
+
+for f in c*.map; do
+ $MAKEPKG -offset 8 -split $f
+done
+
+$GBSWD -g -d -n  *.chr
+$GBSWD -g -d -n  *.hi
+
+for f in b*.lbm; do
+ t=${f%.*}
+ $MAKEPKG -OutputFormat BIN -OutputHeader YES -OutputOrder LOHI swd/$t.chr
+done
+for f in c*.lbm; do
+ t=${f%.*}
+ $MAKEPKG -OutputFormat BIN -OutputHeader YES -OutputOrder LOHI swd/$t.chr swd/$t.hi $t.rgb
+done
+
+mv swd/*.pkg .
+
+$XSGMB bshoot.cmd
+$XSGMB cshoot.cmd
+$XSGMB blevels.cmd
+$XSGMB clevels.cmd
+
+$GBSWD -d *.map
+$GBSWD -g -d -ba bshoot.chr
+$GBSWD -g -d -ba cshoot.chr
+$GBSWD -g -d -ba blevels.chr
+$GBSWD -g -d -ba clevels.chr
+
+for f in *.lst; do
+ $MAKEPKG @$f
+done

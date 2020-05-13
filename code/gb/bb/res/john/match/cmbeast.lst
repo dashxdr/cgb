@@ -1,0 +1,7 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		cmbeast0.chr
+		cmbeast0.hi
+

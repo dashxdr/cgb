@@ -1,0 +1,6 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		bmbeast0.chr
+

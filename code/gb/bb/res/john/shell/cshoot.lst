@@ -1,0 +1,10 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		swd/cshoot.chr
+		swd/cshoot.map
+		cshoot.rgb
+
+
+

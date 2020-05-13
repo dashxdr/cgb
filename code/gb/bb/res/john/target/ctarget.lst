@@ -1,0 +1,7 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		swd/ctarget.chr
+		swd/ctarget.map
+

@@ -1,0 +1,328 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** BOARD.ASM                                                      MODULE **
+; **                                                                       **
+; ** Game Board.                                                           **
+; **                                                                       **
+; ** Last modified : 25 Mar 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+;
+;
+
+MAX_STARS	EQU	3
+SEE_STARS	EQU	3
+
+SHOW_DICE_DELAY	EQU	60
+
+;
+;
+;
+
+PLYR_BEAST	EQU	0
+PLYR_BELLE	EQU	1
+PLYR_POTTS	EQU	2
+PLYR_LUMIR	EQU	3
+PLYR_GASTN	EQU	4
+
+;
+; Offsets into wStructBeast
+;
+
+PFLG_SHORT	EQU	2
+PFLG_AGAIN	EQU	3
+PFLG_2DICE	EQU	4
+PFLG_SKIP	EQU	5
+PFLG_CPU	EQU	6
+PFLG_PLAY	EQU	7
+
+PMSK_SHORT	EQU	$04
+PMSK_AGAIN	EQU	$08
+PMSK_2DICE	EQU	$10
+PMSK_SKIP	EQU	$20
+PMSK_CPU	EQU	$40
+PMSK_PLAY	EQU	$80
+
+PLYR_FLAGS	EQU	0
+PLYR_LEVEL	EQU	1
+PLYR_SQUARE	EQU	2
+PLYR_STARS	EQU	3
+PLYR_MODIFIER	EQU	4
+PLYR_SHOETRAP	EQU	5
+PLYR_SHIELD	EQU	6
+
+;
+; Offsets into PlryInfoBeast
+;
+
+PLYR_RAM	EQU	0
+PLYR_TMP	EQU	2
+PLYR_QSPLAY	EQU	4
+PLYR_QSSKIP	EQU	6
+PLYR_BSMARK	EQU	8
+PLYR_BLMARK	EQU	11
+PLYR_CSMARK	EQU	14
+PLYR_CLMARK	EQU	17
+
+;
+;
+;
+
+SQR_START	EQU	1
+SQR_BEAST	EQU	2
+SQR_BELLE	EQU	3
+SQR_CHIP	EQU	4
+SQR_COGGS	EQU	5
+SQR_GASTN	EQU	6
+SQR_LEFOU	EQU	7
+SQR_LUMIR	EQU	8
+SQR_MIRRO	EQU	9
+SQR_POPPA	EQU	10
+SQR_POTTS	EQU	11
+SQR_LUCKY	EQU	12
+SQR_SULTN	EQU	13
+SQR_DOORS	EQU	14
+SQR_STAR	EQU	15
+SQR_END		EQU	16
+
+;
+;
+;
+
+GUARD1_NRM	EQU	42			;was 42
+GUARD1_ALT	EQU	53			;was 52
+GUARD2_NRM	EQU	46			;was 46
+GUARD2_ALT	EQU	52			;was 50
+GUARD3_NRM	EQU	49			;was 53
+GUARD3_ALT	EQU	57			;was 54
+GUARD4_NRM	EQU	62			;was 56
+GUARD4_ALT	EQU	55			;was 63
+
+;
+;
+;
+
+SCROLL_SCR_LO	EQU	$C800			;$0400 on 2KB boundary
+SCROLL_SCR_HI	EQU	$CC00			;$0400 must follow
+SCROLL_MAP_LO	EQU	$D000			;$1000 on 4KB boundary
+SCROLL_MAP_HI	EQU	$D000			;$1000 on 4KB boundary
+SCROLL_QUEUE	EQU	$D000			;$0400 on 1KB boundary
+
+;
+;
+;
+
+hDieRemap	EQUS	"hTemp48+$08"		;$01 bytes * 1
+hDieFixup	EQUS	"hTemp48+$09"		;$01 bytes * 1
+hDie1Roll	EQUS	"hTemp48+$0A"		;$01 bytes * 1
+hDie2Roll	EQUS	"hTemp48+$0B"		;$01 bytes * 1
+hDieDelay	EQUS	"hTemp48+$0C"		;$01 bytes * 1
+
+;
+;
+;
+
+hBoardOK	EQUS	"hTemp48+$08"		;$01 bytes * 1
+hBoardX		EQUS	"hTemp48+$09"		;$01 bytes * 1
+hBoardY		EQUS	"hTemp48+$0A"		;$01 bytes * 1
+
+;
+;
+;
+
+hFirstMove	EQUS	"hTemp48+$08"		;$01 bytes * 1
+hInPosition	EQUS	"hTemp48+$09"		;$01 bytes * 1
+hButtonFrame	EQUS	"hTemp48+$0A"		;$01 bytes * 1
+hButtonDelay	EQUS	"hTemp48+$0B"		;$01 bytes * 1
+
+;
+;
+;
+
+hCamXLo		EQUS	"hTemp48+$12"		;$01 bytes * 1
+hCamXHi		EQUS	"hTemp48+$13"		;$01 bytes * 1
+hCamYLo		EQUS	"hTemp48+$14"		;$01 bytes * 1
+hCamYHi		EQUS	"hTemp48+$15"		;$01 bytes * 1
+hScrXLo		EQUS	"hTemp48+$16"		;$01 bytes * 1
+hScrXHi		EQUS	"hTemp48+$17"		;$01 bytes * 1
+hScrYLo		EQUS	"hTemp48+$18"		;$01 bytes * 1
+hScrYHi		EQUS	"hTemp48+$19"		;$01 bytes * 1
+hScxBlk		EQUS	"hTemp48+$1A"		;$01 bytes * 1
+hScyBlk		EQUS	"hTemp48+$1B"		;$01 bytes * 1
+hScxOld		EQUS	"hTemp48+$1C"		;$01 bytes * 1
+hScyOld		EQUS	"hTemp48+$1D"		;$01 bytes * 1
+hScxChg		EQUS	"hTemp48+$1E"		;$01 bytes * 1
+hScyChg		EQUS	"hTemp48+$1F"		;$01 bytes * 1
+hBlitXY		EQUS	"hTemp48+$20"		;$04 bytes * 1
+hBlitYX		EQUS	"hTemp48+$24"		;$04 bytes * 1
+hMapAddrLo	EQUS	"hTemp48+$28"		;$01 bytes * 1
+hMapAddrHi	EQUS	"hTemp48+$29"		;$01 bytes * 1
+hChrBank	EQUS	"hTemp48+$2A"		;$01 bytes * 1
+hBlkBank	EQUS	"hTemp48+$2B"		;$01 bytes * 1
+hListPutLo	EQUS	"hTemp48+$2C"		;$01 bytes * 1
+hListPutHi	EQUS	"hTemp48+$2D"		;$01 bytes * 1
+hListGetLo	EQUS	"hTemp48+$2E"		;$01 bytes * 1
+hListGetHi	EQUS	"hTemp48+$2F"		;$01 bytes * 1
+
+;
+;
+;
+
+wBoardBeast	EQUS	"(wTemp512+$000)"	;$10 bytes * 1
+wBoardBelle	EQUS	"(wTemp512+$010)"	;$10 bytes * 1
+wBoardPotts	EQUS	"(wTemp512+$020)"	;$10 bytes * 1
+wBoardLumir	EQUS	"(wTemp512+$030)"	;$10 bytes * 1
+wBoardGastn	EQUS	"(wTemp512+$040)"	;$10 bytes * 1
+wBoardInfoLo	EQUS	"(wTemp512+$050)"	;$01 bytes * 1
+wBoardInfoHi	EQUS	"(wTemp512+$051)"	;$01 bytes * 1
+wBoardRamLo	EQUS	"(wTemp512+$052)"	;$01 bytes * 1
+wBoardRamHi	EQUS	"(wTemp512+$053)"	;$01 bytes * 1
+wBoardTmpLo	EQUS	"(wTemp512+$054)"	;$01 bytes * 1
+wBoardTmpHi	EQUS	"(wTemp512+$055)"	;$01 bytes * 1
+
+wBoardSpr0	EQUS	"(wTemp512+$1F0)"	;$20 bytes * 1
+wBoardSpr1	EQUS	"(wTemp512+$1D0)"	;$20 bytes * 1
+wBoardSpr2	EQUS	"(wTemp512+$1B0)"	;$20 bytes * 1
+wBoardSpr3	EQUS	"(wTemp512+$190)"	;$20 bytes * 1
+wBoardSpr4	EQUS	"(wTemp512+$170)"	;$20 bytes * 1
+wBoardSpr5	EQUS	"(wTemp512+$150)"	;$20 bytes * 1
+wBoardSpr6	EQUS	"(wTemp512+$130)"	;$20 bytes * 1
+wBoardSpr7	EQUS	"(wTemp512+$110)"	;$20 bytes * 1
+wBoardSpr8	EQUS	"(wTemp512+$0F0)"	;$20 bytes * 1
+wBoardSpr9	EQUS	"(wTemp512+$0D0)"	;$20 bytes * 1
+wBoardSprA	EQUS	"(wTemp512+$0B0)"	;$20 bytes * 1
+wBoardSprB	EQUS	"(wTemp512+$090)"	;$20 bytes * 1
+
+wBoardBusy	EQUS	"(wTemp512+$100)"	;$80 bytes * 1 (page boundary)
+
+;
+;
+;
+
+;
+; LO-CODE
+;
+		GLOBAL	TblPlyrInfo
+		GLOBAL	TblGuardPos
+		GLOBAL	TblDoorPos
+		GLOBAL	TblIconOffset
+
+		GLOBAL	GetPlyrInfo
+		GLOBAL	BoardWhichICmd
+
+		GLOBAL	BoardLaunch
+		GLOBAL	BoardSubGame
+
+		GLOBAL	TryToBeatGastn
+
+		GLOBAL	TblMarkerSprRgb
+
+		GLOBAL	BoardLaunch
+
+		GLOBAL	TblMarkerSprRgb
+
+		GLOBAL	CopyBoard
+
+		GLOBAL	CgbInitBoard
+
+		GLOBAL	CgbMapRefresh
+		GLOBAL	CgbMapInit
+		GLOBAL	CgbMapFree
+		GLOBAL	CgbMapAlloc
+		GLOBAL	CgbMapPaint
+
+		GLOBAL	CgbBlitScreen
+		GLOBAL	CgbBlitVbl
+		GLOBAL	BlitRectXY
+		GLOBAL	BlitRectYX
+
+		GLOBAL	CgbAttrVbl
+
+		GLOBAL	BlitVideoXY
+		GLOBAL	BlitVideoYX
+
+		GLOBAL	CopyBoard
+
+		GLOBAL	InitBoardSpr
+		GLOBAL	DumpBoardSpr
+		GLOBAL	DrawBoardSpr
+
+		GLOBAL	DrawGuardMap
+
+		GLOBAL	GmbInitBoard
+		GLOBAL	GmbMapPaint
+		GLOBAL	GmbMapRefresh
+
+		GLOBAL	DoVblGmbBoard
+		GLOBAL	DoLycGmbBoard0
+		GLOBAL	DoLycGmbBoard1
+		GLOBAL	DoLycGmbBoard2
+
+		GLOBAL	OverlayResult
+
+		GLOBAL	LockStories
+		GLOBAL	UnlockStories
+
+;
+; HI-CODE
+;
+
+		GLOBAL	ShowGameResult
+
+		GLOBAL	StoryGame
+		GLOBAL	BoardGame
+
+		GLOBAL	BoardBonus
+
+		GLOBAL	BoardLucky
+		GLOBAL	BoardGastn
+		GLOBAL	BoardStar
+
+		GLOBAL	PlyrShowWhom
+		GLOBAL	ICmdWhomStr
+		GLOBAL	BeastPlayICmd
+		GLOBAL	BeastSkipICmd
+		GLOBAL	BellePlayICmd
+		GLOBAL	BelleSkipICmd
+		GLOBAL	PottsPlayICmd
+		GLOBAL	PottsSkipICmd
+		GLOBAL	LumirPlayICmd
+		GLOBAL	LumirSkipICmd
+
+		GLOBAL	BBOARDS_CHR
+		GLOBAL	BBOARDS_BLK
+
+		GLOBAL	BBOARDS1_MAP
+		GLOBAL	BBOARDS2_MAP
+		GLOBAL	BBOARDS3_MAP
+		GLOBAL	BBOARDM1_MAP
+		GLOBAL	BBOARDM2_MAP
+		GLOBAL	BBOARDM3_MAP
+		GLOBAL	BBOARDM4_MAP
+
+		GLOBAL	CBOARDS_RGB
+		GLOBAL	CBOARDS_CHR
+		GLOBAL	CBOARDS_BLK
+
+		GLOBAL	CBOARDS1_MAP
+		GLOBAL	CBOARDS2_MAP
+		GLOBAL	CBOARDS3_MAP
+		GLOBAL	CBOARDM1_MAP
+		GLOBAL	CBOARDM2_MAP
+		GLOBAL	CBOARDM3_MAP
+		GLOBAL	CBOARDM4_MAP
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF BOARD.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

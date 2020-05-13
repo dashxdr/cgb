@@ -1,0 +1,400 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** RAM.EQU                                                        MODULE **
+; **                                                                       **
+; ** Variables, Structures and Data Tables.                                **
+; **                                                                       **
+; ** Last modified : 02 Apr 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+;
+;
+SECRETLEN	EQU	12
+
+;
+; Hi score structures, each 16 bytes, stored in wHighScores
+;
+		RSSET	$0
+
+HI_STATEASY	RB	1
+HI_STATMEDIUM	RB	1
+HI_STATHARD	RB	1
+HI_INIT1	RB	1
+HI_INIT2	RB	1
+HI_INIT3	RB	1
+HI_SCORELO	RB	1
+HI_SCOREHI	RB	1
+
+;
+;
+;
+
+		GLOBAL	wStructBeast
+		GLOBAL	wStructBelle
+		GLOBAL	wStructPotts
+		GLOBAL	wStructLumir
+		GLOBAL	wStructGastn
+
+		GLOBAL	hTemp48
+
+		GLOBAL	wStackPointer
+		GLOBAL	wSprDumpStack
+
+		GLOBAL	wVblVector
+		GLOBAL	wLycVector
+
+		GLOBAL	wStructSmod
+		GLOBAL	wJmpVblVector
+		GLOBAL	wJmpLycVector
+		GLOBAL	wJmpFadeColor
+		GLOBAL	wJmpXferColor
+		GLOBAL	wJmpSprLRTB
+		GLOBAL	wJmpSprRLTB
+		GLOBAL	wJmpSprDumpMod
+		GLOBAL	wJmpTemporary
+		GLOBAL	wJmpDraw
+
+		GLOBAL	wMzChannel1
+		GLOBAL	wMzChannel2
+		GLOBAL	wMzChannel3
+		GLOBAL	wMzChannel4
+		GLOBAL	wFxChannel1
+		GLOBAL	wFxChannel2
+		GLOBAL	wFxChannel3
+		GLOBAL	wFxChannel4
+
+		GLOBAL	wMzSP
+		GLOBAL	wMzNumber
+		GLOBAL	wFxNumber
+		GLOBAL	wMzPlaying
+		GLOBAL	wMzWavePtr
+
+		GLOBAL	wFileAddr
+		GLOBAL	wFileBank
+
+		GLOBAL	wSprPlotSP
+		GLOBAL	wSprDumpSP
+
+		GLOBAL	wTmpSP
+
+		GLOBAL	wJoy1Dir
+		GLOBAL	wJoy1Cur
+		GLOBAL	wJoy1Hit
+		GLOBAL	wJoy1Rpt
+
+		GLOBAL	wFontFlg
+		GLOBAL	wFontLo
+		GLOBAL	wFontHi
+		GLOBAL	wFontPal
+		GLOBAL	wFontPalXor
+		GLOBAL	wStringX
+		GLOBAL	wStringY
+		GLOBAL	wStringW
+		GLOBAL	wStringH
+		GLOBAL	wStringT
+
+		GLOBAL	wBoxX
+		GLOBAL	wBoxY
+		GLOBAL	wBoxW
+		GLOBAL	wBoxH
+
+		GLOBAL	wFocusPlyr
+		GLOBAL	wPlyrMoves
+		GLOBAL	wFrontPlyr
+		GLOBAL	wFrontLoop
+
+		GLOBAL	wSubChoose
+		GLOBAL	wSubGaston
+		GLOBAL	wSubLevel
+		GLOBAL	wSubStage
+		GLOBAL	wSubAward
+		GLOBAL	wSubStars
+		GLOBAL	wSubPhrase
+		GLOBAL	wSubCount
+
+		GLOBAL	wTriviaSpeed
+		GLOBAL	wTriviaRight
+
+		GLOBAL	wFigCount
+		GLOBAL	wFigTake
+		GLOBAL	wFigPhase
+		GLOBAL	wCelsPerFrame
+		GLOBAL	wPalCount
+		GLOBAL	wPalStart
+		GLOBAL	wGroupCount
+		GLOBAL	wGroups
+		GLOBAL	wGroup1
+		GLOBAL	wGroup2
+		GLOBAL	wGroup3
+		GLOBAL	wGroup4
+		GLOBAL	wGroup5
+		GLOBAL	wGroup6
+		GLOBAL	wGroup7
+		GLOBAL	wGroup8
+		GLOBAL	wTempSelect
+		GLOBAL	wTune
+		GLOBAL	wSndEffect
+
+		GLOBAL	wParallax0
+		GLOBAL	wParallax1
+		GLOBAL	wParallax2
+
+		GLOBAL	wWantToPause
+
+		GLOBAL	wChrUsedLo
+		GLOBAL	wChrUsedHi
+
+		GLOBAL	wOamShadow
+		GLOBAL	wChrXfer
+		GLOBAL	wOamBuffer
+		GLOBAL	wTemp512
+
+		GLOBAL	wFlickerBuf
+
+		GLOBAL	wMapData
+
+		GLOBAL	wAtrShadow
+		GLOBAL	wAtrDecode
+
+		GLOBAL	wBcpShadow
+		GLOBAL	wOcpShadow
+		GLOBAL	wBcpArcade
+		GLOBAL	wOcpArcade
+		GLOBAL	wBcpShadowTop
+		GLOBAL	wBcpArcadeTop
+		GLOBAL	wBcpShadowBtm
+		GLOBAL	wBcpArcadeBtm
+		GLOBAL	wTblColorFade
+		GLOBAL	wCmapSwap
+		GLOBAL	wDirTable
+
+
+		GLOBAL	wShellSound
+		GLOBAL	wShellAcc
+		GLOBAL	wShellVect
+		GLOBAL	wShellBank
+		GLOBAL	wAvoidIntro
+
+		GLOBAL	wRandTake
+		GLOBAL	wRandomBlock
+
+		GLOBAL	wGmbPal2
+
+		GLOBAL	wScoreLo
+		GLOBAL	wScoreHi
+		GLOBAL	wChallenge
+
+		GLOBAL	wSelected
+
+		GLOBAL	wBoardMz
+
+		GLOBAL	wRowCnt
+		GLOBAL	wColCnt
+		GLOBAL	wRowTmp
+		GLOBAL	wColTmp
+
+
+		GLOBAL	hTemp48
+
+		GLOBAL	hRomBank
+		GLOBAL	hRamBank
+		GLOBAL	hWrkBank
+		GLOBAL	hVidBank
+
+		GLOBAL	hOamFlag
+		GLOBAL	hPalFlag
+		GLOBAL	hPosFlag
+
+		GLOBAL	hOamPointer
+
+		GLOBAL	hVblBank
+		GLOBAL	hVblFlag
+		GLOBAL	hVblCount
+		GLOBAL	hVblLCDC
+		GLOBAL	hVblBGP
+		GLOBAL	hVblOBP0
+		GLOBAL	hVblOBP1
+		GLOBAL	hVblSCX
+		GLOBAL	hVblSCY
+		GLOBAL	hVbl8
+
+		GLOBAL	hLycLCDC
+		GLOBAL	hLycBGP
+
+		GLOBAL	hWndY
+		GLOBAL	hPanelY
+
+		GLOBAL	hCycleCount
+
+		GLOBAL	hPadDir
+		GLOBAL	hPadCur
+		GLOBAL	hPadHit
+
+		GLOBAL	hTmpLo
+		GLOBAL	hTmpHi
+		GLOBAL	hTmp2Lo
+		GLOBAL	hTmp2Hi
+		GLOBAL	hTmp3Lo
+		GLOBAL	hTmp3Hi
+		GLOBAL	hTmp4Lo
+		GLOBAL	hTmp4Hi
+
+		GLOBAL	hSprXLo
+		GLOBAL	hSprXHi
+		GLOBAL	hSprYLo
+		GLOBAL	hSprYHi
+		GLOBAL	hSprPal
+		GLOBAL	hSprNxt
+		GLOBAL	hSprMax
+		GLOBAL	hSprCnt
+
+		GLOBAL	hOamBufLo
+		GLOBAL	hOamBufHi
+
+		GLOBAL	hIntroSeqLo
+		GLOBAL	hIntroSeqHi
+		GLOBAL	hIntroPkgLo
+		GLOBAL	hIntroPkgHi
+		GLOBAL	hIntroRtsLo
+		GLOBAL	hIntroRtsHi
+		GLOBAL	hIntroDone
+		GLOBAL	hIntroDelay
+		GLOBAL	hIntroFlags
+		GLOBAL	hIntroBlit
+
+		GLOBAL	hChannelVol
+		GLOBAL	hShadowNR12
+		GLOBAL	hShadowNR22
+		GLOBAL	hShadowNR32
+		GLOBAL	hShadowNR42
+		GLOBAL	hActualNR32
+
+		GLOBAL	hCutoff
+
+		GLOBAL	hOamXfer
+		GLOBAL	hSgb
+		GLOBAL	hMachine
+
+
+
+;
+; Scrolling variables that aren't used, but I don't want to
+; lose track of them.
+;
+;		GLOBAL	wMapXOrgLo
+;		GLOBAL	wMapXOrgHi
+;		GLOBAL	wMapYOrgLo
+;		GLOBAL	wMapYOrgHi
+;		GLOBAL	wMapXMinLo
+;		GLOBAL	wMapXMinHi
+;		GLOBAL	wMapYMinLo
+;		GLOBAL	wMapYMinHi
+;		GLOBAL	wMapXMaxLo
+;		GLOBAL	wMapXMaxHi
+;		GLOBAL	wMapYMaxLo
+;		GLOBAL	wMapYMaxHi
+;		GLOBAL	wCamScrXLo
+;		GLOBAL	wCamScrXHi
+;		GLOBAL	wCamScrYLo
+;		GLOBAL	wCamScrYHi
+;
+;		GLOBAL	hScrXLo
+;		GLOBAL	hScrXHi
+;		GLOBAL	hScrYLo
+;		GLOBAL	hScrYHi
+;		GLOBAL	hScxBlk
+;		GLOBAL	hScyBlk
+;		GLOBAL	hScxChg
+;		GLOBAL	hScyChg
+;		GLOBAL	hScxScrLo
+;		GLOBAL	hScxScrHi
+;		GLOBAL	hScxMapLo
+;		GLOBAL	hScxMapHi
+;		GLOBAL	hScyScrLo
+;		GLOBAL	hScyScrHi
+;		GLOBAL	hScyMapLo
+;		GLOBAL	hScyMapHi
+
+		GLOBAL	wSramSignature	
+		GLOBAL	wStructRamLo	
+		GLOBAL	wStructRamHi	
+		GLOBAL	wWhichGame	
+		GLOBAL	wWhichPlyr	
+		GLOBAL	wStoryUnlocked	
+		GLOBAL	wBoardMap	
+		GLOBAL	wPadding	
+		GLOBAL	wBackupWhich	
+		GLOBAL	wBackupSave0	
+		GLOBAL	wBackupSave1	
+		GLOBAL	wMapXMinLo	
+		GLOBAL	wMapXMinHi	
+		GLOBAL	wMapYMinLo	
+		GLOBAL	wMapYMinHi	
+		GLOBAL	wMapXMaxLo	
+		GLOBAL	wMapXMaxHi	
+		GLOBAL	wMapYMaxLo	
+		GLOBAL	wMapYMaxHi	
+		GLOBAL	wSelect4	
+		GLOBAL	wMusicOff	
+		GLOBAL	wLockState	
+		GLOBAL	wLanguage	
+		GLOBAL	wStringBad	
+		GLOBAL	wStringL1Width	
+		GLOBAL	wStringL2Width	
+		GLOBAL	wStringL3Width	
+		GLOBAL	wStringL4Width	
+		GLOBAL	wStringL5Width	
+		GLOBAL	wLanguageH1	
+		GLOBAL	wLanguageH2	
+		GLOBAL	wLanguageH3	
+		GLOBAL	wBoardSqrLo	
+		GLOBAL	wBoardSqrHi	
+		GLOBAL	wBoardGrdLo	
+		GLOBAL	wBoardGrdHi	
+		GLOBAL	wBoardMapLo	
+		GLOBAL	wBoardMapHi	
+		GLOBAL	wBoardDieLo	
+		GLOBAL	wBoardDieHi	
+		GLOBAL	wBoardSmlX	
+		GLOBAL	wBoardSmlY	
+		GLOBAL	wBoardBtnX	
+		GLOBAL	wBoardBtnY	
+		GLOBAL	wGuardPosnLo	
+		GLOBAL	wGuardPosnHi	
+		GLOBAL	wGuard1Sqr	
+		GLOBAL	wGuard2Sqr	
+		GLOBAL	wGuard3Sqr	
+		GLOBAL	wGuard4Sqr	
+		GLOBAL	wGuard5Sqr	
+		GLOBAL	wGuard6Sqr	
+		GLOBAL	wGuard7Sqr	
+		GLOBAL	wGuard8Sqr	
+		GLOBAL	wGuard9Sqr	
+		GLOBAL	wHighScores1	
+		GLOBAL	wHighScores2	
+		GLOBAL	wTblDivide3	
+		GLOBAL	wTblMapLine	
+		GLOBAL	wSaveTemp48	
+		GLOBAL	wSecretHistory	
+		GLOBAL	wStringLine1	
+		GLOBAL	wStringLine2	
+		GLOBAL	wStringLine3	
+		GLOBAL	wStringLine4	
+		GLOBAL	wStringLine5	
+		GLOBAL	wStringOverflow	
+		GLOBAL	wString	
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF RAM.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

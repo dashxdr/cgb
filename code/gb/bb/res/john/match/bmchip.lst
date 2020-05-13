@@ -1,0 +1,6 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		bmchip0.chr
+

@@ -1,0 +1,8 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		swd/crange.chr
+		swd/crange.map
+		crange.rgb
+

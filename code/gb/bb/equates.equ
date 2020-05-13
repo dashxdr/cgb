@@ -1,0 +1,523 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** EQUATES.ASM                                                    MODULE **
+; **                                                                       **
+; ** Variables, Structures and Data Tables.                                **
+; **                                                                       **
+; ** Last modified : 28 Oct 1998 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; VERSION CONTROL
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; INTERNATIONALIZATION
+;
+; N.B. Select only one.
+;
+
+VERSION_USA	EQU	1
+VERSION_EUROPE	EQU	0
+VERSION_JAPAN	EQU	0
+
+DUMP_TEXT	EQU	0
+TRACE_BOARD	EQU	0
+
+;
+;
+;
+
+		INCLUDE	"gameboy.equ"
+
+INTERFACE:	MACRO
+		GLOBAL	\1
+\1_b:		ld	[wShellAcc],a
+		ld	a,LOW(\1)
+		ld	[wShellVect+1],a
+		ld	a,HIGH(\1)
+		ld	[wShellVect+2],a
+		ld	a,$c3
+		ld	[wShellVect],a
+		ld	a,BANK(\1)
+		ld	[wShellVect+3],a
+		jp	bank_link
+		ENDM
+
+SETVBL:		MACRO
+		LD	A,LOW(\1)
+		LD	[wVblVector],A
+		LD	A,HIGH(\1)
+		LD	[wVblVector+1],A
+		ENDM
+
+SETLYC:		MACRO
+		LD	A,LOW(\1)
+		LD	[wLycVector],A
+		LD	A,HIGH(\1)
+		LD	[wLycVector+1],A
+		ENDM
+
+BANKED:		MACRO
+		GLOBAL	\1
+\1_B::		LDH	A,[hRomBank]
+		PUSH	AF
+		LD	A,BANK(\1)
+		LDH	[hRomBank],A
+		LD	[rMBC_ROM],A
+		CALL	\1
+		POP	AF
+		LDH	[hRomBank],A
+		LD	[rMBC_ROM],A
+		RET
+		ENDM
+
+;
+;
+;
+
+DEBUG		EQU	0
+
+DEBUG_MSG	EQU	0
+USE_GMB_SPR	EQU	0
+
+;
+;
+
+YES		EQU	1
+NO		EQU	0
+
+ROM		EQU	YES
+
+TIMER		EQU	YES
+
+
+;############################################################################
+;############################################################################
+;############################################################################
+
+BACKUP_NONE	EQU	0
+BACKUP_STORY	EQU	1
+BACKUP_BOARD	EQU	2
+
+;Game equates
+
+GAME_SULTAN	EQU	1
+GAME_CHIP	EQU	2
+GAME_SHOOTING	EQU	3
+GAME_RIDE	EQU	4
+GAME_BEAST	EQU	5
+GAME_CHOPPER	EQU	6
+GAME_MIND	EQU	7
+GAME_STOVE	EQU	8
+GAME_TRIVIA	EQU	9
+GAME_SPIT	EQU	10
+GAME_CELLAR	EQU	11
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; PROGRAM EQUATES
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; CGB Work RAM Usage.
+;
+
+WRKBANK_NRM	EQU	1		;Regular memory.
+WRKBANK_SCR	EQU	2		;
+WRKBANK_PAL	EQU	3		;Shadow attributes and palettes.
+WRKBANK_CHRLO	EQU	4		;
+WRKBANK_CHRHI	EQU	5		;
+WRKBANK_QUEUE	EQU	3		;
+
+;
+; Sprite Flags for SPR_FLAGS
+;
+
+FLG_EXEC	EQU	0
+FLG_DRAW	EQU	1
+FLG_PLOT	EQU	2
+FLG_ANM		EQU	3
+FLG_NEW		EQU	4
+FLG_CHK		EQU	5
+FLG_HIT		EQU	6
+
+MSK_EXEC	EQU	$01
+MSK_DRAW	EQU	$02
+MSK_PLOT	EQU	$04
+MSK_ANM		EQU	$08
+MSK_NEW		EQU	$10
+MSK_CHK		EQU	$20
+MSK_HIT		EQU	$40
+
+;
+; FADE related equates
+;
+
+FADE_DELAY	EQU	4
+
+;
+; SPRITE_0 - SPRITE_7 control block offsets.
+;
+		RSRESET
+SPR_FLAGS	RB	1
+SPR_OAM_CNT	RB	1
+SPR_OAM_LO	RB	1
+SPR_OAM_HI	RB	1
+SPR_SCR_X	RW	1
+SPR_SCR_Y	RW	1
+SPR_FLIP	RB	1
+SPR_COLR	RB	1
+SPR_FRAME	RW	1
+;
+SPR_EXEC	RW	1
+SPR_TYPE	RB	1
+SPR_DELAY	RB	1
+;
+SPR_ANM_1ST	RW	1
+SPR_ANM_PTR	RW	1
+SPR_ANM_FRM	RB	1
+SPR_ANM_DLY	RB	1
+;
+SPR_END		RB	0
+;
+SPR_STACK	EQU	22		;Space to allow before sprite.
+;
+SIZE_SPR	EQU	36
+
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; INTERNAL WORK RAM ($FF80-$FFFE)
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; Interrupt control variables.
+;
+
+;
+;
+;
+
+;############################################################################
+;############################################################################
+;############################################################################
+;
+; INTERNAL WORK RAM ($FF80-$FFFE)
+;
+;############################################################################
+;############################################################################
+;############################################################################
+
+;
+; Bank $00
+;
+
+		GLOBAL	AbortGame
+		GLOBAL	MainLoop
+
+		GLOBAL	SramVerify
+		GLOBAL	SaveBackup
+		GLOBAL	LoadBackup
+
+		GLOBAL	IndirectHL
+
+		GLOBAL	BgInFileSys
+		GLOBAL	MemCopyInFileSys
+		GLOBAL	SwdInFileSys
+		GLOBAL	DumpChrsInFileSys
+		GLOBAL	FindInFileSys
+		GLOBAL	FindInPkgFile
+		GLOBAL	RebootMachine
+		GLOBAL	VblDoNothing
+		GLOBAL	LycDoNothing
+		GLOBAL	VblNormal
+		GLOBAL	LycNormal
+		GLOBAL	VblIntro
+		GLOBAL	LycIntro
+		GLOBAL	VblScroll
+		GLOBAL	LycScroll
+		GLOBAL	VblTargetRange
+		GLOBAL	LycTargetRange
+		GLOBAL	VblGmbBoard
+		GLOBAL	LycGmbBoard0
+		GLOBAL	LycGmbBoard1
+		GLOBAL	LycGmbBoard2
+
+		GLOBAL	StructSmodGmb
+		GLOBAL	StructSmodCgb
+		GLOBAL	TblPanelGmb
+		GLOBAL	TblPanelCgb
+		GLOBAL	TblJoyA2Dirn
+		GLOBAL	TblJoyB2Dirn
+		GLOBAL	TblDirn2DULR
+		GLOBAL	TblDirn2Info
+
+		GLOBAL	MultiplyBBW
+		GLOBAL	MultiplyBWW
+		GLOBAL	MultiplyBWW
+		GLOBAL	SDivideWWW
+		GLOBAL	UDivideWWW
+
+		GLOBAL	WaitForVBL
+
+		GLOBAL	ReadJoypad
+		GLOBAL	noisyReadJoypad
+		GLOBAL	WaitForRelease
+
+		GLOBAL	InitAutoRepeat
+		GLOBAL	ProcAutoRepeat
+		GLOBAL	InitDoubleTap
+		GLOBAL	ProcDoubleTap1
+		GLOBAL	ProcDoubleTap2
+
+		GLOBAL	MemClear
+		GLOBAL	RomOamDma
+		GLOBAL	MemCopy
+		GLOBAL	MemFill
+
+		GLOBAL	SprBlank
+		GLOBAL	SprOff
+
+		GLOBAL	InitControls
+		GLOBAL	InitAllSprPlot
+
+		GLOBAL	ArcadeStart
+		GLOBAL	ArcadeRestart
+		GLOBAL	ArcadeLoop
+		GLOBAL	ArcadeCycle
+
+		GLOBAL	DumpChrs
+		GLOBAL	SafeDumpChrs
+		GLOBAL	GmbChrDump
+		GLOBAL	GmbChrDumpDone
+		GLOBAL	CgbChrDump
+		GLOBAL	CgbChrDumpDone
+
+		GLOBAL	InitGroups
+		GLOBAL	RegisterGroup
+		GLOBAL	AddPalette
+		GLOBAL	InitFigures
+		GLOBAL	InitFigures64
+		GLOBAL	AddFrame
+		GLOBAL	AddFigure
+		GLOBAL	OutFigures
+		GLOBAL	OutFiguresPassive
+		GLOBAL	Wait15
+		GLOBAL	Wait30
+		GLOBAL	Wait60
+		GLOBAL	AnyWait
+		GLOBAL	AccurateWait
+		GLOBAL	FadeIn
+		GLOBAL	FadeOut
+
+		GLOBAL	DoNothing
+
+		GLOBAL	RideVector0
+		GLOBAL	RideVector1
+		GLOBAL	RideVector2
+		GLOBAL	CellarVector0
+		GLOBAL	CellarVector1
+
+		GLOBAL	PauseMenu_B
+		GLOBAL	StdStage
+		GLOBAL	LoadPalHL
+		GLOBAL	AnyApply
+
+		GLOBAL	ReInitBBRam
+		GLOBAL	InitBBRam
+		GLOBAL	CheckBBRam
+		GLOBAL	SumBBRam
+
+		GLOBAL	IncScore
+
+		GLOBAL	picklite
+		GLOBAL	pickdark
+		GLOBAL	pickolde
+		GLOBAL	pickend
+		GLOBAL	InitTunePref
+		GLOBAL	RandTunePref
+
+		GLOBAL	GetString
+		GLOBAL	SplitString
+
+		GLOBAL	HashLanguage
+		GLOBAL	CheckLanguage
+
+		GLOBAL	BANK0_END
+
+;
+; Bank $01
+;
+		GLOBAL	BANK1_END
+;
+; Bank $02
+;
+
+		GLOBAL	InitSGB
+		GLOBAL	BBRAMInit
+		GLOBAL	RandInit
+		GLOBAL	BANK2_END
+
+;
+; Bank $03
+
+		GLOBAL	LaunchGame
+		GLOBAL	LaunchGaston
+		GLOBAL	loadbg
+		GLOBAL	backgrounds
+		GLOBAL	doshell
+		GLOBAL	linkmenu
+		GLOBAL	intro
+		GLOBAL	PresetHighs
+
+; Bank $04
+		GLOBAL	Fire
+
+		GLOBAL	sultan
+; Bank $05
+; Bank $06
+		GLOBAL	chip
+; Bank $07
+; Bank $08
+; Bank $09
+; Bank $0A
+; Bank $0B
+; Bank $0C
+; Bank $0D
+; Bank $0E
+; Bank $0F
+; Bank $10
+		GLOBAL	AllPalettes
+		GLOBAL	AllSprites
+; Bank $11
+; Bank $12
+; Bank $13
+; Bank $14
+; Bank $15
+; Bank $16
+; Bank $17
+; Bank $18
+; Bank $19
+; Bank $1A
+; Bank $1B
+; Bank $1C
+; Bank $1D
+; Bank $1E
+; Bank $1F
+; Bank $20
+		GLOBAL	FileSys
+; Bank $21
+; Bank $22
+; Bank $23
+; Bank $24
+; Bank $25
+; Bank $26
+; Bank $27
+; Bank $28
+; Bank $29
+; Bank $2A
+; Bank $2B
+; Bank $2C
+; Bank $2D
+; Bank $2E
+; Bank $2F
+; Bank $30
+; Bank $31
+; Bank $32
+; Bank $33
+; Bank $34
+; Bank $35
+; Bank $36
+; Bank $37
+; Bank $38
+; Bank $39
+; Bank $3A
+; Bank $3B
+; Bank $3C
+; Bank $3D
+; Bank $3E
+; Bank $3F
+
+;
+; SHELL.ASM
+;
+
+		GLOBAL	newbank
+		GLOBAL	bankhl
+		GLOBAL	bank_link
+		GLOBAL	addahl
+		GLOBAL	shellpal
+		GLOBAL	sprblank
+		GLOBAL	housekeep
+		GLOBAL	ShellCode
+		GLOBAL	LinkShell
+		GLOBAL	getanybg
+		GLOBAL	getanybigbg
+		GLOBAL	scanpad
+		GLOBAL	getpad
+		GLOBAL	checkpad
+		GLOBAL	normalgmbfade
+		GLOBAL	random
+		GLOBAL	waitsome
+		GLOBAL	wait3
+
+
+;
+; Include all the other equates files
+;
+
+		INCLUDE	"ram.equ"
+		INCLUDE	"sprites.equ"
+		INCLUDE	"spritesb.equ"
+		INCLUDE	"scroll.equ"
+		INCLUDE	"fade.equ"
+		INCLUDE	"swd.equ"
+		INCLUDE	"sgb.equ"
+		INCLUDE	"sound.equ"
+		INCLUDE	"board.equ"
+		INCLUDE	"intro.equ"
+		INCLUDE	"levels.equ"
+		INCLUDE	"mirror.equ"
+		INCLUDE	"trivia.equ"
+		INCLUDE	"target.equ"
+		INCLUDE	"match.equ"
+		INCLUDE	"ending.equ"
+		INCLUDE	"bitmap.equ"
+		INCLUDE	"font.equ"
+		INCLUDE "res/sprites.asm"
+		INCLUDE	"res/sprites.equ"
+		INCLUDE	"res/filesys.asm"
+
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF EQUATES.ASM
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

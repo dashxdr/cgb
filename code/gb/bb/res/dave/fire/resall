@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.map *.rgb *.chr *.equ *.bg
+. ../../tools
+
+$XSGMB @fire.cmd fire.pcx
+$XSGMB @bg.cmd ccastle.pcx
+$XSGMB @bgbw.cmd bcastle.pcx
+for f in *.map; do
+ $MAKEBG $f
+done
+
+$GBSWD -d *.bg

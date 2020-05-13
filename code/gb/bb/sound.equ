@@ -1,0 +1,60 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** SOUND.EQU                                                      MODULE **
+; **                                                                       **
+; ** Sound Driver And Music Data.                                          **
+; **                                                                       **
+; ** Last modified : 31 Oct 1998 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+SONG_WON	EQU	1
+SONG_LOST	EQU	2
+SONG_GOTSTAR	EQU	3
+SONG_WILDRIDE	EQU	4
+SONG_TARGET	EQU	5
+SONG_UNKNOWN	EQU	6
+SONG_CHOPPER	EQU	7
+SONG_MATCH	EQU	8
+SONG_TITLE	EQU	9
+SONG_WOLF	EQU	10
+
+SONG_TRIVIA	EQU	SONG_MATCH
+
+FX_SHOT_ALL	EQU	20
+FX_DO_SHOT	EQU	21
+FX_SHOT_MISS	EQU	21
+FX_SHOT_GOOD	EQU	23
+FX_SHOT_BAD	EQU	22
+FX_NOT_SHOT	EQU	74
+
+FX_DOOR_MOVE	EQU	47
+FX_DOOR_OPEN	EQU	2
+
+
+		GLOBAL	KillAllSoundB
+		GLOBAL	KillTuneB
+		GLOBAL	KillSfxB
+		GLOBAL	InitTuneB
+		GLOBAL	InitSfxB
+
+		GLOBAL	KillAllSound
+		GLOBAL	KillTune
+		GLOBAL	KillSfx
+		GLOBAL	InitTune
+		GLOBAL	InitSfx
+
+		GLOBAL	MzRefresh
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF SOUND.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

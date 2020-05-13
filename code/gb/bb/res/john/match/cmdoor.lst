@@ -1,0 +1,13 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		cmdoor0.chr
+		cmdoor0.hi
+		cmdoor1.chr
+		cmdoor1.hi
+		cmdoor2.chr
+		cmdoor2.hi
+		cmdoor3.chr
+		cmdoor3.hi
+

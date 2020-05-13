@@ -1,0 +1,147 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** TARGET.EQU                                                     MODULE **
+; **                                                                       **
+; ** LeFou's Target Range.                                                 **
+; **                                                                       **
+; ** Last modified : 02 Mar 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+;
+;
+
+TGT_H		EQUS	"3"
+TGT_W		EQUS	"4"
+TGT_F		EQUS	"10"
+TGT_N		EQUS	"7"
+
+;
+;
+;
+
+TGT_POS00	EQU	0			;Background, top row.
+TGT_POS01	EQU	1			;
+TGT_POS02	EQU	2			;
+TGT_POS03	EQU	3			;
+
+TGT_POS04	EQU	4			;Background, mid row.
+TGT_POS05	EQU	5			;
+TGT_POS06	EQU	6			;
+TGT_POS07	EQU	7			;
+
+TGT_POS08	EQU	8			;Background, btm row.
+TGT_POS09	EQU	9			;
+TGT_POS10	EQU	10			;
+TGT_POS11	EQU	11			;
+
+TGT_POS12	EQU	12			;Foreground (sprite).
+TGT_POS13	EQU	13			;
+TGT_POS14	EQU	14			;
+TGT_POS15	EQU	15			;
+
+TGT_ANY		EQU	0
+TGT_CLOCK	EQU	1
+TGT_BOMB	EQU	2
+TGT_HEART	EQU	3
+TGT_BLUE1	EQU	4
+TGT_RED1	EQU	5
+TGT_BLUE2	EQU	6
+TGT_RED2	EQU	7
+TGT_TAUNT	EQU	8
+TGT_APPLE	EQU	9
+TGT_GOOD	EQU	10
+TGT_BAD		EQU	11
+TGT_RND0	EQU	12
+TGT_RND1	EQU	13
+TGT_RNDH	EQU	14
+
+;
+;
+;
+
+wTmpMap		EQU	$C800
+wTmpChr		EQU	$D000
+
+wTgtScrMsk	EQU	$3F			;$08 bytes * 8
+wTgtGfxMsk	EQU	$3F			;$04 bytes * 16
+wTgtChrMsk	EQU	$0F			;$01 bytes * 16
+
+wTgtSprite	EQUS	"(wTemp512+$000)"	;$10 bytes * 12
+wTgtScrLst	EQUS	"(wTemp512+$0C0)"	;$08 bytes * 8
+wTgtGfxLst	EQUS	"(wTemp512+$100)"	;$04 bytes * 16
+wTgtChrLst	EQUS	"(wTemp512+$140)"	;$01 bytes * 16
+wTgtPnlBuf	EQUS	"(wTemp512+$150)"	;$01 bytes * 16
+
+wTgtLeFou0	EQUS	"(wTemp512+$170+SPR_STACK)"	;$30 bytes * 1
+wTgtLeFou1	EQUS	"(wTemp512+$1A0+SPR_STACK)"	;$30 bytes * 1
+wTgtStar	EQUS	"(wTemp512+$1D0+SPR_STACK)"	;$30 bytes * 1
+
+;
+; LO-CODE
+;
+
+		GLOBAL	TgtStages
+
+		GLOBAL	StrTargetRange
+
+		GLOBAL	PAL_TGTCURSOR
+
+		GLOBAL	ClrWorkspace
+
+		GLOBAL	CgbXferScreen
+		GLOBAL	GmbXferScreen
+		GLOBAL	CgbDumpBG
+		GLOBAL	GmbDumpBG
+		GLOBAL	CgbSprPalette
+		GLOBAL	GetCursorGfx
+		GLOBAL	GetTargetGfx
+		GLOBAL	ReorderTargets
+		GLOBAL	SetMachineJcb
+		GLOBAL	DoVblTarget
+
+		GLOBAL	DumpSwdChr
+
+		GLOBAL	InitTgtSpr
+		GLOBAL	DumpTgtSpr
+		GLOBAL	DrawTgtSpr
+
+		GLOBAL	ProcSprite
+		GLOBAL	SetSpriteFnc
+		GLOBAL	IncSpriteAnm
+		GLOBAL	SetSpriteAnm
+		GLOBAL	ResSpritePal
+		GLOBAL	AddSpritePal
+
+		GLOBAL	DisplayStage
+		GLOBAL	DisplayStageN
+		GLOBAL	XferFullScreen
+		GLOBAL	ShowFullScreen
+
+;
+; HI-CODE
+;
+
+		GLOBAL	TargetRange
+
+		GLOBAL	DumpPanelScr
+		GLOBAL	DumpTargetScr
+
+		GLOBAL	DrawTgtCursor
+
+		GLOBAL	ReadNullTarget_B
+		GLOBAL	ReorderTargets_B
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF TARGET.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

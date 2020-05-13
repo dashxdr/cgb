@@ -1,0 +1,6 @@
+rm filesys.asm filesys.b?? sprites.b??
+cat freeintl.lst john/fileintl.lst dave/filedave.lst dave/filejap.lst > filesys.lst
+gather filesys.lst 14:4000
+cat dave/sprjap.lst john/sprintl.lst > sprites.lst
+gmbspr2 -a0A:4280 sprites @sprites.lst
+animrgb sprites.lst

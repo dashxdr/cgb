@@ -1,0 +1,86 @@
+@cbjapan.pk#!/bin/bash
+set -e
+rm -f swd/* *.hi *.lo *.map *.chr *.pkg *.equ *.rgb *.pk? *.bk? *.blk
+. ../../tools
+
+#for f in b*.bbm; do
+# $XSGMB @bbitmap.cmd $f
+#done
+
+#for f in c*.bbm; do
+# $XSGMB @cbitmap.cmd $f
+#done
+
+for f in bboard*.pcx; do
+ $XSGMB @bboard.cmd -ClearName $f
+done
+
+for f in cboard*.pcx; do
+ $XSGMB @cboard.cmd -ClearName $f
+done
+
+
+for f in bjapan*.pcx; do
+ $XSGMB @bjapan.cmd -ClearName $f
+done
+
+for f in cjapan*.pcx; do
+ $XSGMB @cjapan.cmd -ClearName $f
+done
+
+$GBSWD -d *.map
+
+$XSGMB bboard.cmd -Writechr Yes -Writeblk Yes -WriteMAP No -WriteRGB No
+$XSGMB cboard.cmd -Writechr Yes -Writeblk Yes -WriteMAP No -WriteRGB Yes
+
+$XSGMB bjapan.cmd -Writechr Yes -Writeblk Yes -WriteMAP No -WriteRGB No
+$XSGMB cjapan.cmd -Writechr Yes -Writeblk Yes -WriteMAP No -WriteRGB Yes
+
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x4000 bboard.chr
+mv bboard.pkg bboard.pk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x4000 -Length 0x4000 bboard.chr
+mv bboard.pkg bboard.pk1
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x8000 -Length 0x4000 bboard.chr
+mv bboard.pkg bboard.pk2
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x2400 bboard.blk
+mv bboard.pkg bboard.bk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x2400 -Length 0x4000 bboard.blk
+mv bboard.pkg bboard.bk1
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x4000 cboard.chr
+mv cboard.pkg cboard.pk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x4000 -Length 0x4000 cboard.chr
+mv cboard.pkg cboard.pk1
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x8000 -Length 0x4000 cboard.chr
+mv cboard.pkg cboard.pk2
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x2640 cboard.blk
+mv cboard.pkg cboard.bk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x2640 -Length 0x4000 cboard.blk
+mv cboard.pkg cboard.bk1
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x4000 bjapan.chr
+mv bjapan.pkg bjapan.pk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x4000 -Length 0x4000 bjapan.chr
+mv bjapan.pkg bjapan.pk1
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x8000 -Length 0x4000 bjapan.chr
+mv bjapan.pkg bjapan.pk2
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x2400 bjapan.blk
+mv bjapan.pkg bjapan.bk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x2400 -Length 0x4000 bjapan.blk
+mv bjapan.pkg bjapan.bk1
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x4000 cjapan.chr
+mv cjapan.pkg cjapan.pk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x4000 -Length 0x4000 cjapan.chr
+mv cjapan.pkg cjapan.pk1
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x8000 -Length 0x4000 cjapan.chr
+mv cjapan.pkg cjapan.pk2
+
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x0000 -Length 0x2640 cjapan.blk
+mv cjapan.pkg cjapan.bk0
+$MAKEPKG -OutputFormat BIN -OutputHeader NO -Offset 0x2640 -Length 0x4000 cjapan.blk
+mv cjapan.pkg cjapan.bk1

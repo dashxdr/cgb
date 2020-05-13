@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.chr *.equ *.map *.rgb
+. ../../tools
+
+for f in fd*.pcx; do
+ $XSGMB @bg.cmd $f
+done
+
+for f in fd*.map; do
+ $GBSWD -d $f
+done
+
+for f in fd*.chr; do
+ $GBSWD -d $f
+done
+
+for f in bwd*.pcx; do
+ $XSGMB @bgbw.cmd $f
+done
+
+for f in bwd*.map; do
+ $GBSWD -d $f
+done
+
+for f in bwd*.chr; do
+ $GBSWD -d $f
+done

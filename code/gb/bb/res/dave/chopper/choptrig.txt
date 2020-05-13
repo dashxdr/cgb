@@ -1,0 +1,18 @@
+# Number of logs, Number of seconds for cycle,safe length,min rate, max rate
+# last is the list of allowed bounce sequences
+# Rates can vary from 1 to 64, 64 = fastest
+7,40,9,22,28,3456   ;Easy        stage 1
+7,35,8,22,32,23456  ;Easy        stage 2
+7,30,9,22,36,23456  ;Easy        stage 3
+11,31,8,32,40,3456   ;Normal      stage 1
+11,28,7,32,44,23456  ;Normal      stage 2
+11,25,8,32,48,23456  ;Normal      stage 3
+11,24,7,44,54,3456   ;Hard        stage 1
+11,23,6,44,58,23456  ;Hard        stage 2
+11,22,5,44,62,23456  ;Hard        stage 3
+11,21,6,48,58,23456  ;Challenge1
+11,21,6,48,58,23456  ;Challenge1
+11,21,6,48,58,23456  ;Challenge1
+11,20,5,52,64,23456  ;Challenge2
+11,20,5,52,64,23456  ;Challenge2
+11,20,5,52,64,23456  ;Challenge2

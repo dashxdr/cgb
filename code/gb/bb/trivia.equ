@@ -1,0 +1,81 @@
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+; **                                                                       **
+; ** TRIVIA.EQU                                                     MODULE **
+; **                                                                       **
+; ** Trivia Game.                                                          **
+; **                                                                       **
+; ** Last modified : 21 Apr 1999 by John Brandwood                         **
+; **                                                                       **
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+
+;
+;
+;
+
+hTriviaLives	EQUS	"hTemp48+$10"		;$01 bytes * 1
+hTriviaOver	EQUS	"hTemp48+$11"		;$01 bytes * 1
+hTriviaCursor	EQUS	"hTemp48+$12"		;$01 bytes * 1
+hTriviaChange	EQUS	"hTemp48+$13"		;$01 bytes * 1
+hTriviaFlashLo	EQUS	"hTemp48+$14"		;$01 bytes * 1
+hTriviaFlashHi	EQUS	"hTemp48+$15"		;$01 bytes * 1
+hTriviaTimerLo	EQUS	"hTemp48+$16"		;$01 bytes * 1
+hTriviaTimerHi	EQUS	"hTemp48+$17"		;$01 bytes * 1
+hTriviaTmp	EQUS	"hTemp48+$18"		;$01 bytes * 1
+hTriviaNumber	EQUS	"hTemp48+$19"		;$01 bytes * 1
+hTriviaAnswer	EQUS	"hTemp48+$1A"		;$01 bytes * 1
+hTriviaBad	EQUS	"hTemp48+$1B"		;$01 bytes * 1
+
+;
+;
+;
+
+wTriviaStrQ1	EQUS	"(wTemp512+$000)"	;$01 bytes * 96
+wTriviaStrQ2	EQUS	"(wTemp512+$020)"	;$01 bytes * 96
+wTriviaStrQ3	EQUS	"(wTemp512+$040)"	;$01 bytes * 96
+wTriviaStrQ4	EQUS	"(wTemp512+$060)"	;$01 bytes * 96
+wTriviaStrA1	EQUS	"(wTemp512+$080)"	;$01 bytes * 32
+wTriviaStrA2	EQUS	"(wTemp512+$0A0)"	;$01 bytes * 32
+wTriviaStrA3	EQUS	"(wTemp512+$0C0)"	;$01 bytes * 32
+wTriviaStrA4	EQUS	"(wTemp512+$0E0)"	;$01 bytes * 32
+wTriviaString	EQUS	"(wTemp512+$100)"	;$01 bytes * 1
+
+;
+; LO-CODE
+;
+
+		GLOBAL	TblClockSprRgb
+
+		GLOBAL	TriviaGameLo
+		GLOBAL	TriviaFind
+
+		GLOBAL	DrawTriviaSpr
+
+		GLOBAL	DoTimeBit
+		GLOBAL	DoAnsRight
+		GLOBAL	DoAnsWrong
+
+;
+; HI-CODE
+;
+
+		GLOBAL	TriviaGame
+
+		GLOBAL	TblTriviaFlip3
+		GLOBAL	TblTriviaFlip4
+
+;
+;
+;
+
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+;  END OF TRIVIA.EQU
+; ***************************************************************************
+; ***************************************************************************
+; ***************************************************************************
+

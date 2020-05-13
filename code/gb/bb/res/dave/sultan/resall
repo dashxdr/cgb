@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+rm -f *.map swd/* *.chr *.bg *.map *.rgb *.equ
+. ../../tools
+
+for f in *.bbm; do
+ $XSGMB @bg.cmd $f
+done
+
+for f in *.map; do
+ $MAKEBG $f
+done
+
+$XSGMB @bg2.cmd sulbckbw.bbm
+$MAKEBG sulbckbw.map
+$GBSWD -d *.bg
+
+for f in *.spr; do
+ $XSGMB @cut.cmd $f
+done

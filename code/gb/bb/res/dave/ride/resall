@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.equ *.map *.chr *.rgb
+. ../../tools
+
+for f in *.spr; do
+ $XSGMB @cut.cmd $f
+done
+
+$XSGMB @cut.cmd moon.abm
+$XSGMB @cut2.cmd bellhrs2.spr
+$XSGMB @cut2.cmd wolfx.spr
+$XSGMB @bg.cmd ride.pcx
+$XSGMB @bg2.cmd ridegmb.pcx
+rm -f ridetrg2.asm
+
+for f in *.set; do
+ $RIDECNV2 $f
+done
+
+$GBSWD -d ridegmb.chr
+$MAKEPKG -length 4096 ride.chr
+cp ride.pkg ride0.pkg
+$GBSWD -d ride0.pkg
+
+$MAKEPKG -offset 4096 ride.chr
+cp ride.pkg ride1.pkg
+$GBSWD -d ride1.pkg

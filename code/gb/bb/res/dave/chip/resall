@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+rm -f *.equ *.map *.rgb *.chr *.bg swd/*
+. ../../tools
+
+for zzz in *.bbm; do
+ $XSGMB @bg.cmd $zzz
+done
+
+#$XSGMB @bgbw.cmd bgbw.pcx
+
+for zzz in *.map; do
+ $MAKEBG $zzz
+done
+
+$GBSWD -d *.bg
+
+for zzz in *.spr; do
+ $XSGMB @cut.cmd $zzz
+done
+
+for zzz in *.abm; do
+ $XSGMB @cut.cmd $zzz
+done
+
+$XSGMB @cut2.cmd chip.spr
+$XSGMB @cut2.cmd reflect.spr

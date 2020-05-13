@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.chr *.map *.equ *.rgb *.bin
+. ../../tools
+
+for f in bst*.pcx; do
+ $XSGMB @bg2.cmd $f
+done
+
+$XSGMB @bg.cmd bst000.pcx
+$GBSWD -d bst000.chr
+
+for f in bw*.pcx; do
+ $XSGMB @bgbw2.cmd $f
+done
+
+$XSGMB @bgbw.cmd bw000.pcx
+$GBSWD -d bw000.chr
+
+$MAPDELTA bst bw 16 bstmap.bin
+$XSGMB @cut.cmd wolf.spr
+$XSGMB @cut.cmd wharrow.spr

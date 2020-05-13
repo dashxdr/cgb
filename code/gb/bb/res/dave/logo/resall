@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.rgb *.map *.equ *.chr
+. ../../tools
+
+for f in *.pcx; do
+ $XSGMB @bg.cmd $f
+done
+
+$XSGMB @bgbw.cmd disneybw.pcx
+
+for f in *.map *.chr; do
+ $GBSWD -d $f
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.rgb *.equ *.chr *.pkg
+. ../../tools
+
+$XSGMB @8x8drk.cmd
+$MAKEPKG -length 16 8x8drk.rgb -length -1 -offset 16 8x8drk.chr
+$GBSWD -n -d -g 8x8drk.pkg
+$XSGMB @pal.cmd pal.pcx

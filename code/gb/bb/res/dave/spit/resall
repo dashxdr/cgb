@@ -1,0 +1,41 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.chr *.equ *.map *.rgb *.pkg
+. ../../tools
+
+$XSGMB @bg.cmd gaston.pcx
+$XSGMB @bg.cmd gastnw.pcx
+$XSGMB @bg.cmd judge1.pcx
+$XSGMB @bg.cmd judge2.pcx
+$XSGMB @bg.cmd judge3.pcx
+$XSGMB @bg2.cmd rock1.pcx
+$MAKEPKG -offset 16 rock1.chr
+$XSGMB @bg2.cmd rock2.pcx
+$MAKEPKG -offset 16 rock2.chr
+$XSGMB @bg2.cmd srock1.pcx
+$MAKEPKG -offset 16 srock1.chr
+$XSGMB @bg2.cmd srock2.pcx
+$MAKEPKG -offset 16 srock2.chr
+$XSGMB @bgbw.cmd gastonbw.pcx
+$XSGMB @bgbw.cmd gastnwbw.pcx
+$XSGMB @bgbw.cmd judge1bw.pcx
+$XSGMB @bgbw.cmd judge2bw.pcx
+$XSGMB @bgbw.cmd judge3bw.pcx
+$XSGMB @bg2.cmd rock1bw.pcx
+$MAKEPKG -offset 16 rock1bw.chr
+$XSGMB @bg2.cmd rock2bw.pcx
+$MAKEPKG -offset 16 rock2bw.chr
+$XSGMB @bg2.cmd srock1bw.pcx
+$MAKEPKG -offset 16 srock1bw.chr
+$XSGMB @bg2.cmd srock2bw.pcx
+$MAKEPKG -offset 16 srock2bw.chr
+
+$XSGMB @cut.cmd spit.abm
+$XSGMB @cut.cmd bar.abm
+$XSGMB @cut.cmd gheada.spr
+$XSGMB @cut.cmd gheadb.spr
+$XSGMB @cut.cmd arm.spr
+$XSGMB @cut.cmd coin.spr
+
+$GBSWD -d *.chr
+$GBSWD -d *.map

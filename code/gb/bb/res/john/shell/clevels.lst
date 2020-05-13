@@ -1,0 +1,10 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		swd/clevels.chr
+		swd/clevels.map
+		clevels.rgb
+
+
+

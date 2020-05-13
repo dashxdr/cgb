@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+rm -f *.equ *.map *.rgb *.chr swd/*
+. ../../tools
+
+$XSGMB @bg.cmd cellar.pcx
+$GBSWD -d cellar.map
+$GBSWD -d cellar.chr
+$XSGMB @bgbw.cmd cellarbw.pcx
+$GBSWD -d cellarbw.map
+$GBSWD -d cellarbw.chr
+
+for  zzz in *.abm; do
+ $XSGMB @cut.cmd $zzz
+done

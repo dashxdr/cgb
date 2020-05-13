@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+. ../../tools
+rm -f bbusa.b3?
+cp bbintl.txt bbusa.txt
+$MAKETEXT -BANK 0x3D -SKIP 2 -LANGUAGES 1 bbusa.txt

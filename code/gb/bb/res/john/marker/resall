@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.hi *.lo *.map *.chr *.pkg *.equ *.rgb
+. ../../tools
+
+for f in b*.abm; do  # b*.spr
+ $XSGMB @bspr.cmd $f
+done
+
+for f in c*.abm; do  # c*.spr
+ $XSGMB @cspr.cmd $f
+done

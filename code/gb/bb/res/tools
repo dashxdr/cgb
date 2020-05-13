@@ -1,0 +1,9 @@
+#!/bin/bash
+export XSGMB=$_DEEP../../../../../john/xsgmb/xsgmb
+export MAKEBG=$_DEEP../../../../../util/makebg
+export GBSWD=$_DEEP../../../../../util/gbswd
+export MAKEPKG=$_DEEP../../../../../john/makepkg/makepkg
+export GMBFNT=$_DEEP../../../../../john/gmbfnt/gmbfnt
+export MAKETEXT=$_DEEP../../../../../john/maketext/maketext
+export MAPDELTA=$_DEEP../../../../../util/mapdelta
+export RIDECNV2=$_DEEP../../../../../util/ridecnv2

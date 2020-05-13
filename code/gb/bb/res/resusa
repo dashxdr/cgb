@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+rm -f filesys.asm filesys.b?? sprites.b??
+cat freeusa.lst john/filejohn.lst dave/filedave.lst > filesys.lst
+../../../util/gather filesys.lst 14:4000
+cat dave/sprdave.lst john/sprjohn.lst > sprites.lst
+../../../util/gmbspr2 -a0A:4280 sprites @sprites.lst
+../../../util/animrgb/animrgb sprites.lst

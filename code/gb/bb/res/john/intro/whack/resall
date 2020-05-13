@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.hi *.lo *.map *.chr *.pkg *.equ *.rgb
+_DEEP=../ . ../../../tools
+
+for f in b*.pcx; do
+ $XSGMB @bbitmap.cmd $f
+done
+
+for f in c*.pcx; do
+ $XSGMB @cbitmap.cmd $f
+done
+
+for f in c*.map; do
+ $MAKEPKG -offset 8 -split $f
+done
+
+$GBSWD -g -d -n  *.chr
+$GBSWD -g -d -n  *.hi
+
+
+for f in b*.pcx; do
+ t=${f%.*}
+ $MAKEPKG -OutputFormat BIN -OutputHeader YES -OutputOrder LOHI swd/$t.chr
+done
+for f in c*.pcx; do
+ t=${f%.*}
+ $MAKEPKG -OutputFormat BIN -OutputHeader YES -OutputOrder LOHI swd/$t.chr swd/$t.hi $t.rgb
+done
+
+mv swd/*.pkg .

@@ -1,0 +1,9 @@
+-OutputFormat	BIN
+-OutputHeader	YES
+-OutputOrder	LOHI
+
+		swd/brange2.chr
+		swd/brange2.map
+
+
+

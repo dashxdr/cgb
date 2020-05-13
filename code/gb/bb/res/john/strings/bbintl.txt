@@ -1,0 +1,339 @@
+	Beauty and the Beast										
+											
+											
+	NINTENDO GAMEBOY Onscreen Text										
+											
+											
+	"Text in [Brackets] should not be translated; it is for the translators' reference and does not appear on screen."										
+	NOTE: All text must stay within the character count as utilized in English (including spaces and punctuation).										
+											
+											
+	I. GASTON and LUCKY DAY CARDS										
+	[4 Lines of text per entry - a maximum of 15 characters per line, including spaces]										
+
+	SCREEN	WHO	ENGLISH	GERMAN	FRENCH	ITALIAN	SPANISH				
+
+1	Lucky Day	generic	Roll Again	Würfle nochmal!	Nouveau lancer	Tira ancora	Tira de nuevo				
+2	Lucky Day	-	YOU GET TO ROLL AGAIN THIS TURN	DU DARFST IN DIESER RUNDE ERNEUT WÜRFELN!	C'EST ENCORE TON TOUR DE JETER LES DES	PUOI TIRARE ANCORA I DADI IN QUESTO TURNO	TIRA EL DADO DE NUEVO EN ESTE TURNO					
+												
+3	Lucky Day	generic	Swap Places	Tauscht Plätze!	Change de place	Scambio	Cambia posición					
+4	Lucky Day	-	SWITCH PLACES WITH THE PLAYER WHO IS IN FIRST PLACE	TAUSCHE DEINEN PLATZ MIT DEM SPIELER AN ERSTER STELLE!	CHANGE DE PLACE AVEC LE JOUEUR EN PREMIERE POSITION	SCAMBIA IL TUO POSTO CON IL GIOCATORE IN TESTA	INTERCAMBIA POSICIÓN CON EL JUGADOR QUE VA EN CABEZA					
+												
+5	Lucky Day	generic	Horse Ride	Reiten	Chevauchée	A cavallo	A caballo					
+6	Lucky Day	-	ADD 2 TO THE NEXT 2 DIE ROLLS	FÜGE WÄHREND 2 RUNDEN DIE ZAHL 2 ZUR AUGENZAHL HINZU!	AJOUTE 2 AUX 2 LANCERS DE DES SUIVANTS	AGGIUNGI 2 AI PROSSIMI 2 TIRI DI DADI	SUMA 2 A LAS 2 SIGUIENTES TIRADAS					
+												
+7	Lucky Day	generic	Bonus Star	Bonusstern	Bonus étoile	Bonus Stella	Bono estrella					
+8	Lucky Day	-	YOU RECEIVE A BONUS STAR	DU ERHÄLTST EINEN BONUSSTERN!	TU OBTIENS UN BONUS ETOILE	HAI GUADAGNATO UN BONUS STELLA	RECIBES UN BONO ESTRELLA					
+												
+9	Lucky Day	generic	Magic Mirror	Zauberspiegel	Miroir magique	Specchio magico	Espejo mágico					
+10	Lucky Day	-	SELECT A GAME OF YOUR CHOICE	WÄHLE DAS GEWÜNSCHTE SPIEL AUS!	SELECTIONNE UNE PARTIE	SCEGLI LA PARTITA CHE PREFERISCI	ELIGE LA PARTIDA QUE QUIERAS					
+												
+11	Lucky Day	generic	Shortcut	Abkürzung	Raccourci	Scorciatoia	Atajo					
+12	Lucky Day	-	TAKE THE NEXT SHORTCUT PATH	NIMM DIE NÄCHSTE ABKÜRZUNG!	PRENDS LE PROCHAIN RACCOURCI	PRENDI LA PROSSIMA SCORCIATOIA	TOMA EL PRÓXIMO ATAJO					
+											
+13	Lucky Day	generic	Gaston Shield	Gaston-Schild	Bouclier Gaston	Scudo di Gaston	Escudo Gastón				
+14	Lucky Day	-	PROTECTS YOU FROM THE NEXT GASTON'S GRIEF SQUARE	SCHÜTZT VOR DEM NÄCHSTEN FELD MIT GASTONS FALLE!	TE PROTEGE DE LA PROCHAINE CASE CHAGRIN DE GASTON	TI PROTEGGE DAL PROSSIMO QUADRO MALEDIZIONE DI GASTON	PROTECCIÓN PARA LA PRÓXIMA CASILLA DE PENA DE GASTÓN				
+											
+											
+15	Gaston Card	generic	Gaston Shield	Gaston-Schild	Bouclier Gaston	Scudo di Gaston	Escudo Gastón				
+16	Gaston Card	-	YOUR SHIELD PROTECTS YOU FROM GASTON THIS TURN	IN DIESER RUNDE SCHÜTZT DICH DEIN SCHILD VOR GASTON!	TON BOUCLIER TE PROTEGE DE GASTON	PER QUESTO TURNO LO SCUDO TI PROTEGGE DA GASTON	TU ESCUDO TE PROTEGE DE GASTÓN EN ESTE TURNO				
+											
+17	Gaston Card	generic	Challenge	Herausforderung	Défi	Sfida	Desafío				
+18	Gaston Card	-	DEFEAT MY CHALLENGE AND I WILL LET YOU GO UNHARMED	NIMM MEINE HERAUSFORDERUNG AN, DANN LASSE ICH DICH FREI!	RELEVE MON DEFI SI TU GAGNES TU POURRAS PARTIR SAIN ET SAUF	SUPERA LA MIA SFIDA E TI LASCERÒ ANDARE INCOLUME	SUPERA MI DESAFÍO Y TE DEJARÉ IR SIN HACERTE DAÑO				
+											
+19	Gaston Card	generic	Gaston Loses	Gaston verliert!	Gaston a perdu	Gaston perde	Gastón pierde				
+20	Gaston Card	-	YOU COMPLETED THE GAME AND GASTON LETS YOU GO	DU HAST DAS SPIEL GEWONNEN, UND GASTON LÄSST DICH FREI.	TU AS TERMINE LA PARTIE ET GASTON TE LAISSE PARTIR	HAI COMPLETATO LA PARTITA E COSÌ GASTON TI LIBERA	HAS COMPLETADO EL JUEGO Y GASTÓN TE DEJA IR				
+											
+21	Gaston Card	generic	Gaston Strikes	Gaston schlägt zu!	Gaston attaque	Gaston attacca	Gastón ataca				
+22	Gaston Card	-	MOVE BACK TO THE LAST GASTON'S GRIEF SQUARE	GEHE ZUM LETZTEN FELD MIT GASTONS FALLE ZURÜCK!	RETOURNE A LA DERNIERE CASE CHAGRIN DE GASTON	TORNA ALL' ULTIMO QUADRO MALEDIZIONE DI GASTON	VUELVE A LA ÚLTIMA CASILLA DE PENA DE GASTÓN				
+											
+23	Gaston Card	generic	Gaston Loots	Gaston plündert!	Gaston te pille	Gaston ruba	Gastón saquea				
+24	Gaston Card	-	GASTON TAKES ONE OF YOUR BONUS STARS	GASTON STIEHLT DIR EINEN BONUSSTERN!	GASTON PREND L'UN DE TES BONUS ETOILE	GASTON PRENDE UNA DELLE TUE STELLE BONUS	GASTÓN SE LLEVA UNO DE TUS BONOS ESTRELLA				
+											
+25	Gaston Card	generic	Gaston's Grip	Gastons Fessel	Poigne de Gaston	Gaston ti acciuffa	Gastón te para				
+26	Gaston Card	-	YOU LOSE YOUR NEXT TURN	DU MUSST DIE NÄCHSTE RUNDE AUSSETZEN!	TU PERDS TON PROCHAIN TOUR	PERDI IL PROSSIMO TURNO	PIERDES TU PRÓXIMO TURNO				
+											
+27	Gaston Card	generic	Gaston's Trap	Gastons Falle	Piège de Gaston	Trappola	Trampa de Gastón				
+28	Gaston Card	-	SUBTRACT 2 FROM YOUR NEXT 2 DIE ROLLS	ZIEHE WÄHREND 2 RUNDEN DIE ZAHL 2 VON DER AUGENZAHL AB!	SOUSTRAIS 2 AUX 2 PROCHAINS LANCERS DE DES	SOTTRAI 2 DAI PROSSIMI 2 TIRI DI DADI	RESTA 2 A LAS 2 SIGUIENTES TIRADAS				
+											
+29	Gaston Card	generic	Gaston's Grief	Gastons Schmerz	Chagrin de Gaston	Maledizione	Pena de Gastón				
+30	Gaston Card	-	SWITCH PLACES WITH THE PLAYER WHO IS IN LAST PLACE	TAUSCHE DEINEN PLATZ MIT DEM SPIELER AN LETZTER STELLE!	CHANGE DE PLACE AVEC LE JOUEUR EN DERNIERE POSITION	SCAMBIA IL TUO POSTO CON IL GIOCATORE ALL' ULTIMO POSTO	INTERCAMBIA POSICIÓN CON EL JUGADOR QUE VA EN ÚLTIMO LUGAR				
+											
+											
+	II. STORY AND MINI GAME INTROS										
+	[4 Lines of text per entry - a maximum of 20 characters per line, including spaces]										
+											
+	SCREEN	CHARACTER	ENGLISH	GERMAN	FRENCH	ITALIAN	SPANISH				
+
+31	Intro to 'Lumiere's Leaks'	Lumiere	Come quick, everyone! There's water leaking in the cellar!	Schnell, kommt her! Im Keller gibt es eine undichte Stelle!	Venez tous, vite! Il y a de l'eau qui fuit dans la cave!	Presto, venite! Sta entrando dell' acqua in cantina!	¡Venid todos, rápido! ¡Hay goteras en el sótano!				
+32	Intro to 'Lumiere's Leaks'	Lumiere	Hah! Water is no match for Lumiere.	Ha! Ich fürchte mich nicht vor Wasser!	Ha! L'eau ne fait pas le poids contre Lumière.	Ah! Lumière e l'acqua non vanno proprio d'accordo!	¡Guau! El agua no puede con Lumier.				
+33	Rules for 'Lumiere's Leaks'	generic	Use your flames to stop the water drips. Too many drips will put your fire out.	Stoppe die Tropfen mit den Flammen. Vorsicht: Zuviel Wasser löscht sie!	Utilise tes flammes pour stopper les gouttes sinon elles éteindront ton feu.	Usa le fiamme per bloccare la perdita. Troppe gocce spengono il fuoco.	Usa tus llamas para tapar las goteras. Demasiadas goteras apagarán tu fuego.				
+											
+34	Intro to 'Where's Chip?'	Mrs. Potts	Oh, Chip, are you hiding again?	Tassilo! Wo versteckst Du Dich denn wieder?	Oh, Zip, où te caches-tu encore?	Ehi Chicco, ti sei nascosto di nuovo?	Eh, Chip, ¿escondiéndote otra vez?				
+35	Intro to 'Where's Chip?'	Chip	Try and find me, Mama!	Versuch mich zu finden, Mama!	Essaie de me trouver, maman!	Prova a trovarmi, mamma!	¡Intenta encontrarme, mamá!				
+36	Rules for 'Where's Chip?'	generic	Watch Chip closely. When the cups stop, pick out the one that's Chip.	Behalte Tassilo im Auge, und finde am Ende den richtigen Becher.	Observe bien Zip. Lorsque les coupes s'arrêtent, trouve laquelle est Zip.	Osserva Chicco. Quando le tazze si fermano, prendi Chicco.	Observa atentamente a Chip. Cuando paren las tazas, elige la que es Chip.				
+											
+37	Intro to 'Crazy Chopper'	Belle	Papa, is your invention ready yet?	Papa, ist Deine Erfindung schon bereit?	Papa, ton invention est-elle prête à présent?	Papà, è già pronta la tua invenzione?	Papá, ¿has terminado ya tu invento?				
+38	Intro to 'Crazy Chopper'	Maurice, Belle's father	You're just in time, Belle. I'm going to test it out.	Du kommst gerade rechtzeitig, Belle. Ich will sie jetzt testen!	Tu arrives juste à temps, Belle. Je vais la mettre à l'essai.	Appena in tempo, Belle: sto per sperimentarla.	Llegas justo a tiempo, Bella. Voy a probarlo.				
+39	Intro to 'Crazy Chopper'	Belle	Be careful, Papa. Remember what happened last time.	Vorsicht, Papa! Laß keinen der Stämme auf den Boden fallen!	Sois prudent, Papa. Rappelle-toi ce qui s'est passé la dernière fois.	Attento papà. Ricorda cosa è accaduto la volta scorsa.	Ten cuidado, papá. Recuerda lo que pasó la última vez.				
+40	Rules for 'Crazy Chopper'	generic	Use the spring cart to bounce the logs to the log pile. Don't let any drop.	Transportiere die Stämme mit dem Federwagen!	Sers-toi du chariot pour empiler les rondins. N'en fais pas tomber un seul.	Usa il carretto per accatastare i ciocchi. Non farne cadere neanche uno!	Utiliza el muelle para lanzar los troncos a la pila. ¡Que no se caiga ninguno!				
+											
+41	Intro to 'Belle's Ride'	Belle	Philippe, I don't like the looks of this forest. We'd better hurry home.	Phillip, dieser Wald macht mir Angst. Laß uns nach Hause reiten!	Philibert, cette forêt ne me dit rien qui vaille. Rentrons vite à la maison.	Philippe, questa foresta non mi piace. Presto, torniamo a casa.	Philippe, el bosque me da mala espina. Regresemos corriendo a casa.				
+42	Intro to 'Belle's Ride'	wolf	Grrrr!	Grrrr!	Grrrr!	Grrrr!	¡Grrrr!				
+43	Rules for 'Belle's Ride'	generic	Wolves, bats and traps block Belle's path. Jump and duck to reach safety.	Weiche wilden Tieren und Fallen aus, indem Du springst oder Dich duckst!	Saute et esquive les loups, chauves-souris et pièges qui bloquent Belle.	Lupi, pipistrelli e trappole bloccano la via di Belle. Salta e chinati per salvarti.	Lobos, trampas y murciélagos bloquean el paso a Bella. Esquívalos y salta.				
+											
+44	Intro for 'Mrs.Potts' Peril'	Mrs. Potts	Ha-ha! This meal will be my greatest masterpiece!	Ha-ha! Diese Mahlzeit wird mein größtes Meisterwerk!	Ha ha! Ce repas sera mon chef-d'œuvre suprême!	Ah ah! Questo pranzo sarà un vero capolavoro!	¡Ja! ¡Esta comida será mi gran obra maestra!				
+45	Intro for 'Mrs.Potts' Peril'	Chip	Look at me, Mama! I'm way up high! Oops. Sorry!	Hallo, Mama! Schau mal, ich bin hier oben... Hoppla!	Regarde-moi, maman! Je suis tout là haut! Ho! Pardon!	Guardami mamma! Sono qui in alto! Oh, scusa!	¡Mamá, mira qué alto estoy! ¡Uy! ¡Lo siento!				
+46	Intro for 'Mrs.Potts' Peril'	Mrs.Potts	Oh, Chip, I told you not to play up there.	Tassilo! Ich habe Dir doch gesagt, daß Du nicht dort oben spielen sollst!	Oh, Zip, je t'ai déjà dit de ne pas jouer ici.	Chicco! Ti ho detto di non giocare lassù!	Eh, Chip, te dije que no jugaras ahí arriba.				
+47	Rules to 'Mrs.Potts' Peril'	generic	Mrs. Potts must put out all the fires. Use the pumps to get more water.	Mme. Potin muß die Feuer löschen. Bei den Pumpen kann sie Wasser holen!	Mme Samovar doit éteindre tous les feux. Utilise les pompes d'eau.	La Signora Bric deve spegnere tutte le fiamme. Usa le pompe per avere più acqua.	La Sra. Potts debe apagar todos los fuegos. Las bombas te darán más agua.				
+											
+48	Intro to 'Poochy Paw Prints'	French Maid Duster	Oooh! Look at the mess you made!	Oooh! Sieh Dir Deine Schmutzpfoten an!	Oooh! Regarde un peu la pagaille que tu as mise!	Oooh! Guarda che pasticcio hai combinato!	¡Oooh! ¡Menudo desastre has armado!				
+49	Intro to 'Poochy Paw Prints'	Ottoman doggy	Woof! Woof!	Wau! Wau!	Oua! Oua!	Bau! Bau!	¡Guau! ¡Guau!				
+50	Intro to 'Poochy Paw Prints'	French Maid Duster	You naughty poochy, now I will have to clean it up!	Du ungezogenes Hündchen! Jetzt muß ich alles wieder aufputzen!	Quel vilain chien, je vais devoir tout nettoyer maintenant!	Birbante di un cagnolino! Ora mi tocca pulire tutto!	¡Perro malo, ahora tendré que limpiar todo esto!				
+51	Rules to 'Poochy Paw Prints'	generic	To clean up, dust the paw prints in the same order as they are left.	Putze die Spuren in der Reihenfolge auf, in der sie hinterlassen wurden.	Efface les traces de pas dans l'ordre dans lequel elles ont été laissées.	Per pulire spazza via le orme del cane nell'ordine in cui sono state lasciate.	Limpia las huellas de las patas en el mismo orden en el que se hicieron.				
+											
+52	Intro to 'Le Fou's Gallery'	Le Fou	There's no greater shooter than Gaston. So step up and try to prove me wrong.	Du schießt besser als Gaston? Dann beweise es mir!	Y'a pas meilleur tireur que Gaston. Approche-toi et prouve le contraire.	Nessuno sa sparare bene come Gaston. Fatti avanti e prova a fare di meglio.	Gastón es el mejor tirador. Intenta demostrar que me equivoco.				
+53	Rules to 'Le Fou's Gallery'	generic	Each stage has good targets and bad. Shoot the good but avoid the bad.	Du darfst nur die angegebenen Ziele treffen!	A chaque niveau, vise les bonnes cibles et évite les mauvaises.	Ogni livello ha bersagli buoni e non. Mira ai primi ed evita gli altri.	Hay dianas buenas y malas. Dispara a las buenas, pero evita las malas.				
+54	Rules to 'Le Fou's Gallery'	generic	If you run out of time or lives, the game is over.	Ist die Zeit abgelaufen oder gehen Deine Versuche aus, ist das Spiel beendet!	Si ton temps expire et que tu n'as plus de vies, la partie est terminée.	Se esaurisci il tempo o le vite, la partita è finita.	Si se te acaban el tiempo o las vidas, la partida termina.				
+											
+55	Intro to 'Beast's Battle'	generic	Vicious wolves lurk everywhere in the forest.	Überall im Wald lauern hungrige Wölfe!	Des loups malveillants rôdent partout dans la forêt.	I lupi malvagi sono in agguato in ogni angolo della foresta.	Los feroces lobos se ocultan en muchos escondrijos del bosque.				
+56	Intro to 'Beast's Battle'	generic	The Beast must battle them to save Belle.	Das Biest muß gegen sie kämpfen oder ihnen ausweichen.	La Bête doit se battre contre eux pour sauver Belle.	La Bestia deve affrontarli per salvare Belle.	La Bestia debe luchar contra ellos para salvar a Bella.				
+57	Rules to 'Beast's Battle'	generic	Use the arrows as a guide to fight the wolves with jumps, ducks and punches.	Achte auf die Pfeile und springe, ducke Dich oder verteile Hiebe!	Utilise les flèches pour t'aider à sauter, esquiver et donner des coups.	Usa le frecce come guida per battere i lupi con salti, schivate e pugni.	Guíate con flechas y lucha contra los lobos con saltos, fintas y golpes.				
+											
+58	Intro to 'Bonus Game'	generic	Congratulations, you have collected enough stars for a bonus game.	Gratuliere. Du hast genug Sterne für ein Bonusspiel gesammelt.	Félicitations, tu as récupéré assez d'étoiles pour un jeu bonus.	Complimenti! Hai raccolto le stelle necessarie per una partita bonus.	Enhorabuena, has reunido estrellas suficientes para una partida extra.				
+59	Rules for 'Gaston's Spitoons'	generic	Use the meter below Gaston to aim for the spittoon with the star.	Achte auf die Power-Leiste und drücke zum Spucken den A-Knopf. 	Utilise le compteur sous Gaston pour viser le crachoir avec l'étoile.	Usa l'indicatore sotto Gaston per mirare con la stella alla sputacchiera.	Usa el metro bajo Gastón para apuntar a la escupidera con la estrella.				
+60	Rules for 'Matching Squares'	generic	Find the matching pairs behind the doors. The better you do, the greater the rewards.	Finde hinter den Türen die passenden Paare! 	Trouve le maximum de cases correspondantes derrière les portes.	Trova le coppie dietro le porte. Più sarai bravo, maggiore sarà il premio.	Encuentra parejas iguales tras las puertas. Hazlo bien, tendrás más premio.				
+											
+61	Intro for 'Story Game-1'	generic	In the Story Game, you must find the Beast before Gaston. Good luck!	Im Story-Modus mußt Du das Biest finden, bevor dies Gaston gelingt!	Dans ce jeu, Tu dois trouver la Bête avant Gaston. Bonne chance!	Nella Storia devi trovare la Bestia prima di Gaston. Auguri!	En la Partida Historia, encuentra a Bestia antes que Gastón. ¡Suerte!				
+62	Intro for 'Story Game-1'	generic	Gaston speaks to a gathering mob.	Gaston wiegelt die Dorfbewohner auf!	Gaston parle à une assemblée de gens.	Gaston parla ad una folla radunata.	Gastón habla a la multitud que se está reuniendo.				
+63	Intro for 'Story Game-1'	Gaston	He'll harm your children... We are not safe until the Beast is dead.	Eure Kinder sind in Gefahr! Wir müssen das Biest beseitigen!	Il va faire du mal à vos enfants... On ne sera saufs qu'une fois la Bête morte.	Farà del male ai bambini...Non siamo al sicuro finché la Bestia è viva!	Hará daño a vuestros hijos... Hasta que no muera la Bestia no estaremos a salvo.				
+64	Intro for 'Story Game-1'	generic	Belle is locked in the cellar while the angry mob heads for the castle.	Während Belle im Keller gefangen ist, stürmt die Menge zum Schloß.	Belle est enfermée à la cave. La foule en colère se dirige vers le château.	Belle è rinchiusa in cantina mentre la folla infuriata si dirige al castello.	Bella está encerrada en el sótano y una muchedumbre airada se dirige al castillo.				
+65	Intro for 'Story Game-1'	Belle	I must get out of here and warn the Beast before it's too late!	Ich muß fliehen, um das Biest zu warnen!	Je dois sortir d'ici et avertir la Bête avant qu'il ne soit trop tard!	Devo uscire di qui e avvertire la Bestia prima che sia troppo tardi!	¡Debo salir de aquí y avisar a Bestia antes de que sea demasiado tarde!				
+66	Intro for 'Story Game-1'	generic	Gaston's mob sets off for the Beast's castle.	Der Mob macht sich auf den Weg zum Schloß!	La troupe de Gaston se met en route vers le château de la Bête.	La folla di Gaston si mette in marcia verso il castello della Bestia.	La muchedumbre de Gastón se dirige al castillo de la Bestia.				
+67	Intro for 'Story Game-1'	Mob of villagers	Kill the Beast!	Findet das Biest!	A mort la Bête!	A morte la Bestia!	¡Muerte a la Bestia!				
+68	Intro for 'Story Game-1'	generic	Chip desperately tries to start the woodchopping contraption.	Tassilo versucht verzweifelt, die Holzhack-Maschine in Gang zu setzen.	Zip tente désespérément de démarrer l'engin à couper le bois.	Chicco tenta disperatamènte di avviàre la macchina taglialegna.	Chip intenta desesperadamente activar el artilugio de cortar madera.				
+69	Intro for 'Story Game-1'	Chip	I must help Belle escape to warn the Beast!	Ich muß Belle zur Flucht verhelfen, damit sie das Biest warnen kann!	Je dois aider Belle à s'échapper pour aller avertir la Bête!	Devo aiutare Belle a fuggire e avvertire la Bestia!	¡Debo ayudar a Bella a escapar para que avise a la Bestia!				
+70	Intro for 'Story Game-1'	generic	Chip starts the woodchopper and heads toward the locked door.	Tassilo schaltet die Maschine ein und bewegt sich auf die verriegelte Tür zu.	Zip démarre le coupeur de bois et se dirige vers la porte verrouillée.	Chicco avvia la macchina taglialegna e si dirige verso la porta chiusa.	Chip activa el cortamaderas y se dirige hacia la puerta cerrada.				
+71	Intro for 'Story Game-1'	Chip	Here I come, Belle! Stay away from the door!	Hier bin ich, Belle! Halte Dich von der Tür fern!	J'arrive, Belle! Eloigne-toi de La porte!	Eccomi Belle! Stai lontana dalla porta!	¡Allá voy, Bella! ¡Aléjate de la puerta!				
+72	Intro for 'Story Game-1'	generic	The woodchopper breaks the locked door!	Die Holztür wird von der Axt aufgebrochen!	Le coupeur de bois casse la porte verrouillée!	Il marchingegno rompe la porta chiusa!	¡El cortamaderas rompe la puerta y la abre!				
+73	Intro for 'Story Game-1'	generic	With Chip's help, Belle and Maurice escape the locked cellar.	Dank Tassilos Hilfe können Belle und Maurice aus dem  Keller fliehen.	Grâce à Zip, Belle et Maurice s'échappent de la cave.	Con l'aiuto di Chicco, Belle e Maurice scappano dalla cantina.	Con la ayuda de Chip, Bella y Maurice escapan del calabozo.				
+74	Intro for 'Story Game-1'	Belle	We must hurry, Father!	Wir müssen uns beeilen, Papa!	Nous devons nous dépêcher, père!	Dobbiamo fare in fretta, papà!	¡Debemos darnos prisa, padre!				
+											
+75	Intro for 'Story Game-2'	Belle	I wonder where Gaston is?	Wo Gaston wohl sein mag?	Je me demande où est Gaston ?	Chissà dov'è Gaston!	Me pregunto dónde estará Gastón.				
+											
+76	Intro for 'Story Game-3'	generic	Gaston's mob arrives at the castle. A great door bars their way.	Die Meute erreicht das Schloß, doch ein  Holzportal versperrt den Zugang!	La troupe de Gaston arrive au château. Une grande porte leur barre le passage.	La folla di Gaston è arrivata al castello, ma un portone gli blocca la via. 	La muchedumbre de Gastón llega al castillo. Una enorme puerta les impide el paso.				
+77	Intro for 'Story Game-3'	generic	They construct a battering ram to break the door down.	Die Dorfbewohner brechen das Tor mit einem Rammbock auf!	Ils fabriquent un bélier pour enfoncer la porte.	Costruiscono un ariete per buttare giù la porta.	Construyen un ariete para echarla abajo.				
+	Intro for 'Story Game-3'	Mob of villagers	Kill the Beast!	Brennt das Schloß nieder!	A mort la Bête!	A morte la Bestia!	¡Muerte a la Bestia!				
+78	Intro for 'Story Game-3'	generic	Gaston breaks the castle door down! There's not much time to warn the Beast!	Das Tor gibt nach! Es bleibt kaum noch Zeit, das Biest zu warnen!	Gaston a réussi à enfoncer la porte du château! Il reste peu de temps!	Gaston sta buttando giù la porta! Non c'è molto tempo per avvertire la Bestia!	¡Gastón tira la puerta del castillo! ¡No hay tiempo para avisar a la Bestia!				
+											
+80	Intro to 'Winning the Game'	generic	Belle warns the Beast and Gaston is defeated.	Belle warnt das Biest, und Gaston ist besiegt.	Belle avertit la Bête et Gaston est vaincu.	Belle avvisa la Bestia e Gaston è sconfitto.	Bella avisa a Bestia y Gastón es derrotado.				
+81	Intro to 'Winning the Game'	generic	True love is found and the Beast returns to his former self.	Dank wahrer Liebe verwandelt sich das Biest wieder in einen stattlichen Prinzen!	Tout est bien qui finit bien et la Bête reprend son aspect normal.	Il vero amore fa miracoli e la Bestia riprende il suo aspetto.	Surge el verdadero amor y la Bestia recupera su antiguo aspecto.				
+82	Intro to 'Winning the Game'	generic	And they lived ...	Und ihr Leben...	Et ils vécurent...	E vissero sempre...	Y vivieron...				
+83	Intro to 'Winning the Game'	generic	... happily ever after.	...war voll Glück!	... longtemps heureux.	...felici e contenti.	... felices para siempre.				
+84	Intro to 'Winning the Game'	generic	Game Over	Spiel beendet!	Partie terminée	Fine partita	Fin de la partida				
+											
+85	Intro to 'Losing the Game'	generic	Belle does not reach the Beast in time.	Belle kann das Biest nicht rechtzeitig warnen.	Belle n'a pas réussi à avertir la Bête à temps.	Belle non raggiunge la Bestia in tempo.	Bella no avisa a la Bestia a tiempo.				
+86	Intro to 'Losing the Game'	generic	The last petal has fallen from the enchanted rose.	Das letzte Blatt fällt von der verzauberten Rose ab.	La rose enchantée a perdu son dernier pétale.	È caduto l'ultimo petalo della rosa incantata.	Ha caído el último pétalo de la rosa encantada.				
+											
+											
+	III. MENU/ GAMEPLAY TEXT										
+											
+	"Text in [Brackets] should not be translated; it is for the translators' reference and does not appear on screen."										
+	NOTE: All text must stay within the character count as utilized in English (including spaces and punctuation).										
+											
+	SCREEN	CHARACTER	ENGLISH	GERMAN	FRENCH	ITALIAN	SPANISH				
+
+87	Main Menu	-	Game Select	Spielauswahl	Sélection des parties	Seleziona partita	Seleccionar partida			
+88	Main Menu	-	Story Game	Story-Modus	Jeu d'action	Storia	Partida Historia			
+89	Main Menu	-	Board Game	Brettspiel	Jeu de société	Gioco da tavolo	Partida Tablero			
+90	Main Menu	-	Practice Game	Übungsspiel	Entraînement	Pratica	Partida Práctica			
+91	Main Menu	-	Challenge Mode	Challenge	Mode défi	Modalità sfida	Modo Desafío			
+92	Main Menu	-	Options	Optionen	Options	Opzioni	Opciones			
+										
+93	Options Screen	-	Options	Optionen	Options	Opzioni	Opciones			
+94	Options Screen	-	Song	Gesang	Chanson	Canzone	Canción			
+95	Options Screen	-	Sound FX	Soundeffekte	Effets sonores	Effetti sonori	Efectos sonido			
+96	Options Screen	-	Music	Musik	Musique	Musica	Música			
+97	Options Screen	-	On	An	Activée	Sì	Sí			
+98	Options Screen	-	Off	Aus	Désactivée	No	No			
+99	Options Screen	-	Clear Memory	Speicher löschen	Effacer mémoire	Cancella memoria	Liberar memoria			
+100	Options Screen	-	Clear high scores?	Highscores löschen?	Effacer meilleurs scores?	Cancella record?	¿Borrar mejores puntuaciones?			
+101	Options Screen	-	No	Nein	Non	No	No			
+102	Options Screen	-	Yes	Ja	Oui	Sì	Sí			
+103	Options Screen	-	Credits	Credits	Remerciements	Autori	Créditos			
+										
+104	Story Game	-	Easy	Leicht	Facile	Facile	Fácil			
+105	Story Game	-	Medium	Mittel	Moyen	Medio	Medio			
+106	Story Game	-	Hard	Schwierig	Difficile	Difficile	Difícil			
+										
+107	Results Screen	-	Results	Ergebnisse	Résultats	Risultati	Resultados			
+108	Results Screen	-	Stage	Level	Niveau	Livello	Nivel			
+109	Results Screen	-	Complete!	Fertig!	Terminé!	Fatto!	Completado			
+110	Results Screen	-	Award	Belohnung	Récompense	Premio	Premio			
+111	Results Screen	-	Stars	Sterne	Etoiles	Stelle	Estrellas			
+112	Results Screen	-	Time	Zeit	Temps	Tempo	Tiempo			
+113	Results Screen	-	Oh Dear!	Au weia!	Oh mon Dieu!	Peccato!	¡Cielos!			
+114	Results Screen	-	Good!	Gut!	Bien!	Bene!	¡Bien!			
+115	Results Screen	-	Well Done!	Gut gemacht!	Bravo!	Ben fatto!	¡Bien hecho!			
+116	Results Screen	-	Superstar!	Super!	Champion!	Grandioso!	¡Superestrella!			
+117	Results Screen	-	Slow	Langsam	Lent	Lento	Lento			
+118	Results Screen	-	Normal	Normal	Normal	Normale	Normal			
+119	Results Screen	-	Fast	Schnell	Rapide	Veloce	Rápido			
+120	Results Screen	-	Pairs	Paare	Paires	Coppie	Pareja			
+121	Results Screen	-	Award	Belohnung	Récompense	Premio	Premio			
+122	Results Screen	-	Spit	Spucken	Craché	Sputo	Escupitajo			
+123	Results Screen	-	Miss	Daneben	Manqué	Mancato	Fallo			
+124	Results Screen	-	Hit	Treffer	Touché	Colpito	Acierto			
+125	Results Screen	-	Star	Stern	Etoile	Stella	Estrella			
+126	Results Screen	-	Roll Again!	Würfle nochmal!	Rejette les dés!	Tira ancora!	¡Tira de nuevo!			
+										
+127	Board Game	-	Player Select	Spielerauswahl	Sélection des joueurs	Seleziona giocatore	Seleccionar jugador			
+										
+128	Board Game	-	Beast	Biest	Bête	Bestia	Bestia			
+129	Board Game	-	Belle	Belle	Belle	Belle	Bella			
+130	Board Game	-	Mrs. Potts	Madame Potin	Mme Samovar	La Signora Bric	Sra. Potts			
+131	Board Game	-	Lumiere	Lumiere	Lumière	Lumière	Lumier			
+132	Board Game	-	User	Benutzer	Utilisateur	Utente	Usuario			
+133	Board Game	-	CPU	CPU	UC	CPU	PC			
+134	Board Game	-	None	Keine	Aucun	Nessuno	Ninguno			
+135	Board Game	-	Weak	Schwach	Faible	Debole	Débil			
+136	Board Game	-	Average	Durchschnittlich	Moyen	Medio	Normal			
+137	Board Game	-	Strong	Stark	Fort	Forte	Fuerte			
+138	Board Game	-	Beast's Turn	Das Biest würfelt!	Tour de la Bête	Tocca alla Bestia	Turno de Bestia			
+139	Board Game	-	Belle's Turn	Belle würfelt!	Tour de la Belle	Tocca a Belle	Turno de Bella			
+140	Board Game	-	Mrs. Potts' Turn	Madame Potin würfelt!	Tour de Mme Samovar	Tocca alla Signora Bric	Turno de la Sra. Potts			
+141	Board Game	-	Lumiere's Turn	Lumiere würfelt!	Tour de Lumière	Tocca a Lumière	Turno de Lumier			
+142	Board Game	-	Beast skips a turn	Das Biest setzt eine Runde aus!	La Bête saute son tour	La Bestia salta un giro	Bestia pierde un turno			
+143	Board Game	-	Belle skips a turn	Belle setzt eine Runde aus!	Belle saute son tour	Belle salta un giro	Bella pierde un turno			
+144	Board Game	-	Mrs. Potts skips a turn	Madame Potin setzt eine Runde aus!	Mme Samovar saute son tour	La Signora Bric salta un giro	La Sra. Potts pierde un turno			
+145	Board Game	-	Lumiere skips a turn	Lumiere setzt eine Runde aus!	Lumière saute son tour	Lumière salta un giro	Lumier pierde un turno			
+146	Board Game	-	Congratulations!	Gratuliere!	Félicitations!	Complimenti!	¡Enhorabuena!			
+147	Board Game	-	Beast Wins!	Biest gewinnt!	La Bête a gagné	Vince la Bestia!	¡Gana la Bestia!			
+148	Board Game	-	Belle Wins!	Belle gewinnt!	Belle a gagné	Vince Belle!	¡Gana Bella!			
+149	Board Game	-	Mrs. Potts Wins!	Mme Potin gewinnt!	Mme Samovar a gagné	Vince la Signora Bric!	¡Gana la Sra. Potts!			
+150	Board Game	-	Lumiere Wins!	Lumiere gewinnt!	Lumière a gagné	Vince Lumière!	¡Gana Lumier!			
+151	Board Game	-	Game Over	Spiel beendet!	Partie terminée	Fine partita	Fin de la partida			
+										
+152	Game Titles	-	Belle's Ride	Belle reitet aus	La chevauchée de Belle	Corsa di Belle	La carrera de Bella			
+153	Game Titles	-	Beast's Battle	Hungrige Wölfe	La lutte de la Bête	Battaglia della Bestia	Lucha de Bestia			
+154	Game Titles	-	Crazy Chopper	Der Federwagen	Le casseur fou	Taglialegna matto	Cortadora Loca			
+155	Game Titles	-	Mrs. Potts' Peril	Küchenbrand	Mme Samovar en péril	Pericolo in cucina	Peligra la Sra. Potts			
+156	Game Titles	-	Le Fou's Gallery	Le Fous Schießbude	Le stand du Fou	Galleria di LeTont	Galería de Le Fou			
+157	Game Titles	-	Poochy Paw Prints	Schmutzige Pfoten	Le jeu des empreintes	Orme del cagnolino	Huellas del perrito			
+158	Game Titles	-	Where's Chip?	Wo ist Tassilo?	Où est Zip?	Dov'è Chicco?	¿Dónde está Chip?			
+159	Game Titles	-	Lumiere's Leaks	Lumieres Problem	Les fuites de Lumière	Perdite di Lumière	Goteras de Lumier			
+160	Game Titles	-	Cogsworth's Trivia	Herrn von Unruhs tägliche Fragerei	Les futilités de Big Ben	Sciocchezze di Tockins	Trivialidades de Dindón			
+161	Game Titles	-	Matching Doors	Türen-Memory	Les portes puzzle	Porte abbinate	Puertas acordes			
+162	Game Titles	-	Gaston's Spittoons	Gastons Spucknäpfe	Le crachoir de Gaston	Sputacchiere di Gaston	Escupideras de Gastón			
+										
+163	Practice Game	-	Easy	Einfach	Facile	Facile	Fácil			
+164	Practice Game	-	Medium	Mittel	Moyen	Medio	Medio			
+165	Practice Game	-	Hard	Schwierig	Difficile	Difficile	Difícil			
+										
+166	Challenge Mode	-	Challenge Easy	Einfacher Test	Défi facile	Sfida facile	Desafío fácil			
+167	Challenge Mode	-	Challenge Hard	Schwieriger Test	Défi difficile	Sfida difficile	Desafío difícil			
+168	Challenge Mode	-	Paces	Schritte	Pas	Passi	Pasos			
+169	Challenge Mode	-	Wolves	Wölfe	Loups	Lupi	Lobos			
+170	Challenge Mode	-	Wolf	Wolf	Loup	Lupo	Lobo			
+171	Challenge Mode	-	Logs	Stämme	Rondins	Ciocchi	Troncos			
+172	Challenge Mode	-	Flames	Flammen	Flammes	Fiamme	Llamas			
+173	Challenge Mode	-	Targets	Ziele	Cibles	Bersagli	Dianas			
+174	Challenge Mode	-	Steps	Abdrücke	Niveaux	Orme	Pisadas			
+175	Challenge Mode	-	Shuffles	Durchgänge	Cartes	Inganni	Mezclas			
+176	Challenge Mode	-	Shuffle	Durchgang	Carte	Inganno	Mezcla			
+177	Challenge Mode	-	Drips	Tropfen	Gouttes	Gocce	Goteras			
+178	Challenge Mode	-	High Score!!!	Highscore!!!	Score élevé!!!	Record!!!	¡Mejor puntuación!			
+
+	[Player will be able to enter 3 initials so we will need translations for any special characters in the language set]									
+
+179	During Game	-	Stage 1	Level 1	Niveau 1	Livello 1	Nivel 1			
+180	During Game	-	Stage 2	Level 2	Niveau 2	Livello 2	Nivel 2			
+181	During Game	-	Stage 3	Level 3	Niveau 3	Livello 3	Nivel 3			
+182	During Game	-	No!	Nein!	Non!	No!	¡No!			
+183	During Game	-	Yay!	Ja!	Ouais!	Sì!	¡Hey!			
+184	During Game	-	Boom!	Bumm!	Boum!	Bum!	¡Boom!			
+185	During Game	-	Shoot	Ja!	Tire	Spara!	Dispara			
+186	During Game	-	Avoid!	Nein!	Evite!	Schiva!	¡Evítalo!			
+187	During Game	-	Ye Olde Shooting Range	Le Fous Schießstand	Le stand de tir d'antan	L'antico Tiro a Segno!	Campo de tiro			
+188	During Game	-	Power	Power	Puissance	Potenza	Fuerza			
+										
+189	Saved Game	-	Saved Game	Gespeichertes Spiel	Partie enregistrée	Partita salvata	Partida guardada			
+190	Saved Game	-	You have a game in progress.	Ein Spiel läuft bereits!	Une partie est déjà en cours.	Partita in corso.	Hay una partida en juego.			
+191	Saved Game	-	Continue	Weiter	Continuer	Continua	Continuar			
+192	Saved Game	-	Delete	Löschen	Supprimer	Cancella	Eliminar			
+										
+193	Pause Mode	-	Paused	Pause	Pause	Pausa	Pausa			
+										
+194	Legal screen	-	Disney's	Disneys	Disney	Disney	Disney			
+195	Legal screen	-	Beauty and the Beast	Die Schöne und das Biest	La Belle et la Bête	La Bella e la Bestia	La Bella y la Bestia			
+196	Legal screen	-	A Board Game Adventure	Spielesammlung	une Aventure Interactive	Un gioco d'avventura	Aventura sobre el tablero			
+197	Legal screen	-	©1999 Disney	©1999 Disney	©1999 Disney	©1999 Disney	©1999 Disney			
+198	Legal screen	-	All Rights Reserved	Alle Rechte vorbehalten	Tous droits réservés	Tutti i diritti riservati	Reservados todos los derechos			
+199	Legal screen	-	Unauthorized Duplication is a Violation of Applicable Laws	Unerlaubtes Kopieren stellt eine Verletzung geltender Gesetze dar	Toute copie non autorisée constitue une violation des lois en vigueur	La riproduzione non autorizzata è una violazione delle leggi in vigore	La reproducción no autorizada constituye una violación de las leyes aplicables			
+200	Legal screen	-	Licensed by Nintendo	Unter Lizenz von Nintendo	Licence délivrée par Nintendo	Concesso in licenza da Nintendo	Con licencia de Nintendo				
+											
+202	Options Screen	-	Language	Sprache	Langue	Lingua	Idioma				
+203	Options Screen	-	English	Deutsch	Français	Italiano	Español				
+											
+204	Board Game	-	Difficulty Select	Schwierigkeitsgrad	Niveau de difficulté	Scegli difficoltà	Selecc. dificultad				
+											
+205	Saved Game	-	Delete Game	Spiel löschen	Supprimer la partie	Cancella partita	Eliminar partida				
+											
+206	Results Screen	-	Rounds	Runden	Manches	Turni	Vueltas				
+											
+207	Star Square	generic	It is your lucky day! You receive 3 bonus stars!	Glück gehabt! Du erhältst 3 Bonussterne!	C'est ton jour de chance ! Tu obtiens 3 bonus étoile !	È il tuo giorno fortunato! Eccoti 3 bonus stelle!	¡Es tu día de suerte! ¡Recibes 3 bonos estrella!				
+											
+208	Guard	generic	Secret Passage	Geheimgang	Passage secret	Passaggio segreto	Pasaje secreto				
+209	Guard	-	THE GUARD SHOWS YOU A SECRET PASSAGE	DER WÄCHTER ZEIGT DIR EINEN GEHEIMGANG!	LE GARDE T'INDIQUE UN PASSAGE SECRET	LA GUARDIA TI MOSTRA UN PASSAGGIO SEGRETO	EL GUARDIÁN TE MUESTRA UN PASAJE SECRETO				
+											
+210	Board Names	1st Story	Village Board	Das Dorf	Village	Villaggio	Tablero Villa				
+211	Board Names	2nd Story	Forest Board	Der Wald	Forêt	Foresta	Tablero Bosque				
+212	Board Names	3rd Story	Castle Board	Im Schloss	Château	Castello	Tablero Castillo				
+213	Board Names	1st Multiplayer	Cottage Board	Die Hütte	Maison	Villetta	Tablero Cabaña				
+214	Board Names	2nd Multiplayer	Fountain Board	Am Brunnen	Fontaine	Fontana	Tablero Fuente				
+215	Board Names	3rd Multiplayer	Garden Board	Im Garten	Jardin	Giardino	Tablero Jardín				
+216	Board Names	4th Multiplayer	Ballroom Board	Im Ballsaal	Salle de bal	Sala da ballo	Tablero Salón				
+											
+217	Unlock Board	Unlock Board	Congratulations! You have unlocked a new board!	Super! Du hast ein neues Brett erspielt!	Félicitations ! Tu as déverrouillé un nouveau plateau de jeu !	Complimenti! Hai aperto un nuovo portale!	¡Enhorabuena! ¡Has abierto un tablero nuevo!				
+											
+218	Locked Board	1st Story	Complete the Village Board to unlock.	Beende zum Erspielen Das Dorf!	Termine le plateau de jeu Village.	Completa il  Villaggio per aprire il portale.	Completa el tablero Villa y lo abrirás.				
+219	Locked Board	2nd Story	Complete the Forest Board to unlock.	Beende zum Erspielen Der Wald!	Termine le plateau de jeu Forêt.	Completa la Foresta per aprire il portale.	Completa el tablero Bosque y lo abrirás.				
+220	Locked Board	3rd Story	Complete the Castle Board to unlock.	Beende zum Erspielen Im Schloss!	Termine le plateau de jeu Château.	Completa il Castello per aprire il portale.	Completa el tablero Castillo y lo abrirás.				
+											
+221	Locked Board	2nd Multiplayer	Complete all Easy Practice Games.	Beende alle einfachen Übungsspiele.	Termine toutes les parties faciles du mode Entraînement.	Completa le partite di livello facile.	Completa todas las partidas práctica fáciles.				
+222	Locked Board	3rd Multiplayer	Complete all Medium Practice Games.	Beende alle mittleren Übungsspiele.	Termine toutes les parties moyennes du mode Entraînement.	Completa le partite di livello medio.	Completa todas las partidas práctica medias.				
+223	Locked Board	4th Multiplayer	Complete all Hard Practice Games.	Beende alle schwierigen Übungsspiele.	Termine toutes les parties difficiles du mode Entraînement.	Completa le partite di livello difficile.	Completa todas las partidas práctica difíciles.				
+											
+224	Intro to 'Winning Story Game 1'	generic	Well Done! You have beaten Gaston to the forest.	Super! Du hast vor Gaston den Wald erreicht!	Bravo ! Tu as atteint la forêt avant Gaston.	Bravo! Sei arrivato alla foresta prima di Gaston.	¡Bien hecho! Has llegado al bosque antes que Gastón.				
+225	Intro to 'Winning Story Game 2'	generic	Well Done! You have beaten Gaston to the castle.	Super! Du hast vor Gaston das Schloß erreicht!	Bravo ! Tu as atteint le château avant Gaston.	Bravo! Sei arrivato al castello prima di Gaston.	¡Bien hecho! Has llegado al castillo antes que Gastón.				
+226	Intro to 'Winning Story Game 1 or 2'	generic	But don't stop now, there is still a long way to go!	Weiter! Du hast noch einen langen Weg vor Dir!	Mais ne t'arrête pas en si bon chemin, il reste encore beaucoup à faire !	Non fermarti ora! C'è ancora molta strada da fare!	Pero no te pares ahora. ¡Aún queda mucho!				
+											
+227	Challenge Mode	-	Log	Stamm	Rondin	Ciocco	Tronco				
+228	Challenge Mode	-	Flame	Flamme	Flamme	Fiamma	Llama				
+229	Challenge Mode	-	Target	Ziel	Cible	Scopo	Diana				
+230	Challenge Mode	-	Step	Abdruck	Niveau	Orma	Pisada				
+											
+											
+	IV. REMOVED TEXT THAT USED TO BE IN THE GAME (TRANSLATIONS NOT NEEDED)										
+											
+	"Text in [Brackets] should not be translated; it is for the translators' reference and does not appear on screen."										
+	NOTE: All text must stay within the character count as utilized in English (including spaces and punctuation).										
+											
+	SCREEN	CHARACTER	ENGLISH	GERMAN	FRENCH	ITALIAN	SPANISH				
+
+	Lucky Day	generic	Challenge	Herausforderung	Défi	Sfida	Desafío				
+	Lucky Day	-	DEFEAT MY CHALLENGE AND I WILL REWARD YOU	BESTEHE DEN TEST FÜR EINE BELOHNUNG	BATS-MOI A MON DEFI ET TU SERAS RECOMPENSE	VINCI LA MIA SFIDA E SAPRÒ COME RICOMPENSARTI	SUPERA MI DESAFÍO Y TE PREMIARÉ				
+
+	Lucky Day	generic	You Lost!	Verloren!	Perdu !	Hai perso!	¡Perdiste!				
+	Lucky Day	-	YOU DID NOT DO WELL ENOUGH TO EARN MY REWARD	DU HAST MIT DEINER LEISTUNG KEINE BELOHNUNG VERDIENT	TU N'AS PAS ETE ASSEZ FORT POUR MERITER MA RECOMPENSE	NIENTE RICOMPENSA: NON SEI STATO ABBASTANZA BRAVO!	NO LO HAS HECHO LO BASTANTE BIEN PARA GANAR MI PREMIO				
+
+	Star Square	generic	YOU RECEIVE A BONUS STAR	DU BEKOMMST EINEN BONUSSTERN	TU OBTIENS UN BONUS ETOILE	HAI GUADAGNATO UN BONUS STELLA	RECIBES UN BONO ESTRELLA				
+
+	Intro to 'Castle-1'	generic	Gaston's mob is now outside the castle building a battering ram!	Gastons Pöbel baut jetzt vor dem Schloß einen Rammblock!	La troupe de Gaston construit à présent un bélier devant les portes du château!	La folla di Gaston è fuori dal castello e sta costruendo un ariete!	¡La muchedumbre de Gastón está ante el castillo fabricando un ariete!				
+	Intro to 'Castle-1'	generic	You must hurry and find the Beast before Gaston does!	Schnell, finde das Biest, bevor es von Gaston gefunden wird!	Dépêche-toi de trouver la Bête avant Gaston!	Devi sbrigarti e trovare la Bestia prima di Gaston!	¡Rápido, encuentra a la Bestia antes de que lo haga Gastón!				
+											
+	Intro to 'Castle-2'	generic	Gaston is now using a battering ram to break the castle door down. Hurry!	Gaston bricht jetzt mit dem Rammblock die Schloßtür auf. Beeil Dich!	Gaston essaie d'enfoncer la porte du château avec un bélier. Vite!	Gaston sta usando un ariete per buttar giù la porta del castello. Presto!	Gastón está usando el ariete para tirar la puerta del castillo. ¡Rápido!				
+											
+	Intro to 'Castle-3'	generic	Gaston breaks the castle door down! There's not much time to warn the Beast!	Die Tür gibt nach! Es bleibt kaum noch Zeit, um das Biest zu warnen!	Gaston a réussi à enfoncer la porte du château! Il reste peu de temps!	Gaston sta buttando giù la porta! Non c'è molto tempo per avvertire la Bestia!	¡Gastón tira la puerta del castillo! ¡No hay tiempo para avisar a la Bestia!				
+
+	Intro for 'Story Game-2'	Belle	I wonder how far Gaston is ahead of us?	Wieviel Vorsprung Gaston wohl schon hat?	Je me demande combien d'avance Gaston a sur nous?	Chissà di quanto ci precede Gaston?	¿Cuánta ventaja nos llevará Gastón?				

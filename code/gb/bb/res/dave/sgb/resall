@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+rm -f *.bin *.rgb *.chr *.equ *.map #*.swd
+. ../../tools
+$XSGMB @sgb.cmd test.pcx || true
+#$MAKEPKG -offset 8 test.map -offset 128 -length 96 test.rgb
+#cp test.pkg testmap.bin
+#$GBSWD testmap.bin
+$MAKEPKG -length 4096 test.chr
+cp test.pkg testchr1.bin
+$GBSWD testchr1.bin
+$MAKEPKG -offset 4096 test.chr
+cp test.pkg testchr2.bin
+$GBSWD testchr2.bin
+$XSGMB @pal.cmd superpal.pcx

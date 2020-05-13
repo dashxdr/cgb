@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+rm -f swd/* *.hi *.lo *.map *.chr *.pkg *.equ *.rgb
+. ../../tools
+
+$XSGMB brange.cmd
+$XSGMB brange2.cmd
+$XSGMB btarget.cmd
+$XSGMB crange.cmd
+$XSGMB crange2.cmd
+$XSGMB ctarget.cmd
+$XSGMB ccursor.cmd
+
+$GBSWD -d *.map
+
+$GBSWD -d -ba brange.chr
+$GBSWD -d -ba brange2.chr
+$GBSWD -d btarget.chr
+$GBSWD -d -ba crange.chr
+$GBSWD -d -ba crange2.chr
+$GBSWD -d ctarget.chr
+$GBSWD -d ccursor.chr
+
+$MAKEPKG @brange.lst
+$MAKEPKG @brange2.lst
+$MAKEPKG @btarget.lst
+$MAKEPKG @crange.lst
+$MAKEPKG @crange2.lst
+$MAKEPKG @ctarget.lst
+$MAKEPKG @ccursor.lst
+
+for f in b*.spr; do
+ $XSGMB @bspr.cmd $f
+done
+
+for f in c*.spr; do
+ $XSGMB @cspr.cmd $f
+done
