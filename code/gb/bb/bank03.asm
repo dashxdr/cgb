@@ -33,7 +33,7 @@ TOPTITLE	EQU	13
 
 SFX_ILLEGAL	EQU	19
 
-NUMGAMES	EQU	9	;# of subgames in practice mode
+NUMGAMES	EQU	10	;# of subgames in practice mode
 
 		INTERFACE Kiss
 		INTERFACE Fire
