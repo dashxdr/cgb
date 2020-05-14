@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include <inttypes.h>
+#include <unistd.h>
+#include <stdarg.h>
 
 /*
 converts .spr file into agb sprite format
@@ -46,6 +49,10 @@ sizes:
 11 = 32 x 64   48   32
 
 */
+
+typedef int32_t LONG;
+typedef uint32_t ULONG;
+
 int xsizes[12]={1,2,4,8,2,4,4,8,1,1,2,4};
 int ysizes[12]={1,2,4,8,1,1,2,4,2,4,4,8};
 
@@ -77,9 +84,8 @@ int headerlen;
 
 int outfile;
 
-striptail(char *dest,char *src)
-{
-char *p;
+void striptail(char *dest,char *src) {
+	char *p;
 	strcpy(dest,src);
 	p=dest+strlen(src);
 	while(p>dest)
@@ -88,23 +94,19 @@ char *p;
 	if(*p=='.') *p=0;
 }
 
-bout(int val)
-{
+void bout(int val) {
 	*outpoint++=val;
 }
-wout(int val)
-{
+void wout(int val) {
 	bout(val);
 	bout(val>>8);
 }
-lout(int val)
-{
+void lout(int val) {
 	wout(val);
 	wout(val>>16);
 }
 
-owrite(unsigned char *take,int len)
-{
+void owrite(unsigned char *take,int len) {
 	while(len--) bout(*take++);
 }
 
@@ -118,17 +120,17 @@ void nomem(int val)
 	exit(20);
 }
 
-readsprheader(void)
-{
-unsigned char header[6];
-int len;
+int readsprheader(void) {
+	unsigned char header[6];
+	int len;
+	int res;
 
 	lseek(infile,0L,SEEK_SET);
 	len=read(infile,header,3);
 	if(len!=3) return -1;
 	if(memcmp(header,"SPR",3)) return -2;
 	lseek(infile,3L,SEEK_SET);
-	read(infile,header,sizeof(header));
+	res=read(infile,header,sizeof(header));res=res;
 	sprframes=header[0] | (header[1]<<8);
 	sprwidth=header[2] | (header[3]<<8);
 	sprheight=header[4] | (header[5]<<8);
@@ -149,33 +151,30 @@ unsigned char getdot(int x,int y)
 	return frame[x+y*sprwidth];
 }
 
-getspr()
-{
-unsigned char *p;
-int i,j;
-char toss[2];
-unsigned char line[1024];
+void getspr(void) {
+	unsigned char *p;
+	int i,j;
+	char toss[2];
+	unsigned char line[1024];
+	int res;
 
-	read(infile,toss,2); // tic count for this frame
-	read(infile,palette,768);
-	if(!rot90)
-		read(infile,frame,sprwidth*sprheight);
-	else
-	{
+	res=read(infile,toss,2);res=res; // tic count for this frame
+	res=read(infile,palette,768);res=res;
+	if(!rot90) {
+		res=read(infile,frame,sprwidth*sprheight);res=res;
+	} else {
 		for(j=0;j<osprheight;++j)
 		{
-			read(infile,line,osprwidth);
+			res=read(infile,line,osprwidth);res=res;
 			p=frame+osprheight-1-j;
 			for(i=0;i<osprwidth;++i,p+=osprheight)
 				*p=line[i];
 		}
 	}
-
 }
 
-getextremes()
-{
-int x,y;
+void getextremes() {
+	int x,y;
 
 	for(x=0;x<sprwidth;++x)
 	{
@@ -213,12 +212,11 @@ int x,y;
 int numpalettes=0;
 int paletteoffs[MAXFRAMES];
 
-addpalette()
-{
-int i,j;
-int numcolors;
-unsigned char tp[512];
-int r,g,b,c;
+void addpalette() {
+	int i;
+	int numcolors;
+	unsigned char tp[512];
+	int r,g,b,c;
 
 	if(nopal)
 	{
@@ -256,11 +254,10 @@ int r,g,b,c;
 int numframes=0;
 int frameoffs[MAXFRAMES];
 
-addframe(int tx,int ty,int sizex,int sizey)
-{
-int i,j,x,y;
-int x2,y2;
-unsigned char tf[64*64],*p,*p2,*p3;
+void addframe(int tx,int ty,int sizex,int sizey) {
+	int i,j,x,y;
+	int x2,y2;
+	unsigned char tf[64*64],*p,*p2,*p3;
 
 	p=tf;
 	for(y=ty;y<ty+sizey;y+=8)
@@ -306,27 +303,191 @@ unsigned char tf[64*64],*p,*p2,*p3;
 
 }
 
-void hprintf(int f,char *str, ...)
-{
-char buff[1024];
-	vsprintf(buff,str,&str+1);
-	write(f,buff,strlen(buff));
+void hprintf(int f,char *str, ...) {
+	char buff[1024];
+
+	va_list ap;
+	va_start(ap, str);
+	vsprintf(buff,str, ap);
+	va_end(ap);
+	int res=write(f,buff,strlen(buff));res=res;
 }
 
+#define MAXOVERALL 2048
 
-main(int argc,char **argv)
+unsigned char costsize[MAXOVERALL];
+unsigned char costdist[MAXOVERALL];
+
+int maxdist,maxsize;
+int bestoff,bestlen;
+int totalcost;
+
+int ocount;
+int ofile;
+ULONG *obuff;
+
+void co(ULONG value)
 {
-int res;
-int i,j;
-char temp[64];
-int needx,needy;
-int bestsize,bestnum;
-int dx,dy;
-char basename[256];
-char tempname[256];
-int extralen;
-int headerfile;
-unsigned char t4[4];
+	obuff[ocount++]=value;
+}
+
+int bitsin;
+ULONG workinglong;
+void bitsout(int numbits,int val)
+{
+//printf("Writing %d bits:%x\n",numbits,val);
+	if(bitsin+numbits<=32)
+	{
+		workinglong|=val<<bitsin;
+		bitsin+=numbits;
+	} else
+	{
+	int t1,t2,t3;
+		t1=32-bitsin;
+		t3=numbits-t1;
+		if(t1)
+		{
+			t2=val&((1<<t1)-1);
+			val>>=t1;
+			workinglong|=t2<<bitsin;
+		}
+		co(workinglong);
+		workinglong=val;
+		bitsin=t3;
+	}
+}
+
+int complook(unsigned char *at,int before,int after) {
+	int i,k;
+	int ratio,bestratio,cost;
+
+	if(!before) return -1;
+	if(!after) return -2;
+	bestratio=bestoff=bestlen=0;
+	i=1;
+	if(before>maxdist) before=maxdist;
+	if(after>maxsize) after=maxsize;
+	while(i<=before)
+	{
+		k=0;
+		while(k<after)
+			if(at[-i+k]!=at[k]) break;
+			else k++;
+		if(k>1)
+		{
+			cost=costdist[i-1]+costsize[k];
+			if(cost<9*k && (ratio=(k<<16)/cost) > bestratio)
+			{
+				bestlen=k;
+				bestoff=i;
+				bestratio=ratio;
+			}
+		}
+		i++;
+	}
+	if(bestlen>1) return 1;
+	return 0;
+}
+void dumpliteral(unsigned char *from,int len) {
+	if(!len) return;
+	while(len)
+	{
+		bitsout(1,0);
+		bitsout(8,from[-len]);
+		len--;
+	}
+}
+void dumpcopy() {
+//printf("bestlen=%d\n",bestlen);
+	if(bestlen==2)
+		bitsout(2,1);
+	else if(bestlen>=3 && bestlen<=5)
+		{bitsout(2,3);bitsout(2,bestlen-2);}
+	else if(bestlen>=6 && bestlen<=20)
+		{bitsout(4,3);bitsout(4,bestlen-5);}
+	else
+		{bitsout(8,3);bitsout(8,bestlen-20);}
+
+	if(bestoff<=0x20)
+		{bitsout(2,0);bitsout(5,bestoff-1);}
+	else if(bestoff<=0xa0)
+		{bitsout(2,1);bitsout(7,bestoff-0x21);}
+	else if(bestoff<=0x2a0)
+		{bitsout(2,2);bitsout(9,bestoff-0xa1);}
+	else
+		{bitsout(2,3);bitsout(10,bestoff-0x2a1);}
+}
+
+int docompress(unsigned char *to, unsigned char *from,int len) {
+	int offset;
+	int i;
+	int literal;
+	int val;
+
+	ocount=0;
+	obuff=(ULONG *)to;
+	offset=literal=0;
+	totalcost=0;
+	bitsin=0;
+	while(offset<len)
+	{
+		val=complook(from+offset,offset,len-offset);
+		switch(val)
+		{
+		case 0: /* couldn't find anything */
+		case -1: /* nothing before */
+			++offset;
+			++literal;
+			totalcost+=9;
+			break;
+		case -2: /* nothing after */
+			break;
+		default:
+			dumpliteral(from+offset,literal);
+			literal=0;
+			i=costdist[bestoff-1]+costsize[bestlen];
+			totalcost+=i;
+//if(verbose) printf("%5d bits:Copy:(%d) %d bytes\n",i,-bestoff,bestlen);
+			offset+=bestlen;
+			dumpcopy();
+			break;
+		}
+	}
+	dumpliteral(from+offset,literal);
+	bitsout(16,3);
+	bitsout(32,0);
+	return ocount<<2;
+}
+
+void initswd() {
+	int i;
+	for(i=0;i<MAXOVERALL;++i)
+	{
+		if(i==2) costsize[i]=2;
+		else if(i>=3 && i<=5) costsize[i]=4;
+		else	if(i>=6 && i<=20) costsize[i]=8;
+		else costsize[i]=16;
+		if(i<0x20) costdist[i]=7;
+		else if(i<0xa0) costdist[i]=9;
+		else if(i<0x2a0) costdist[i]=11;
+		else costdist[i]=12;
+	}
+	maxdist=0x6a0;
+	maxsize=256;
+}
+
+int main(int argc,char **argv) {
+	int res;
+	int i,j;
+	int needx,needy;
+	int bestsize,bestnum;
+	int dx,dy;
+	char basename[256];
+	char tempname[256];
+	int extralen;
+	int headerfile;
+	unsigned char t4[4];
+
 	i=1;
 	while(i<argc && argv[i][0]=='-')
 	{
@@ -388,7 +549,7 @@ unsigned char t4[4];
 	}
 	printf("agbspr: %s\n",basename);
 
-	headerlen=1+7*(sprframes-1)<<1;
+	headerlen=(1+7*(sprframes-1))<<1;
 	extralen=((headerlen+15)&~15)-headerlen;
 	headerlen+=extralen;
 	outpoint=outblock;
@@ -446,8 +607,8 @@ unsigned char t4[4];
 				if(j) printf("Warning, frame was too big, clipped.\n");
 //printf("(%d,%d) center, (%d,%d) to (%d,%d)\n",dx,dy,minx,miny,maxx,maxy);
 			}
-			needx=maxx-minx+8>>3;
-			needy=maxy-miny+8>>3;
+			needx=(maxx-minx+8)>>3;
+			needy=(maxy-miny+8)>>3;
 			bestnum=-1;
 			bestsize=256;
 			for(j=0;j<12;++j)
@@ -486,186 +647,21 @@ unsigned char t4[4];
 	}
 	datacount+=headerlen;
 
-	if(nocompress)
-		write(outfile,outblock,datacount);
-	else
+	if(nocompress) {
+		res=write(outfile,outblock,datacount);res=res;
+	} else
 	{
 		initswd();
 		t4[0]=datacount;
 		t4[1]=datacount>>8;
 		t4[2]=datacount>>16;
 		t4[3]=datacount>>24;
-		write(outfile,t4,4);
+		res=write(outfile,t4,4);res=res;
 
-		write(outfile,compressed,
+		res=write(outfile,compressed,
 			docompress(compressed,outblock,datacount));
+		res=res;
 	}
 	close(outfile);
-}
-
-#define MAXOVERALL 2048
-
-unsigned char costsize[MAXOVERALL];
-unsigned char costdist[MAXOVERALL];
-
-int maxdist,maxsize;
-int bestoff,bestlen;
-int totalcost;
-
-int ocount;
-int ofile;
-unsigned long *obuff;
-
-co(unsigned long value)
-{
-	obuff[ocount++]=value;
-}
-
-int bitsin;
-unsigned long workinglong;
-void bitsout(int numbits,int val)
-{
-//printf("Writing %d bits:%x\n",numbits,val);
-	if(bitsin+numbits<=32)
-	{
-		workinglong|=val<<bitsin;
-		bitsin+=numbits;
-	} else
-	{
-	int t1,t2,t3;
-		t1=32-bitsin;
-		t3=numbits-t1;
-		if(t1)
-		{
-			t2=val&((1<<t1)-1);
-			val>>=t1;
-			workinglong|=t2<<bitsin;
-		}
-		co(workinglong);
-		workinglong=val;
-		bitsin=t3;
-	}
-}
-
-complook(char *at,int before,int after)
-{
-int i,j,k;
-int bestcost,ratio,bestratio,cost;
-
-	if(!before) return -1;
-	if(!after) return -2;
-	bestratio=bestoff=bestlen=0;
-	i=1;
-	if(before>maxdist) before=maxdist;
-	if(after>maxsize) after=maxsize;
-	while(i<=before)
-	{
-		j=0;k=0;
-		while(k<after)
-			if(at[-i+k]!=at[k]) break;
-			else k++;
-		if(k>1)
-		{
-			cost=costdist[i-1]+costsize[k];
-			if(cost<9*k && (ratio=(k<<16)/cost) > bestratio)
-			{
-				bestlen=k;
-				bestoff=i;
-				bestratio=ratio;
-			}
-		}
-		i++;
-	}
-	if(bestlen>1) return 1;
 	return 0;
-}
-dumpliteral(unsigned char *from,int len)
-{
-	if(!len) return;
-	while(len)
-	{
-		bitsout(1,0);
-		bitsout(8,from[-len]);
-		len--;
-	}
-}
-dumpcopy()
-{
-int t;
-//printf("bestlen=%d\n",bestlen);
-	if(bestlen==2)
-		bitsout(2,1);
-	else if(bestlen>=3 && bestlen<=5)
-		{bitsout(2,3);bitsout(2,bestlen-2);}
-	else if(bestlen>=6 && bestlen<=20)
-		{bitsout(4,3);bitsout(4,bestlen-5);}
-	else
-		{bitsout(8,3);bitsout(8,bestlen-20);}
-
-	if(bestoff<=0x20)
-		{bitsout(2,0);bitsout(5,bestoff-1);}
-	else if(bestoff<=0xa0)
-		{bitsout(2,1);bitsout(7,bestoff-0x21);}
-	else if(bestoff<=0x2a0)
-		{bitsout(2,2);bitsout(9,bestoff-0xa1);}
-	else
-		{bitsout(2,3);bitsout(10,bestoff-0x2a1);}
-}
-int docompress(char *to,char *from,int len)
-{
-int offset;
-int i,j,k;
-int literal;
-int val;
-int out;
-	ocount=0;
-	obuff=(unsigned long *)to;
-	out=offset=literal=0;
-	totalcost=0;
-	bitsin=0;
-	while(offset<len)
-	{
-		val=complook(from+offset,offset,len-offset);
-		switch(val)
-		{
-		case 0: /* couldn't find anything */
-		case -1: /* nothing before */
-			++offset;
-			++literal;
-			totalcost+=9;
-			break;
-		case -2: /* nothing after */
-			break;
-		default:
-			dumpliteral(from+offset,literal);
-			literal=0;
-			i=costdist[bestoff-1]+costsize[bestlen];
-			totalcost+=i;
-//if(verbose) printf("%5d bits:Copy:(%d) %d bytes\n",i,-bestoff,bestlen);
-			offset+=bestlen;
-			dumpcopy();
-			break;
-		}
-	}
-	dumpliteral(from+offset,literal);
-	bitsout(16,3);
-	bitsout(32,0);
-	return ocount<<2;
-}
-initswd()
-{
-int i;
-	for(i=0;i<MAXOVERALL;++i)
-	{
-		if(i==2) costsize[i]=2;
-		else if(i>=3 && i<=5) costsize[i]=4;
-		else	if(i>=6 && i<=20) costsize[i]=8;
-		else costsize[i]=16;
-		if(i<0x20) costdist[i]=7;
-		else if(i<0xa0) costdist[i]=9;
-		else if(i<0x2a0) costdist[i]=11;
-		else costdist[i]=12;
-	}
-	maxdist=0x6a0;
-	maxsize=256;
 }

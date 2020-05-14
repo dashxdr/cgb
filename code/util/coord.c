@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #define MAXFILE 65536
 
@@ -14,9 +16,8 @@ char *take,*ltake;
 int primary[1024],alternate[1024];
 int order[1024];
 
-_getline(char *put)
-{
-char *p;
+int _getline(char *put) {
+	char *p;
 	p=put;
 	while(*take && *take!='\n')
 		*p++=*take++;
@@ -27,11 +28,10 @@ char *p;
 
 char atoken[64];
 
-token()
-{
-char *p,ch;
+int token(void) {
+	char *p,ch;
 	p=atoken;
-	while(ch=tolower(*ltake))
+	while((ch=tolower(*ltake)))
 	{
 		++ltake;
 		if(ch==' ' || ch=='\t') break;
@@ -42,7 +42,7 @@ char *p,ch;
 	return *atoken;
 }
 
-massiveerror()
+void massiveerror(void)
 {
 	printf("Serious error, probably your input file is screwed up, James.\n");
 	exit(5);
@@ -157,8 +157,7 @@ struct entry
 } entries[1024];
 
 int maxid=0;
-outline(int id,int x,int y,int type,int dest1,int dest2)
-{
+void outline(int id,int x,int y,int type,int dest1,int dest2) {
 	if(id>maxid) maxid=id;
 	entries[id].x=x;
 	entries[id].y=y;
@@ -167,14 +166,12 @@ outline(int id,int x,int y,int type,int dest1,int dest2)
 	entries[id].dest2=dest2;
 }
 
-flush2()
-{
-int i,j;
-struct entry *e;
-int came;
-char line[128],*p;
-int dest1,dest2;
-int found;
+void flush2(void) {
+	int i,j;
+	struct entry *e;
+	char line[128],*p;
+	int dest1,dest2;
+	int found;
 
 	for(i=1;i<=maxid;++i)
 	{
@@ -217,33 +214,29 @@ int i,j;
 		if(items[i].altx==x && items[i].alty==y && type<0)
 			return i;
 		if(items[i].nextx!=x || items[i].nexty!=y) continue;
-		if(j<0 && type>0 || j>0 && type<0) continue;
+		if((j<0 && type>0) || (j>0 && type<0)) continue;
 		return i;
 	}
 	return -1;
 }
 
-int unmap(int want,int num)
-{
-int i;
+int unmap(int want,int num) {
+	int i;
 	if(!want) return 0;
 	for(i=0;i<num;++i)
 		if(order[i]==want) return num-i;
 	return 0;
 }
 
-flush()
-{
-int i,j,k;
-int active1[50],active2[50],ac1,ac2;
-struct item *it;
-int id,cnt;
-int num;
-int t=0;
+void flush(void) {
+	int i,j,k;
+	int active1[50],active2[50],ac1,ac2;
+	struct item *it;
+	int cnt;
+	int num;
 
 	memset(primary,0,sizeof(primary));
 	memset(alternate,0,sizeof(alternate));
-	id=0;
 	ac1=1;
 	active1[0]=itemcount-1;
 	k=0;
@@ -287,7 +280,6 @@ getchar();
 			}
 		}
 	}
-	id=0;
 	i=k;
 	while(i-->0)
 	{
@@ -312,16 +304,11 @@ getchar();
 }
 
 
-additem(int x,int y,int sqr,int dir,int type,int alt)
-{
-int altx,alty;
-int tx,ty;
+void additem(int x,int y,int sqr,int dir,int type,int alt) {
+	int altx,alty;
 
 	if(itemcount==500)
 		massiveerror();
-
-	tx=x;
-	ty=y;
 	items[itemcount].sqr=sqr;
 	items[itemcount].x=x;
 	items[itemcount].y=y;
@@ -350,26 +337,16 @@ printf("%3d:%10s (%3d,%3d) type %3d   (%3d,%3d)  (%3d,%3d)\n",itemcount,
 	++itemcount;
 }
 
-main(int argc, char *argv[])
-{
-int i,j,k;
-int infile;
-char line[256];
+int main(int argc, char *argv[]) {
+	int i;
+	int infile;
+	char line[256];
 
-int xpos,ypos;
-int xpos2,ypos2;
-int t1,t2,t1x,t2x;
-int lc;
-int online;
-int sp2;
-int stack2x[20];
-int stack2y[20];
-int stack2type[20];
-int sp;
-int stackx[20];
-int stacky[20];
-int stacktype[20];
-int posnum;
+	int xpos,ypos;
+	int xpos2,ypos2;
+	int t1,t2,t1x,t2x;
+	int lc;
+	int sp2;
 
 	itemcount=0;
 	if(argc<2)
@@ -401,8 +378,7 @@ int posnum;
 		printf("Syntax error first line, should have X,Y coord\n");
 		exit(3);
 	}
-	sp=sp2=0;
-	posnum=1;
+	sp2=0;
 	while(_getline(line))
 	{
 		++lc;

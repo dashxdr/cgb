@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 #define MAXVERTEXES 1024
 #define MAXFACES 1024
@@ -27,10 +28,9 @@ int white(char c)
 	return c==' ' || c=='\t' || c==':';
 }
 
-int match(char *s)
-{
-int l;
-char c;
+int match(char *s) {
+	int l;
+	char c;
 	l=strlen(s);
 	if(strlen(inpoint)<l) return 0;
 	if(strncmp(inpoint,s,l)) return 0;
@@ -40,9 +40,8 @@ char c;
 	return 1;
 }
 
-int moveto(char *s)
-{
-int l;
+int moveto(char *s) {
+	int l;
 	l=strlen(s);
 	while(*inpoint && strncmp(inpoint,s,l)) ++inpoint;
 	if(*inpoint) {inpoint+=l;return 1;}
@@ -50,19 +49,17 @@ int l;
 }
 
 
-void skipwhite(void)
-{
-char c;
-	while(c=*inpoint)
+void skipwhite(void) {
+	char c;
+	while((c=*inpoint))
 	{
 		if(white(c)) ++inpoint;
 		else break;
 	}
 }
-void findwhite(void)
-{
-char c;
-	while(c=*inpoint)
+void findwhite(void) {
+	char c;
+	while((c=*inpoint))
 	{
 		if(white(c)) break;
 		else ++inpoint;
@@ -74,17 +71,15 @@ void skip(void)
 	findwhite();
 }
 
-float getfloat(void)
-{
-float k;
+float getfloat(void) {
+	float k;
 	skipwhite();
 	sscanf(inpoint,"%f",&k);
 	findwhite();
 	return k;
 }
-int getint(void)
-{
-int k;
+int getint(void) {
+	int k;
 	skipwhite();
 	sscanf(inpoint,"%d",&k);
 	findwhite();
@@ -93,20 +88,19 @@ int k;
 
 
 
-main(int argc,char **argv)
-{
-FILE *f;
-char line[1024];
-float size2,dist2;
-int i;
-float scale;
+int main(int argc,char **argv) {
+	FILE *f;
+	char line[1024];
+	float size2,dist2;
+	int i;
+	float scale;
 
-float minx,maxx,miny,maxy,minz,maxz;
-float cx,cy,cz;
+	float minx,maxx,miny,maxy,minz,maxz;
+	float cx,cy,cz;
 
-	if(argc<2) return;
+	if(argc<2) return -1;
 	f=fopen(argv[1],"rb");
-	if(!f) return;
+	if(!f) return -2;
 	numvertexes=0;
 
 	size2=0.0;
@@ -119,9 +113,8 @@ float cx,cy,cz;
 		if(!*inpoint) continue;
 		if(match("MESH_VERTEX"))
 		{
-			int n;
 			float x,y,z;
-			n=getint();
+			int n=getint();n=n;
 			x=vertexes[numvertexes].x=getfloat();
 			y=vertexes[numvertexes].y=getfloat();
 			z=vertexes[numvertexes].z=getfloat();
@@ -138,8 +131,8 @@ float cx,cy,cz;
 			else printf("Too many vertexes\n");
 		} else if(match("MESH_FACE"))
 		{
-			int n,a,b,c,m;
-			n=getint();
+			int a,b,c,m;
+			int n=getint();n=n;
 			skip();
 			a=getint();
 			skip();

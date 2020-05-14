@@ -1,9 +1,9 @@
+#include <stdio.h>
 int array[2000];
 int count;
 int max;
 
-void insert(at)
-{
+void insert(int at) {
 	if(at<max)
 	{
 		insert(at+at+1);
@@ -13,9 +13,8 @@ void insert(at)
 }
 
 
-main()
-{
-int i;
+int main(int argc, char **argv) {
+	int i;
 
 	max=12;
 	count=1;
@@ -24,5 +23,5 @@ int i;
 	for(i=0;i<max;++i)
 		printf(" %2d",array[i]);
 	printf("\n");
-
+	return 0;
 }

@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define BUFFERLEN 65536L
 char *take,*buffer;
@@ -13,7 +14,7 @@ int _getline(char *p)
 char ch;
 char *p2;
 	p2=p;
-	while(ch=*take)
+	while((ch=*take))
 	{
 		++take;
 		if(ch=='\n') break;
@@ -31,13 +32,12 @@ int i;
 }
 
 
-main(int argc,char **argv)
-{
-int file,len,val;
-char line[80];
-char varname[64],ch,lastvarname[64];
-int i,j,k;
-int count,last;
+int main(int argc,char **argv) {
+	int file,len,val;
+	char line[80];
+	char varname[64],ch,lastvarname[64];
+	int i,j;
+	int count,last;
 
 	if(argc<2)
 	{
@@ -83,4 +83,5 @@ int count,last;
 		++count;
 	}
 	outsome(lastvarname,10);
+	return 0;
 }
