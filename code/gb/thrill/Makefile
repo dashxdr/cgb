@@ -1,6 +1,7 @@
 GBTOOLS:=$(shell pwd)/../../gbasm
 GBASM:=$(GBTOOLS)/gbasm
 GBLINK:=$(GBTOOLS)/gblink
+SUBDIRS:= util res
 
 OUT	     =	thrill.gb
 
@@ -79,7 +80,7 @@ OBJS	     = \
 
 vpath %.obj objs
 
-all: util res rom
+all: $(SUBDIRS) rom
 
 rom:
 	mkdir -p objs
@@ -91,14 +92,14 @@ rom:
 
 $(OUT):	$(OBJS)
 	cd objs ; $(GBLINK) $(OBJS) -o ../$(OUT)
-res util:
+$(SUBDIRS):
 	make -C $@ $(MAKECMDGOALS)
-clean:
-	rm $(OUT) objs/*.obj
+clean: $(SUBDIRS)
+	rm -f $(OUT) objs/*.obj
 play:
 	../../mgb/mgb $(OUT)
 
-.PHONY: res rom util
+.PHONY: $(SUBDIRS) rom
 
 #fonthi.obj:	res/jfont/*.gbf
 #sprite00.obj:	res/sprites.asm res/sprites.pal
