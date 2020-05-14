@@ -659,7 +659,7 @@ char *first;
 		if(j) {printf("error in file %s\n",name);exit(2);}
 		striptail(name);
 		fixboard(name,count);
-surfacetopcx("/ram/out.pcx",&collision);
+surfacetopcx("/tmp/out.pcx",&collision);
 		if(!count)
 		{
 			lastxsize=boardgfx.xsize;
