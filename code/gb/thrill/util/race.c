@@ -48,7 +48,6 @@ void track(int xa,int xb,int ya,int yb) {
 
 
 int main(int argc, char **argv) {
-	int i,j,k;
 	printf("racetrack1:\n");
 	track(X1A,X1B,YA,Y1B);
 	printf("racetrack2:\n");

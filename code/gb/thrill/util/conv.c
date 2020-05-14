@@ -131,7 +131,7 @@ int r,g,b;
 //		collision.rgb[i]=maprgb(r,g,b);
 	}
 }
-void initrainbow(char *m)
+void initrainbow(unsigned char *m)
 {
 int i,j,r,g,b;
 
@@ -190,7 +190,7 @@ void fixboard(char *basename,int n) {
 	float a;
 	unsigned short map[64][24];
 	char name[64];
-	int f,s,t,d;
+	int f,t,d;
 	int tx,ty;
 	int type[4];
 	unsigned short changes[8192];
@@ -239,12 +239,12 @@ void fixboard(char *basename,int n) {
 		xmin=xmin-FLUFF;
 		if(xmin<0) xmin=0;
 		xmin&=~1;
-		xmax=xmax+FLUFF+1 & ~1;
+		xmax=(xmax+FLUFF+1) & ~1;
 		if(xmax>xsize) xmax=xsize;
 		ymin=ymin-FLUFF;
 		if(ymin<0) ymin=0;
 		ymin&=~1;
-		ymax=ymax+FLUFF+1 & ~1;
+		ymax=(ymax+FLUFF+1) & ~1;
 		if(ymax>ysize) ymax=ysize;
 	} else
 	{
@@ -294,7 +294,7 @@ printf("(%d,%d) to (%d,%d)\n",xmin,ymin,xmax,ymax);
 				}
 			}
 #define PI 3.1415926
-			if(!closenum || xtotal==0 && ytotal==0)
+			if((!closenum || xtotal==0) && ytotal==0)
 			{
 				op[i>>1]=0;
 				continue;
@@ -412,21 +412,20 @@ void pcxciinit(void)
 	pcxileft=0;
 }
 
-int readpcx(char *name,surface *gs)
-{
-int xs,ys;
-int i,j,k,n,t;
-int totalsize;
-int width,height;
-int x,y;
-unsigned char *bm,*lp;
-char tname[256];
-int r,g,b;
-int numbpp;
-unsigned char map48[48];
-unsigned char arow[2048];
-int perrow;
-int pcxbyteswide;
+int readpcx(char *name,surface *gs) {
+	int xs,ys;
+	int i,j,k,n,t;
+	int totalsize;
+	int width,height;
+	int y;
+	unsigned char *bm,*lp;
+	int r,g,b;
+	int numbpp;
+	unsigned char map48[48];
+	unsigned char arow[2048];
+	int perrow;
+	int pcxbyteswide;
+
 	pcxciinit();
 	memset(gs,0,sizeof(surface));
 	pcxihand=open(name,O_RDONLY);
@@ -541,7 +540,7 @@ int pcxbyteswide;
 
 #define ABS(x) (((x)<0) ? -(x) : (x))
 
-int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsigned char *colors) {
+int writepcx(char *name, int width, int height, void (*fetch)(), unsigned char *colors) {
 	int file;
 	unsigned char temp[2048],*p,temp2[2048],*p2;
 	int i,j,k;
@@ -570,7 +569,7 @@ int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsign
 	*p++=height>>8;
 	for(i=0;i<49;++i) *p++=0;
 	*p++=1; //NPlanes
-	i=width+1 & 0xfffe;
+	i=(width+1) & 0xfffe;
 	*p++=width;	//bytes per line
 	*p++=width>>8;
 	*p++=1;		//palette info
@@ -582,7 +581,7 @@ int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsign
 		fetch(temp,j);
 		p=temp;
 		p2=temp2;
-		i=width+1 & 0xfffe;
+		i=(width+1) & 0xfffe;
 		temp[width]=0;
 		k=0;
 		while(i)
@@ -607,6 +606,7 @@ int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsign
 	res=write(file,"\014",1);res=res;
 	res=write(file,colors,0x300);res=res;
 	close(file);
+	return 0;
 }
 surface *pcxs;
 
@@ -622,10 +622,8 @@ void surfacetopcx(char *out,surface *s) {
 	writepcx(out,s->xsize,s->ysize,lfetch,tmap);
 }
 
-void main(int argc,char **argv) {
-	int i,j,code,exitflag;
-	int x=0,y=0;
-	int time,newtime;
+int main(int argc,char **argv) {
+	int i,j;
 	char name[64];
 	int count;
 	char *first;
@@ -633,7 +631,7 @@ void main(int argc,char **argv) {
 	if(argc<2)
 	{
 		printf("Use: %s <pcxfile> ...\n",argv[0]);
-		return;
+		return -1;
 	}
 	initcolors();
 	first=0;
@@ -673,4 +671,5 @@ surfacetopcx("/tmp/out.pcx",&collision);
 	strcpy(name,first);
 	striptail(name);
 	outtiles(name);
+	return 0;
 }

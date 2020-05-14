@@ -67,9 +67,8 @@ int xs,ys;
 int i,j,k,n,t;
 int totalsize;
 int width,height;
-int x,y;
+int y;
 unsigned char *bm,*lp;
-char tname[256];
 int r,g,b;
 int numbpp;
 unsigned char map48[48];
@@ -201,14 +200,13 @@ char *p;
 		}
 }
 
-void gettileraw(unsigned char *put,int px,int py)
-{
-unsigned char *p;
-int x,y,i,j;
+void gettileraw(unsigned char *put,int px,int py) {
+	unsigned char *p;
+	int x,y;
 
 	memset(put,0,64);
-	if(pic.xsize<(px+1<<3) || pic.ysize<(py+1<<3)) return;
-	p=pic.pic+(py*pic.xsize+px<<3);
+	if(pic.xsize<((px+1)<<3) || pic.ysize<((py+1)<<3)) return;
+	p=pic.pic+((py*pic.xsize+px)<<3);
 	for(y=0;y<8;++y)
 	{
 		for(x=0;x<8;++x)
@@ -218,15 +216,14 @@ int x,y,i,j;
 		p+=pic.xsize-8;
 	}
 }
-int gettile(unsigned char *put,int px,int py)
-{
-int i,j,k,x,y;
-unsigned char b1,b2,*p;
-int err;
+int gettile(unsigned char *put,int px,int py) {
+	int j,k,x,y;
+	unsigned char b1,b2,*p;
+	int err;
 
 	memset(put,0,16);
-	if(pic.xsize<(px+1<<3) || pic.ysize<(py+1<<3)) return 0;
-	p=pic.pic+(py*pic.xsize+px<<3);
+	if(pic.xsize<((px+1)<<3) || pic.ysize<((py+1)<<3)) return 0;
+	p=pic.pic+((py*pic.xsize+px)<<3);
 	k=*p;
 	err=0;
 	for(y=0;y<8;++y)
@@ -273,13 +270,12 @@ int i,j,k;
 	close(i);
 }
 
-void processpicture(int mask)
-{
-int i,j,k,x,y;
-int mapnum;
-unsigned char *p,*p2;
-int *mp;
-unsigned char araw[64];
+void processpicture(int mask) {
+	int i,j,x,y;
+	int mapnum;
+	unsigned char *p,*p2;
+	int *mp;
+	unsigned char araw[64];
 
 	for(y=0;y<HEIGHT;++y)
 	{
@@ -299,9 +295,9 @@ unsigned char araw[64];
 				if(j==2)
 					*mp=~0;
 				else if(j==1)
-					*mp=mapnum | (p2-tiles&0xfff0) | 8;
+					*mp=mapnum | ((p2-tiles)&0xfff0) | 8;
 				else
-					*mp=mapnum | (p2-tiles&0xfff0);
+					*mp=mapnum | ((p2-tiles)&0xfff0);
 
 			} else
 			{
@@ -341,15 +337,13 @@ char nametemp[256];
 
 }
 
-int main(int argc,char **argv)
-{
-struct surface s;
-int i,j,k,t;
-char strippedname[128];
-char temp[256];
-char mask;
-unsigned char *p;
-char setoutputname;
+int main(int argc,char **argv) {
+	int i,j,k,t;
+	char strippedname[128];
+	char temp[256];
+	char mask;
+	unsigned char *p;
+	char setoutputname;
 
 	tiles=malloc(65536);
 	if(!tiles) nomem(1);

@@ -2,7 +2,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-	int i,j,k;
+	int i,j;
 	char ramp[256];
 
 	memset(ramp,0,sizeof(ramp));
