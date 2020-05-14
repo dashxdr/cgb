@@ -4,7 +4,7 @@ all: $(SUBDIRS)
 	./resall
 
 clean: $(SUBDIRS)
-	rm -f sprites.b?? sprites.pal filesys.b?? *.asm *.equ
+	rm -f sprites.b?? filesys.b?? *.asm *.equ
 
 $(SUBDIRS):
 	$(MAKE) -C $@ $(MAKECMDGOALS)

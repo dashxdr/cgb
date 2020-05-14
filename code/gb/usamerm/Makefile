@@ -131,7 +131,7 @@ $(OUT): $(OBJS)
 	cd objs ; $(GBLINK) $(OBJS) -o ../$(OUT)
 
 clean: res
-	rm -f $(OUT) objs/*.obj merm.map
+	rm -f $(OUT) objs/*.obj
 
 res:
 	make -C res $(MAKECMDGOALS)
