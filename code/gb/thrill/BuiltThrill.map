@@ -103,8 +103,8 @@ Bank #0:
  $07ec = DumpChrset
  $0800 = DumpChrs
  $0802 = DumpChrs.Loop
- $0819 = SafeDumpChrs.Loop
  $0819 = SafeDumpChrs
+ $0819 = SafeDumpChrs.Loop
  $083a = FastDumpChr
  $0844 = FastDumpChr.w1
  $0849 = FastDumpChr.w2
@@ -129,8 +129,8 @@ Bank #0:
  $0963 = DoLycNull
  $0965 = DoLycNormal
  $0971 = DoLycStatus
- $098c = DoLycStatus.wait2
  $098c = DoLycStatus.block
+ $098c = DoLycStatus.wait2
  $0992 = DoLycStatus.wait3
  $09c9 = SprBlank
  $09d0 = SprBlank.Loop
@@ -628,8 +628,8 @@ Bank #0:
  $c228 = wBcpArcadeBtm
  $c230 = wPanelRGB
  $c284 = wStructSmod
- $c284 = wJmpVblVector
  $c284 = wSprDumpStack
+ $c284 = wJmpVblVector
  $c285 = wVblVector
  $c287 = wJmpLycVector
  $c288 = wLycVector
@@ -725,10 +725,10 @@ Bank #0:
  $c600 = SprDumpLoop
  $c700 = wOamBuffer
  $c800 = wTemp512
- $d000 = wAtrShadow
  $d000 = wTemp1024
- $d400 = wAtrDecode
+ $d000 = wAtrShadow
  $d400 = wBalls
+ $d400 = wAtrDecode
  $d43a = wBallCount
  $d43b = wWarps
  $d43f = wWarp
@@ -791,8 +791,8 @@ Bank #0:
 Bank #1:
  $4000 = SoundBase
 Bank #2:
- $4000 = PAL_SPINNER
  $4000 = AllPalettes
+ $4000 = PAL_SPINNER
  $4008 = PAL_FLIPPERS
  $4010 = PAL_BALL
  $4018 = PAL_ARROW
@@ -1096,8 +1096,8 @@ Bank #10:
  $48ba = superskill.either
  $48c6 = superskill.add
  $48ca = superskill.nomore
- $48dd = superskill.max
  $48dd = gotskill
+ $48dd = superskill.max
  $48ec = gotskill.aok
  $48f0 = entersnackbar
  $48fc = enterleft
@@ -1145,9 +1145,9 @@ Bank #10:
  $4bac = board2eject.rightnot2
  $4bc4 = board2eject.nolockball3
  $4bca = board2eject.fun
- $4bd5 = board2eject.done3
- $4bd5 = board2eject.nofunchain
  $4bd5 = board2eject.nosubs3
+ $4bd5 = board2eject.nofunchain
+ $4bd5 = board2eject.done3
  $4bd8 = b2set1
  $4be4 = b2out2
  $4be7 = b2set2
@@ -1209,8 +1209,8 @@ Bank #10:
  $4f8d = allridesbit
  $4f97 = fantasybit
  $4fb4 = fantasybit.same
- $4fbc = fantasybit.double
  $4fbc = addtabletime
+ $4fbc = fantasybit.double
  $4fd0 = addtabletime.aok
  $4fd4 = fantasyred
  $4fd7 = fantasyyellow
@@ -1849,8 +1849,8 @@ Bank #23:
  $6290 = falconprocess.fast
  $62a9 = falconprocess.nochange
  $62cd = falconprocess.nofalcslow
- $62da = falconprocess.nosecond
  $62da = falconprocess.noeject
+ $62da = falconprocess.nosecond
  $62ed = falconprocess.same
  $62ee = falcshow
  $62f3 = falcsaver
@@ -2414,8 +2414,8 @@ Bank #27:
  $7520 = menu1maxes.bad
  $7521 = menu1maxes.good
  $7524 = menu3maplist
- $7529 = menu3re
  $7529 = Menu3
+ $7529 = menu3re
  $756d = menu3outer
  $7570 = menu3loop
  $7589 = menu3loop.nofade
@@ -2466,8 +2466,8 @@ Bank #27:
  $794f = boatcredits
  $795b = boatcredit
  $7972 = boatcredit.dec
- $7984 = boatcredit.none
  $7984 = boatcredit.done
+ $7984 = boatcredit.none
  $7993 = boatcredit.noend
  $7998 = setboatdrop
  $79c2 = setboatdrop.no1
@@ -2476,9 +2476,9 @@ Bank #27:
  $7a28 = boatoff
  $7a5e = boatbumper
  $7a97 = boatbumper.cok
- $7ab8 = boatbumper.ignore
- $7ab8 = boatbumper.mok
  $7ab8 = boatbumper.soft
+ $7ab8 = boatbumper.mok
+ $7ab8 = boatbumper.ignore
  $7abe = boatleft
  $7ac1 = boatmiddle
  $7ac5 = boatright
@@ -2499,8 +2499,8 @@ Bank #27:
  $7b95 = boatsprite.all
  $7b97 = boatsprite.ok
  $7ba3 = boatsprite.some
- $7ba4 = boatsprite.sync
  $7ba4 = boatsprite.sync1a
+ $7ba4 = boatsprite.sync
  $7baa = boatsprite.sync1b
  $7bb0 = boatsprite.fill
 Bank #28:
@@ -2564,8 +2564,8 @@ Bank #30:
  $7310 = racesprites
  $731a = racecars
  $732b = racecars.ok1
- $733f = racecars.ok2
  $733f = coaster
+ $733f = racecars.ok2
  $7393 = racetrack2
  $76a5 = racetrack1
 Bank #31:
@@ -2700,8 +2700,8 @@ Bank #31:
  $6613 = hlshr3
  $6619 = hlshr5
  $6624 = hlshr5.noinc1
- $662b = neghlshr3
  $662b = hlshr5.noinc2
+ $662b = neghlshr3
  $6632 = neghlshr3.noinc3
  $6639 = neghlshr3.noinc4
  $6640 = poshlshr5
@@ -2751,11 +2751,11 @@ Bank #31:
  $686d = hitbumper.hok2
  $6881 = pinview
  $6887 = pinview.findmaxy
- $689d = pinview.notusedy
  $689d = pinview.smallery
+ $689d = pinview.notusedy
  $68ac = pinview.findmaxx
- $68c2 = pinview.notusedx
  $68c2 = pinview.smallerx
+ $68c2 = pinview.notusedx
  $68d6 = pinview.deok
  $68de = pinview.hlok3
  $68e8 = pinview.hlok
@@ -2790,8 +2790,8 @@ Bank #31:
  $6bab = sqrtab
  $6bed = ballcollisions
  $6c09 = ballcollisions.no12
- $6c1a = ballcollisions.no1213
  $6c1a = ballcollisions.no13
+ $6c1a = ballcollisions.no1213
  $6c34 = ballpushvals
  $6c44 = ballcollision
  $6c6e = ballcollision.insidexbox
@@ -2821,14 +2821,14 @@ Bank #31:
  $6e50 = normalize.ypos
  $6e51 = pinbyte
  $6e5a = pinbyte.layerok
- $6e8a = lflipperdeltas
  $6e8a = flipper3b2deltas
  $6e8a = flipper1b2deltas
+ $6e8a = lflipperdeltas
  $6e8a = sublflipperdeltas
  $6e9c = subrflipperdeltas
- $6e9c = rflipperdeltas
  $6e9c = flipper2b2deltas
  $6e9c = flipper4b2deltas
+ $6e9c = rflipperdeltas
  $6eae = lflipper3deltas
  $6ec0 = lflipper4deltas
  $6ed2 = statusprocess
@@ -2843,8 +2843,8 @@ Bank #31:
  $6f3b = SubHitFlipper.right2
  $6f4f = SubHitFlipper.left2
  $6f63 = pin_end
- $6f64 = fire_top
  $6f64 = Fire
+ $6f64 = fire_top
  $6f74 = fireloop
  $6f83 = fireloop.nozero
  $6fda = fireloop.skip
@@ -2896,8 +2896,8 @@ Bank #31:
  $772a = irInit
  $7734 = irCountHi.Hray01
  $7734 = irCountHi
- $773c = irCountLo.Lray01
  $773c = irCountLo
+ $773c = irCountLo.Lray01
  $7744 = irHi
  $7747 = irHi.Hret01
  $774b = irLo
@@ -2909,8 +2909,8 @@ Bank #31:
  $7841 = irSend
  $7850 = irSend.next_byte
  $786c = irSend.summed
- $786f = irSend.wsummed
  $786f = irSend.next_bit
+ $786f = irSend.wsummed
  $7874 = irSend.send_1
  $7886 = irSend.send_0
  $7896 = irSend.sended
