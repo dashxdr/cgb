@@ -92,15 +92,15 @@ rom:
 
 $(OUT):	$(OBJS)
 	cd objs ; $(GBLINK) $(OBJS) -o ../$(OUT)
-res util:
+$(SUBDIRS):
 	make -C $@ $(MAKECMDGOALS)
-
 clean: $(SUBDIRS)
-	rm -f ${OUT} objs/*.obj
+	rm -rf $(OUT) objs thrill.map
+
 play:
 	../../mgb/mgb $(OUT)
 
-.PHONY: res rom util
+.PHONY: $(SUBDIRS) rom
 
 #fonthi.obj:	res/jfont/*.gbf
 #sprite00.obj:	res/sprites.asm res/sprites.pal

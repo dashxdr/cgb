@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include <inttypes.h>
+#include <unistd.h>
+#include <stdarg.h>
 
 /*
 converts .spr file into agb sprite format
@@ -46,6 +49,10 @@ sizes:
 11 = 32 x 64   48   32
 
 */
+
+typedef int32_t LONG;
+typedef uint32_t ULONG;
+
 int xsizes[12]={1,2,4,8,2,4,4,8,1,1,2,4};
 int ysizes[12]={1,2,4,8,1,1,2,4,2,4,4,8};
 
@@ -77,9 +84,8 @@ int headerlen;
 
 int outfile;
 
-striptail(char *dest,char *src)
-{
-char *p;
+void striptail(char *dest,char *src) {
+	char *p;
 	strcpy(dest,src);
 	p=dest+strlen(src);
 	while(p>dest)
@@ -88,23 +94,19 @@ char *p;
 	if(*p=='.') *p=0;
 }
 
-bout(int val)
-{
+void bout(int val) {
 	*outpoint++=val;
 }
-wout(int val)
-{
+void wout(int val) {
 	bout(val);
 	bout(val>>8);
 }
-lout(int val)
-{
+void lout(int val) {
 	wout(val);
 	wout(val>>16);
 }
 
-owrite(unsigned char *take,int len)
-{
+void owrite(unsigned char *take,int len) {
 	while(len--) bout(*take++);
 }
 
@@ -118,17 +120,17 @@ void nomem(int val)
 	exit(20);
 }
 
-readsprheader(void)
-{
-unsigned char header[6];
-int len;
+int readsprheader(void) {
+	unsigned char header[6];
+	int len;
+	int res;
 
 	lseek(infile,0L,SEEK_SET);
 	len=read(infile,header,3);
 	if(len!=3) return -1;
 	if(memcmp(header,"SPR",3)) return -2;
 	lseek(infile,3L,SEEK_SET);
-	read(infile,header,sizeof(header));
+	res=read(infile,header,sizeof(header));res=res;
 	sprframes=header[0] | (header[1]<<8);
 	sprwidth=header[2] | (header[3]<<8);
 	sprheight=header[4] | (header[5]<<8);
@@ -149,33 +151,30 @@ unsigned char getdot(int x,int y)
 	return frame[x+y*sprwidth];
 }
 
-getspr()
-{
-unsigned char *p;
-int i,j;
-char toss[2];
-unsigned char line[1024];
+void getspr(void) {
+	unsigned char *p;
+	int i,j;
+	char toss[2];
+	unsigned char line[1024];
+	int res;
 
-	read(infile,toss,2); // tic count for this frame
-	read(infile,palette,768);
-	if(!rot90)
-		read(infile,frame,sprwidth*sprheight);
-	else
-	{
+	res=read(infile,toss,2);res=res; // tic count for this frame
+	res=read(infile,palette,768);res=res;
+	if(!rot90) {
+		res=read(infile,frame,sprwidth*sprheight);res=res;
+	} else {
 		for(j=0;j<osprheight;++j)
 		{
-			read(infile,line,osprwidth);
+			res=read(infile,line,osprwidth);res=res;
 			p=frame+osprheight-1-j;
 			for(i=0;i<osprwidth;++i,p+=osprheight)
 				*p=line[i];
 		}
 	}
-
 }
 
-getextremes()
-{
-int x,y;
+void getextremes() {
+	int x,y;
 
 	for(x=0;x<sprwidth;++x)
 	{
@@ -213,12 +212,11 @@ int x,y;
 int numpalettes=0;
 int paletteoffs[MAXFRAMES];
 
-void addpalette()
-{
-int i,j;
-int numcolors;
-unsigned char tp[512];
-int r,g,b,c;
+void addpalette() {
+	int i;
+	int numcolors;
+	unsigned char tp[512];
+	int r,g,b,c;
 
 	if(nopal)
 	{
@@ -256,11 +254,10 @@ int r,g,b,c;
 int numframes=0;
 int frameoffs[MAXFRAMES];
 
-void addframe(int tx,int ty,int sizex,int sizey)
-{
-int i,j,x,y;
-int x2,y2;
-unsigned char tf[64*64],*p,*p2,*p3;
+void addframe(int tx,int ty,int sizex,int sizey) {
+	int i,j,x,y;
+	int x2,y2;
+	unsigned char tf[64*64],*p,*p2,*p3;
 
 	p=tf;
 	for(y=ty;y<ty+sizey;y+=8)
@@ -306,201 +303,14 @@ unsigned char tf[64*64],*p,*p2,*p3;
 
 }
 
-void hprintf(int f,char *str, ...)
-{
-char buff[1024];
-	vsprintf(buff,str,&str+1);
-	write(f,buff,strlen(buff));
-}
+void hprintf(int f,char *str, ...) {
+	char buff[1024];
 
-
-main(int argc,char **argv)
-{
-int res;
-int i,j;
-char temp[64];
-int needx,needy;
-int bestsize,bestnum;
-int dx,dy;
-char basename[256];
-char tempname[256];
-int extralen;
-int headerfile;
-unsigned char t4[4];
-	i=1;
-	while(i<argc && argv[i][0]=='-')
-	{
-		if(!strcmp(argv[i]+1,"256"))
-			c256=1;
-		else if(!strcmp(argv[i]+1,"nopal"))
-			nopal=1;
-		else if(!strcmp(argv[i]+1,"header"))
-			header=1;
-		else if(!strcmp(argv[i]+1,"nocompress"))
-			nocompress=1;
-		else if(!strcmp(argv[i]+1,"center"))
-			center=1;
-		else if(!strcmp(argv[i]+1,"r"))
-			rot90=1;
-		else
-		{
-			printf("Unknown switch %s\n",argv[i]);
-			exit(-1);
-		}
-		++i;
-	}
-	if(i==argc)
-	{
-		printf("Use: %s [-256] [-nopal] [-header] <sprfile>\n",argv[0]);
-		printf("-256         = 256 color (default 16)\n");
-		printf("-nopal       = Don't include palette (default is to do so)\n");
-		printf("-header      = Output .h file (default is to not do so)\n");
-		printf("-nocompress  = Don't compress output file (default is to compress)\n");
-		printf("-center      = move reference point to center of frame\n");
-		exit(0);
-	}
-	infile=open(argv[i],O_RDONLY);
-	if(infile<0)
-	{
-		fprintf(stderr,"Couldn't open %s for read.\n",argv[i]);
-		exit(1);
-	}
-	res=readsprheader();
-	if(res<0)
-	{
-		fprintf(stderr,"Error reading SPR header %d\n",res);
-		exit(2);
-	}
-	striptail(basename,argv[i]);
-	sprintf(tempname,"%s.bin",basename);
-	if(header)
-	{
-		sprintf(tempname,"%s.h",basename);
-		headerfile=open(tempname,O_WRONLY|O_CREAT|O_TRUNC,0644);
-		if(headerfile<0)
-		{
-			fprintf(stderr,"Could not open %s for write.\n",tempname);
-			exit(-10);
-		}
-		hprintf(headerfile,"extern unsigned char _binary_%s_bin_start[];\n",
-			basename);
-		close(headerfile);
-	}
-	printf("agbspr: %s\n",basename);
-
-	headerlen=1+7*(sprframes-1)<<1;
-	extralen=((headerlen+15)&~15)-headerlen;
-	headerlen+=extralen;
-	outpoint=outblock;
-	dataout=outblock+headerlen;
-	datacount=0;
-
-	wout(sprframes + (c256 ? 0x8000 : 0));
-
-	for(i=0;i<sprframes;++i)
-	{
-		getspr();
-		getextremes();
-		if(!i)
-		{
-			if(minx!=maxx || miny!=maxy)
-			{
-				printf("First frame should have only 1 non-zero pixel\n");
-				exit(-1);
-			}
-			dx=minx;
-			dy=miny;
-/*
-			wout(-dx);
-			wout(-dy);
-*/
-		} else if(minx>maxx)
-		{
-			printf("Frame %d  empty\n",i);
-			wout(0);
-			wout(0);
-			wout(0);
-			lout(0);
-			lout(0);
-		} else
-		{
-			if(center)
-			{
-//printf("(%d,%d) center, (%d,%d) to (%d,%d)\n",dx,dy,minx,miny,maxx,maxy);
-				int xs,ys;
-				xs=ys=8;
-				while(xs<32 && (dx-minx>xs || maxx-dx>=xs)) xs<<=1;
-				while(ys<32 && (dy-miny>ys || maxy-dy>=ys)) ys<<=1;
-
-				if(xs>ys) ys=xs;
-				else if(ys>xs) xs=ys;
-
-				j=0;
-				if(dx-minx>xs || maxx-dx>=xs) j=1;
-				if(dy-miny>ys || maxy-dy>=ys) j=1;
-				minx=dx-xs;
-				miny=dy-xs;
-				maxx=dx+xs-1;
-				maxy=dy+ys-1;
-
-				if(j) printf("Warning, frame was too big, clipped.\n");
-//printf("(%d,%d) center, (%d,%d) to (%d,%d)\n",dx,dy,minx,miny,maxx,maxy);
-			}
-			needx=maxx-minx+8>>3;
-			needy=maxy-miny+8>>3;
-			bestnum=-1;
-			bestsize=256;
-			for(j=0;j<12;++j)
-			{
-				if(xsizes[j]<needx || ysizes[j]<needy) continue;
-				if(xsizes[j]*ysizes[j]>=bestsize) continue;
-				bestsize=xsizes[j]*ysizes[j];
-				bestnum=j;
-			}
-			if(bestnum<0)
-			{
-				printf("This sprite is bigger than 64x64.\n");
-				exit(-4);
-			}
-			needx=xsizes[bestnum]<<3;
-			needy=ysizes[bestnum]<<3;
-
-			printf("Frame %d  (%d,%d) to (%d,%d)  %dx%x at (%d,%d)\n",i,
-				minx,miny,maxx,maxy,xsizes[bestnum],ysizes[bestnum],
-				minx-dx,miny-dy);
-			wout(bestnum);
-			wout(minx-dx);
-			wout(miny-dy);
-			addpalette();
-			addframe(minx,miny,needx,needy);
-		}
-	}
-	while(extralen--) bout(0);
-
-	sprintf(tempname,"%s.bin",basename);
-	outfile=open(tempname,O_WRONLY|O_CREAT|O_TRUNC,0644);
-	if(outfile<0)
-	{
-		printf("Could not open output file %s\n",tempname);
-		exit(-2);
-	}
-	datacount+=headerlen;
-
-	if(nocompress)
-		write(outfile,outblock,datacount);
-	else
-	{
-		initswd();
-		t4[0]=datacount;
-		t4[1]=datacount>>8;
-		t4[2]=datacount>>16;
-		t4[3]=datacount>>24;
-		write(outfile,t4,4);
-
-		write(outfile,compressed,
-			docompress(compressed,outblock,datacount));
-	}
-	close(outfile);
+	va_list ap;
+	va_start(ap, str);
+	vsprintf(buff,str, ap);
+	va_end(ap);
+	int res=write(f,buff,strlen(buff));res=res;
 }
 
 #define MAXOVERALL 2048
@@ -514,15 +324,15 @@ int totalcost;
 
 int ocount;
 int ofile;
-unsigned long *obuff;
+ULONG *obuff;
 
-co(unsigned long value)
+void co(ULONG value)
 {
 	obuff[ocount++]=value;
 }
 
 int bitsin;
-unsigned long workinglong;
+ULONG workinglong;
 void bitsout(int numbits,int val)
 {
 //printf("Writing %d bits:%x\n",numbits,val);
@@ -547,10 +357,9 @@ void bitsout(int numbits,int val)
 	}
 }
 
-complook(char *at,int before,int after)
-{
-int i,j,k;
-int bestcost,ratio,bestratio,cost;
+int complook(unsigned char *at,int before,int after) {
+	int i,k;
+	int ratio,bestratio,cost;
 
 	if(!before) return -1;
 	if(!after) return -2;
@@ -560,7 +369,7 @@ int bestcost,ratio,bestratio,cost;
 	if(after>maxsize) after=maxsize;
 	while(i<=before)
 	{
-		j=0;k=0;
+		k=0;
 		while(k<after)
 			if(at[-i+k]!=at[k]) break;
 			else k++;
@@ -579,6 +388,7 @@ int bestcost,ratio,bestratio,cost;
 	if(bestlen>1) return 1;
 	return 0;
 }
+
 void dumpliteral(unsigned char *from,int len)
 {
 	if(!len) return;
@@ -668,4 +478,194 @@ int i;
 	}
 	maxdist=0x6a0;
 	maxsize=256;
+}
+
+int main(int argc,char **argv) {
+	int res;
+	int i,j;
+	int needx,needy;
+	int bestsize,bestnum;
+	int dx,dy;
+	char basename[256];
+	char tempname[256];
+	int extralen;
+	int headerfile;
+	unsigned char t4[4];
+
+	i=1;
+	while(i<argc && argv[i][0]=='-')
+	{
+		if(!strcmp(argv[i]+1,"256"))
+			c256=1;
+		else if(!strcmp(argv[i]+1,"nopal"))
+			nopal=1;
+		else if(!strcmp(argv[i]+1,"header"))
+			header=1;
+		else if(!strcmp(argv[i]+1,"nocompress"))
+			nocompress=1;
+		else if(!strcmp(argv[i]+1,"center"))
+			center=1;
+		else if(!strcmp(argv[i]+1,"r"))
+			rot90=1;
+		else
+		{
+			printf("Unknown switch %s\n",argv[i]);
+			exit(-1);
+		}
+		++i;
+	}
+	if(i==argc)
+	{
+		printf("Use: %s [-256] [-nopal] [-header] <sprfile>\n",argv[0]);
+		printf("-256         = 256 color (default 16)\n");
+		printf("-nopal       = Don't include palette (default is to do so)\n");
+		printf("-header      = Output .h file (default is to not do so)\n");
+		printf("-nocompress  = Don't compress output file (default is to compress)\n");
+		printf("-center      = move reference point to center of frame\n");
+		exit(0);
+	}
+	infile=open(argv[i],O_RDONLY);
+	if(infile<0)
+	{
+		fprintf(stderr,"Couldn't open %s for read.\n",argv[i]);
+		exit(1);
+	}
+	res=readsprheader();
+	if(res<0)
+	{
+		fprintf(stderr,"Error reading SPR header %d\n",res);
+		exit(2);
+	}
+	striptail(basename,argv[i]);
+	sprintf(tempname,"%s.bin",basename);
+	if(header)
+	{
+		sprintf(tempname,"%s.h",basename);
+		headerfile=open(tempname,O_WRONLY|O_CREAT|O_TRUNC,0644);
+		if(headerfile<0)
+		{
+			fprintf(stderr,"Could not open %s for write.\n",tempname);
+			exit(-10);
+		}
+		hprintf(headerfile,"extern unsigned char _binary_%s_bin_start[];\n",
+			basename);
+		close(headerfile);
+	}
+	printf("agbspr: %s\n",basename);
+
+	headerlen=(1+7*(sprframes-1))<<1;
+	extralen=((headerlen+15)&~15)-headerlen;
+	headerlen+=extralen;
+	outpoint=outblock;
+	dataout=outblock+headerlen;
+	datacount=0;
+
+	wout(sprframes + (c256 ? 0x8000 : 0));
+
+	for(i=0;i<sprframes;++i)
+	{
+		getspr();
+		getextremes();
+		if(!i)
+		{
+			if(minx!=maxx || miny!=maxy)
+			{
+				printf("First frame should have only 1 non-zero pixel\n");
+				exit(-1);
+			}
+			dx=minx;
+			dy=miny;
+/*
+			wout(-dx);
+			wout(-dy);
+*/
+		} else if(minx>maxx)
+		{
+			printf("Frame %d  empty\n",i);
+			wout(0);
+			wout(0);
+			wout(0);
+			lout(0);
+			lout(0);
+		} else
+		{
+			if(center)
+			{
+//printf("(%d,%d) center, (%d,%d) to (%d,%d)\n",dx,dy,minx,miny,maxx,maxy);
+				int xs,ys;
+				xs=ys=8;
+				while(xs<32 && (dx-minx>xs || maxx-dx>=xs)) xs<<=1;
+				while(ys<32 && (dy-miny>ys || maxy-dy>=ys)) ys<<=1;
+
+				if(xs>ys) ys=xs;
+				else if(ys>xs) xs=ys;
+
+				j=0;
+				if(dx-minx>xs || maxx-dx>=xs) j=1;
+				if(dy-miny>ys || maxy-dy>=ys) j=1;
+				minx=dx-xs;
+				miny=dy-xs;
+				maxx=dx+xs-1;
+				maxy=dy+ys-1;
+
+				if(j) printf("Warning, frame was too big, clipped.\n");
+//printf("(%d,%d) center, (%d,%d) to (%d,%d)\n",dx,dy,minx,miny,maxx,maxy);
+			}
+			needx=(maxx-minx+8)>>3;
+			needy=(maxy-miny+8)>>3;
+			bestnum=-1;
+			bestsize=256;
+			for(j=0;j<12;++j)
+			{
+				if(xsizes[j]<needx || ysizes[j]<needy) continue;
+				if(xsizes[j]*ysizes[j]>=bestsize) continue;
+				bestsize=xsizes[j]*ysizes[j];
+				bestnum=j;
+			}
+			if(bestnum<0)
+			{
+				printf("This sprite is bigger than 64x64.\n");
+				exit(-4);
+			}
+			needx=xsizes[bestnum]<<3;
+			needy=ysizes[bestnum]<<3;
+
+			printf("Frame %d  (%d,%d) to (%d,%d)  %dx%x at (%d,%d)\n",i,
+				minx,miny,maxx,maxy,xsizes[bestnum],ysizes[bestnum],
+				minx-dx,miny-dy);
+			wout(bestnum);
+			wout(minx-dx);
+			wout(miny-dy);
+			addpalette();
+			addframe(minx,miny,needx,needy);
+		}
+	}
+	while(extralen--) bout(0);
+
+	sprintf(tempname,"%s.bin",basename);
+	outfile=open(tempname,O_WRONLY|O_CREAT|O_TRUNC,0644);
+	if(outfile<0)
+	{
+		printf("Could not open output file %s\n",tempname);
+		exit(-2);
+	}
+	datacount+=headerlen;
+
+	if(nocompress) {
+		res=write(outfile,outblock,datacount);res=res;
+	} else
+	{
+		initswd();
+		t4[0]=datacount;
+		t4[1]=datacount>>8;
+		t4[2]=datacount>>16;
+		t4[3]=datacount>>24;
+		res=write(outfile,t4,4);res=res;
+
+		res=write(outfile,compressed,
+			docompress(compressed,outblock,datacount));
+		res=res;
+	}
+	close(outfile);
+	return 0;
 }

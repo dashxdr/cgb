@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define MAXIN 50
 #define BUFFSIZE 16384
@@ -31,8 +32,15 @@ int get(int num)
 	return *takes[num]++;
 }
 
-void main(int argc,char **argv)
-{
+void closeall(void) {
+	int i;
+	for(i=0;i<numf;i++)
+	{
+		if(files[i]>=0) {close(files[i]);files[i]=0;}
+		if(buffers[i]) {free(buffers[i]);buffers[i]=0;}
+	}
+}
+int main(int argc,char **argv) {
 	int i,j;
 	int ch[MAXIN];
 	long addr;
@@ -42,7 +50,7 @@ void main(int argc,char **argv)
 	if(argc<3)
 	{
 		puts("Use: comp <file1> <file2> <file3>...\n");
-		return;
+		return -1;
 	}
 
 	numf=argc-1;
@@ -57,12 +65,12 @@ void main(int argc,char **argv)
 		{
 			printf("Cannot open %s.\n",argv[i+1]);
 			closeall();
-			return;
+			return -2;
 		} else if(buffers[i]==0)
 		{
 			printf("Could not allocate memory for buffer.\n");
 			closeall();
-			return;
+			return -3;
 		}
 	addr=0;
 	for(;;++addr)
@@ -105,14 +113,5 @@ exit:
 	}
 	closeall();
 	if(difflengths) printf("Files were not all the same length.\n");
-
-}
-closeall()
-{
-	int i;
-	for(i=0;i<numf;i++)
-	{
-		if(files[i]>=0) {close(files[i]);files[i]=0;}
-		if(buffers[i]) {free(buffers[i]);buffers[i]=0;}
-	}
+	return 0;
 }

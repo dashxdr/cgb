@@ -8,8 +8,6 @@
 // **************************************************************************
 // **************************************************************************
 
-#define PC
-
 #ifndef __LFPTYPES_H
 #define __LFPTYPES_H
 
@@ -116,17 +114,17 @@
 //
 // Shortcut names for the standard C Types
 //
-#define signed
+#include <inttypes.h>
 
 #define FL   signed char
 #define UC unsigned char
 #define SC   signed char
 #define US unsigned short
 #define SS   signed short
-#define UI unsigned int
-#define SI   signed int
-#define UL unsigned long
-#define SL   signed long
+#define UI uint32_t
+#define SI   int32_t
+#define UL uint32_t
+#define SL   int32_t
 
 //
 // Shortcut names for ASM Types
@@ -202,7 +200,6 @@
 //
 //
 
-
 typedef union AnyPtrU
 	{
 	void * bfp;
@@ -222,7 +219,6 @@ typedef union AnyPtrU
 	SW *   swp;
 	UD *   sdp;
 	} AnyPtrT;
-
 
 //
 // Define 'global' as a complement to 'static' declarations.

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 
 unsigned char *data;
 int datalen;
@@ -18,20 +20,17 @@ struct piece {
 int romlen;
 unsigned char *armrom=0;
 
-dumpelf(unsigned char *data,int datalen)
-{
-int i,j;
-unsigned char *p,*t;
-Elf32_Ehdr *ehdr;
-Elf32_Shdr *shdr;
-char *strings,*name;
-Elf32_Sym *symtab=0;
-int symsize;
-char *stringtab=0;
-int stringsize;
-Elf32_Phdr *phdr;
-int numpieces;
-unsigned int minpos,maxpos;
+void dumpelf(unsigned char *data,int datalen) {
+	int i;
+	Elf32_Ehdr *ehdr;
+	Elf32_Shdr *shdr;
+	char *strings,*name;
+	Elf32_Sym *symtab=0;
+	int symsize=0;
+	char *stringtab=0;
+	Elf32_Phdr *phdr;
+	int numpieces;
+	unsigned int minpos,maxpos;
 
 	ehdr=(Elf32_Ehdr *)data;
 	printf("%8x e_type\n",ehdr->e_type);
@@ -49,7 +48,7 @@ unsigned int minpos,maxpos;
 	printf("%8x e_shnum\n",ehdr->e_shnum);
 	printf("%8x e_shstrndx\n",ehdr->e_shstrndx);
 
-	strings=data+((Elf32_Shdr *)
+	strings=(char *)data+((Elf32_Shdr *)
 			(data+ehdr->e_shoff+ehdr->e_shstrndx*ehdr->e_shentsize))->sh_offset;
 
 	for(i=0;i<ehdr->e_shnum;++i)
@@ -73,8 +72,7 @@ unsigned int minpos,maxpos;
 			symsize=shdr->sh_size;
 		} else if(!strcmp(name,".strtab"))
 		{
-			stringtab=data+shdr->sh_offset;
-			stringsize=shdr->sh_size;
+			stringtab=(char *)data+shdr->sh_offset;
 		}
 	}
 
@@ -163,14 +161,14 @@ unsigned int minpos,maxpos;
 
 }
 
-void main(int argc,char **argv)
-{
-int f;
-	if(argc<2) return;
+int main(int argc,char **argv) {
+	int f;
+	if(argc<2) return -1;
 	data=malloc(MAXSIZE);
 	f=open(argv[1],O_RDONLY);
-	if(f<0) return;
+	if(f<0) return -2;
 	datalen=read(f,data,MAXSIZE);
 	close(f);
 	dumpelf(data,datalen);
+	return 0;
 }

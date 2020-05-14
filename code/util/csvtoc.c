@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*
 This program reads in an excel .csv file and outputs it in 'c' format.
@@ -19,18 +20,15 @@ int i;
 	printf("};\n");
 }
 
-main()
-{
-char line[1024],*p;
-int v1,v2,v3,v4,v5,v6,v7,v8;
-char c1[512],c2[512];
-int n,count;
-int ic;
-int stops[1024],sc;
-int tc;
-char names[500][128];
+int main(int argc, char **argv) {
+	char line[1024],*p;
+	int v1,v2,v3,v4,v5,v6,v7,v8;
+	int n;
+	int ic;
+	int stops[1024],sc;
+	int tc;
+	char names[500][128];
 
-	count=0;
 	sc=tc=0;
 	ic=1;
 	for(;;)
@@ -72,5 +70,5 @@ char names[500][128];
 	if(tc)
 		printf("};\n");
 	outstops(stops,sc,ic,names);
-
+	return 0;
 }

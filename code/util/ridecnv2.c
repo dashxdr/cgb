@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #define OUTPUTNAME "ridetrg2.asm"
 
@@ -9,11 +12,8 @@
 char *inbuff;
 FILE *ofile;
 
-
-
-striptail(char *s)
-{
-char *p,ch,*p2;
+void striptail(char *s) {
+	char *p,ch,*p2;
 	p=s+strlen(s);
 	while(p>s)
 	{
@@ -32,15 +32,14 @@ char *p,ch,*p2;
 	}
 	p2=s;
 	if(p>s)
-		while(*s++=*p++);
+		while((*s++=*p++));
 	while(*p2) {*p2=tolower(*p2);++p2;}
 }
 
-append(char **in, char **out)
-{
-char ch;
+void append(char **in, char **out) {
+	char ch;
 
-	while(ch=**in)
+	while((ch=**in))
 	{
 		++(*in);
 		if(ch=='\n') break;
@@ -49,25 +48,22 @@ char ch;
 	**out=0;
 }
 
-outspace(int num)
-{
+void outspace(int num) {
 	fprintf(ofile,"\t\tDB\t%d\n",num);
 }
-outnamed(char *name)
-{
+void outnamed(char *name) {
 	fprintf(ofile,"\t\tDB\t%s\n",name);
 }
 
 
-parseprint(char *name,char *input)
-{
-int i,j,k,left,space,lastchar;
-char *p1,*p2,ch,*lastname;
-char tempname[64];
-int digit;
-char line[256],*p,*source;
-int num,max;
-int linenum=0;
+void parseprint(char *name,char *input) {
+	int i,left,space,lastchar=-1;
+	char ch,*lastname;
+	char tempname[64];
+	int digit;
+	char line[256],*p,*source;
+	int num,max;
+	int linenum=0;
 
 	max=0;
 	for(;;)
@@ -75,7 +71,7 @@ int linenum=0;
 		++linenum;
 		p=line;
 		if(!*input) break;
-		while(ch=*input)
+		while((ch=*input))
 		{
 			++input;
 			if(ch=='\r') continue;
@@ -84,7 +80,7 @@ int linenum=0;
 		}
 		*p=0;
 		p=line;
-		while(ch=*p)
+		while((ch=*p))
 		{
 			if(ch==' ' || ch=='\t' || ch==';') break;
 			++p;
@@ -100,7 +96,7 @@ int linenum=0;
 		fprintf(ofile,"ride%s%d:\n",name,num);
 		left=0;
 		space=0;
-		while(ch=tolower(*source++))
+		while((ch=tolower(*source++)))
 		{
 			if(left && ch!=lastchar)
 			{
@@ -153,7 +149,6 @@ int linenum=0;
 			case 'b':
 			case 'w':
 				digit=1;
-				*source;
 				if(*source>='1' && *source<='3')
 				{
 					digit=*source++-'0';
@@ -175,12 +170,10 @@ int linenum=0;
 }
 
 
-convertfile(char *name)
-{
-int file;
-char fixedname[256];
-char *p1,*p2,*in;
-int i,j,k,len;
+int convertfile(char *name) {
+	int file;
+	char fixedname[256];
+	int len;
 
 	file=open(name,O_RDONLY);
 	if(file<0)
@@ -202,12 +195,11 @@ int i,j,k,len;
 	strcpy(fixedname,name);
 	striptail(fixedname);
 	parseprint(fixedname,inbuff);
-
+	return 0;
 }
 
-main(int argc,char **argv)
-{
-int i;
+int main(int argc,char **argv) {
+	int i;
 
 	if(argc<2)
 	{
@@ -227,4 +219,5 @@ int i;
 	for(i=1;i<argc;++i)
 		convertfile(argv[i]);
 	fclose(ofile);
+	return 0;
 }

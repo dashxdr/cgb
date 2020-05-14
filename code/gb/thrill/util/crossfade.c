@@ -1,4 +1,6 @@
 #include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
 
 unsigned char pal1[]={
 0xce,0x39,0x20,0x7e,0xea,0x00,0x00,0x00,
@@ -23,12 +25,13 @@ unsigned char pal2[]={
 
 #define STEPS 16
 
-main()
-{
-int i,j,k,r1,g1,b1,r2,g2,b2,r,g,b,c,c1,c2;
-unsigned char bo[64];
-int f;
-char name[32];
+int main(int argc, char **argv) {
+	int i,j,k,r1,g1,b1,r2,g2,b2,r,g,b,c,c1,c2;
+	unsigned char bo[64];
+	int f;
+	char name[32];
+	int res;
+
 	for(i=0;i<=STEPS;++i)
 	{
 		k=STEPS-i;
@@ -54,7 +57,7 @@ char name[32];
 		f=open(name,O_WRONLY|O_CREAT|O_TRUNC,0644);
 		if(f>=0)
 		{
-			write(f,bo,sizeof(bo));
+			res=write(f,bo,sizeof(bo));res=res;
 			close(f);
 		}
 	}

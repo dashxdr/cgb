@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-
+#include <unistd.h>
 
 #define WIDEWANT 480
 
@@ -20,23 +20,22 @@ unsigned char palette[768],*bm;
 
 unsigned char *bigbm;
 
-void nomem(int val)
-{
+void nomem(int val) {
 	fprintf(stderr,"No memory %d\n",val);
 	exit(20);
 }
 
-readsprheader(void)
-{
-unsigned char header[6];
-int len;
+int readsprheader(void) {
+	unsigned char header[6];
+	int len;
+	int res;
 
 	lseek(infile,0L,SEEK_SET);
 	len=read(infile,header,3);
 	if(len!=3) return -1;
 	if(memcmp(header,"SPR",3)) return -2;
 	lseek(infile,3L,SEEK_SET);
-	read(infile,header,sizeof(header));
+	res=read(infile,header,sizeof(header));res=res;
 	sprframes=header[0] | (header[1]<<8);
 	sprwidth=header[2] | (header[3]<<8);
 	sprheight=header[4] | (header[5]<<8);
@@ -46,17 +45,17 @@ int len;
 }
 
 
-slapspr(int px,int py)
-{
-unsigned char *p,oneline[1024],*t;
-int i,j;
+void slapspr(int px,int py) {
+	unsigned char *p,oneline[1024],*t;
+	int i,j;
+	int res;
 
-	read(infile,oneline,2); // tic count for this frame
-	read(infile,palette,768);
+	res=read(infile,oneline,2);res=res; // tic count for this frame
+	res=read(infile,palette,768);res=res;
 	p=bigbm+(px+py*bigwidth)*3;
 	for(j=0;j<sprheight;++j)
 	{
-		read(infile,oneline,sprwidth);
+		res=read(infile,oneline,sprwidth);res=res;
 		for(i=0;i<sprwidth;++i)
 		{
 			t=palette+3*oneline[i];
@@ -70,13 +69,11 @@ int i,j;
 
 
 
-main(int argc,char **argv)
-{
-int res;
-int xpos,ypos;
-int i,j;
-char temp[64];
-int bigbmsize;
+int main(int argc,char **argv) {
+	int res;
+	int xpos,ypos;
+	char temp[64];
+	int bigbmsize;
 
 	if(argc<2) infile=0;
 	else
@@ -121,6 +118,7 @@ int bigbmsize;
 		--sprframes;
 	}
 	sprintf(temp,"P6\n%d %d\n255\n",bigwidth,spacey*numy);
-	write(1,temp,strlen(temp));
-	write(1,bigbm,bigbmsize);
+	res=write(1,temp,strlen(temp));res=res;
+	res=write(1,bigbm,bigbmsize);res=res;
+	return 0;
 }

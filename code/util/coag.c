@@ -1,6 +1,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -31,7 +34,7 @@ char *p,ch;
 		if(ch=='/' || ch=='\\' || ch==':') break;
 	}
 	++p;
-	while(ch=*p++)
+	while((ch=*p++))
 		if(ch!='.') *dest++=toupper(ch);
 	*dest=0;
 }
@@ -69,16 +72,16 @@ top:
 	return *put;
 }
 
-main(int argc,char **argv)
-{
-int file;
-int i,j;
-int len;
-char name[128];
-char fixed[128];
-char *info;
-int offset;
-char *store;
+int main(int argc,char **argv) {
+	int file;
+	int i;
+	int len;
+	char name[128];
+	char fixed[128];
+	char *info;
+	int offset;
+	char *store;
+	int res;
 
 	if(argc<2)
 	{
@@ -119,7 +122,7 @@ char *store;
 		
 		len=lseek(file,0L,SEEK_END);
 		lseek(file,0L,SEEK_SET);
-		read(file,store+offset,len);
+		res=read(file,store+offset,len);res=res;
 		close(file);
 		tossdir(fixed,name);
 		uc(fixed);
@@ -136,7 +139,7 @@ char *store;
 		printf("Couldn't open '%s' for output\n",INFONAME);
 	else
 	{
-		write(file,buffer2,info-buffer2);
+		res=write(file,buffer2,info-buffer2);res=res;
 		close(file);
 	}
 	file=open(OUTPUTNAME,O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,0644);
@@ -144,7 +147,7 @@ char *store;
 		printf("Couldn't open '%s' for output\n",OUTPUTNAME);
 	else
 	{
-		write(file,store,offset);
+		res=write(file,store,offset);res=res;
 		close(file);
 	}
 

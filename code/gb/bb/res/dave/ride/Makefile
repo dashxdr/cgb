@@ -1,4 +1,5 @@
 all:
 	./resall
 clean:
-	rm -f swd/* *.rgb *.map *.equ *.chr *.asm *.pkg
+	rm -f *.rgb *.map *.equ *.chr *.asm *.pkg
+	rm -rf swd

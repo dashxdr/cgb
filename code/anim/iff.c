@@ -621,7 +621,7 @@ global	DATABLOCK_T *       IffReadData             (
 					{
 					ErrorCode = ERROR_IFF_TRUNCATED;
 					sprintf(ErrorMessage,
-						"(IFF) File truncated at 0x%08.8lX : incomplete chunk header.\n",
+						"(IFF) File truncated at 0x%8.8X : incomplete chunk header.\n",
 						(UL) curcontext->groupCurPos);
 					}
 				goto errorExit;
@@ -640,7 +640,7 @@ global	DATABLOCK_T *       IffReadData             (
 					{
 					ErrorCode = ERROR_IFF_MALFORMED;
 					sprintf(ErrorMessage,
-						"(IFF) File malformed at 0x%08.8lX : illegally positioned PROP group.\n",
+						"(IFF) File malformed at 0x%08lX : illegally positioned PROP group.\n",
 						(UL) curcontext->groupCurPos - sizeof(CHUNKHEADER));
 					goto errorExit;
 					}
@@ -650,7 +650,7 @@ global	DATABLOCK_T *       IffReadData             (
 					*(ID4 *)ID4String = C.ckID;
 					ErrorCode = ERROR_IFF_MALFORMED;
 					sprintf(ErrorMessage,
-						"(IFF) File malformed at 0x%08.8lX : illegal group %s within ANIM.\n",
+						"(IFF) File malformed at 0x%08lX : illegal group %s within ANIM.\n",
 						(UL) curcontext->groupCurPos - sizeof(CHUNKHEADER),
 						ID4String);
 					goto errorExit;
@@ -691,7 +691,7 @@ global	DATABLOCK_T *       IffReadData             (
 					{
 					ErrorCode = ERROR_IFF_TRUNCATED;
 					sprintf(ErrorMessage,
-						"(IFF) File truncated at 0x%08.8lX : incomplete group header.\n",
+						"(IFF) File truncated at 0x%08X : incomplete group header.\n",
 						(UL) curcontext->groupCurPos);
 					goto errorExit;
 					}
@@ -726,7 +726,7 @@ global	DATABLOCK_T *       IffReadData             (
 					{
 					ErrorCode = ERROR_IFF_MALFORMED;
 					sprintf(ErrorMessage,
-						"(IFF) File malformed at 0x%08.8lX : PROP ANIM is not a legal group type.\n",
+						"(IFF) File malformed at 0x%08lX : PROP ANIM is not a legal group type.\n",
 						(UL) curcontext->groupCurPos - sizeof(GROUPHEADER));
 					goto errorExit;
 					}
@@ -767,7 +767,7 @@ global	DATABLOCK_T *       IffReadData             (
 							{
 							ErrorCode = ERROR_IFF_TRUNCATED;
 							sprintf(ErrorMessage,
-								"(IFF) File truncated at 0x%08.8lX : unable to seek to end of group.\n",
+								"(IFF) File truncated at 0x%08X : unable to seek to end of group.\n",
 								(UL) curcontext->groupCurPos);
 							goto errorExit;
 							}
@@ -804,7 +804,7 @@ global	DATABLOCK_T *       IffReadData             (
 					{
 					ErrorCode = ERROR_IFF_MALFORMED;
 					sprintf(ErrorMessage,
-						"(IFF) File malformed at 0x%08.8lX : not a valid group header.\n",
+						"(IFF) File malformed at 0x%08X : not a valid group header.\n",
 						(UL) 0);
 					goto errorExit;
 					}
@@ -815,7 +815,7 @@ global	DATABLOCK_T *       IffReadData             (
 					{
 					ErrorCode = ERROR_IFF_MALFORMED;
 					sprintf(ErrorMessage,
-  					"(IFF) File malformed at 0x%08.8lX : LIST and CAT groups cannot contain "
+  					"(IFF) File malformed at 0x%08lX : LIST and CAT groups cannot contain "
 						"data chunks.\n",
 						(UL) curcontext->groupCurPos - sizeof(CHUNKHEADER));
 					goto errorExit;
@@ -829,7 +829,7 @@ global	DATABLOCK_T *       IffReadData             (
 					// FORM ANIM.
 					ErrorCode = ERROR_IFF_MALFORMED;
 					sprintf(ErrorMessage,
-  					"(IFF) File malformed at 0x%08.8lX : FORM ANIM cannot contain data "
+  					"(IFF) File malformed at 0x%08lX : FORM ANIM cannot contain data "
 						"chunks.\n",
 						(UL) curcontext->groupCurPos - sizeof(CHUNKHEADER));
 					}
@@ -893,7 +893,7 @@ global	DATABLOCK_T *       IffReadData             (
 				ErrorCode = ERROR_IFF_MALFORMED;
 				*(ID4 *)ID4String = curcontext->groupID;
 				sprintf(ErrorMessage,
- 					"(IFF) File malformed at 0x%08.8lX : %s group should end at 0x%08.8lX.\n",
+ 					"(IFF) File malformed at 0x%08X : %s group should end at 0x%08X.\n",
 					(UL) curcontext->groupCurPos,
 					ID4String,
 					(UL) curcontext->groupEndPos);
@@ -2273,7 +2273,7 @@ static	size_t              ReadChunkHead           (
 		{
 		ErrorCode = ERROR_IFF_TRUNCATED;
 		sprintf(ErrorMessage,
-			"(IFF) File truncated at 0x%08.8lX : incomplete chunk header.\n");
+			"(IFF) File truncated at 0x%08X : incomplete chunk header.\n", context->groupCurPos);
 		goto errorExit;
 		}
 
@@ -2291,7 +2291,7 @@ static	size_t              ReadChunkHead           (
 		{
 		ErrorCode = ERROR_IFF_MALFORMED;
 		sprintf(ErrorMessage,
-			"(IFF) File malformed at 0x%08.8lX : chunk size either -ve or > 1MB.\n");
+			"(IFF) File malformed at 0x%08X : chunk size either -ve or > 1MB.\n", context->groupCurPos);
 		goto errorExit;
 		}
 
@@ -2365,7 +2365,7 @@ static	IFFBLOCK *          ReadChunk               (
 			{
 			ErrorCode = ERROR_IFF_TRUNCATED;
 			sprintf(ErrorMessage,
-				"(IFF) File truncated at 0x%08.8lX : incomplete chunk header.\n",
+				"(IFF) File truncated at 0x%8.8X : incomplete chunk header.\n",
 				(UL) context->groupCurPos);
 			goto errorFree;
 			}
@@ -2419,7 +2419,7 @@ static	ERRORCODE           SkipChunk               (
 		if (fseek(context->file, s, SEEK_CUR) != 0)
 			{
 			sprintf(ErrorMessage,
-				"(IFF) File truncated at 0x%08.8lX : incomplete chunk data.\n",
+				"(IFF) File truncated at 0x%8.8X : incomplete chunk data.\n",
 				(UL) context->groupCurPos);
 			return (ErrorCode = ERROR_IFF_TRUNCATED);
 			}

@@ -17,6 +17,8 @@ for color background:
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -24,27 +26,27 @@ for color background:
 
 #define BUFFERSIZE 65536
 char *buffer1,*buffer2,*buffer3;
-long len1,len2,len3;
+int len1,len2,len3;
 
-void splitwrite(int file,int xsize,int ysize,char *p)
-{
-int i,j;
-char *p2;
-	j=xsize*ysize;
+void splitwrite(int file,int xsize,int ysize,char *p) {
+	int i;
+	char *p2;
+	int res;
+	i=xsize*ysize;
 	p2=buffer2;
-	while(j--) {*p2++=*p++;++p;}
-	write(file,buffer2,p2-buffer2);
+	while(i--) {*p2++=*p++;++p;}
+	res=write(file,buffer2,p2-buffer2);res=res;
 }
 
 
-main(int argc,char **argv)
-{
-int file,ofile;
-char temp1[256];
-char temp2[256];
-char temp3[256];
-char *p;
-int xsize,ysize,i,j,k;
+int main(int argc,char **argv) {
+	int file,ofile;
+	char temp1[256];
+	char temp2[256];
+	char temp3[256];
+	char *p;
+	int xsize,ysize,i;
+	int res;
 
 	if(argc<2)
 	{
@@ -96,8 +98,8 @@ int xsize,ysize,i,j,k;
 	temp3[1]=ysize;
 	temp3[2]=len2>>4;
 	temp3[3]=len2>>12;
-	write(ofile,temp3,16);
-	write(ofile,buffer2,len2);
+	res=write(ofile,temp3,16);res=res;
+	res=write(ofile,buffer2,len2);res=res;
 	if(xsize*ysize+8<len1) // processing a color background
 	{
 		splitwrite(ofile,xsize,ysize,buffer1+9);
@@ -110,11 +112,13 @@ int xsize,ysize,i,j,k;
 		{
 			i=read(file,buffer2,64);
 			close(file);
-			write(ofile,buffer2,i);
+			res=write(ofile,buffer2,i);res=res;
 		}
 		splitwrite(ofile,xsize,ysize,buffer1+8);
-	} else
-		write(ofile,buffer1+8,xsize*ysize);
+	} else {
+		res=write(ofile,buffer1+8,xsize*ysize);res=res;
+	}
 	close(ofile);
 	printf("All done,wrote %s, %d x %d, %d characters\n",temp2,xsize,ysize,len2>>4);
+	return 0;
 }

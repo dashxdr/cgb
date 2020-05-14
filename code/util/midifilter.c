@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
-
+#include <inttypes.h>
+#include <unistd.h>
 
 #define FACTOR 8
 #define FACTOR2 ((10000L<<FACTOR)>>10)
@@ -13,8 +14,8 @@ typedef unsigned char uchar;
 unsigned char songdata[500000];
 int numtracks;
 int division;
-long pertick;
-long masterclock;
+int pertick;
+int masterclock;
 struct atrack
 {
 	uchar *pointer;
@@ -22,8 +23,8 @@ struct atrack
 	uchar *put;
 	int lasttime;
 	int dump;
-	long left;
-	long time;
+	int left;
+	int time;
 	int id;
 	uchar flags;
 	uchar laststatus;
@@ -33,21 +34,13 @@ struct atrack
 
 int mididowncount;
 
-
-
-void midiprintf(char *name,...)
-{
+void midiprintf(char *name,...) {
 //	vfprintf(stderr,name,&name+1);
 }
 
 
-midiup(int v1,int id)
-{
-}
-mididown(int v2,int v1,int id,int program)
-{
-}
-
+void midiup(int v1,int id) {}
+void mididown(int v2,int v1,int id,int program) {}
 
 
 #define BUFFSIZE 2048
@@ -73,17 +66,16 @@ unsigned char readbyte()
 	}
 	return 0;
 }
-readword()
-{
-int b1,b2;
+int readword(void) {
+	int b1,b2;
 	b1=readbyte();
 	b2=readbyte();
 	if(b2==-1) return -1;
 	return (b1<<8)|b2;
 }
-long readlong()
+int32_t readlong()
 {
-long b1,b2,b3,b4;
+	int32_t b1,b2,b3,b4;
 	b1=readbyte();
 	b2=readbyte();
 	b3=readbyte();
@@ -101,10 +93,9 @@ int i;
 	++(track->dump);
 	return i;
 }
-long readvariable(struct atrack *track)
-{
-long val=0;
-int t;
+int readvariable(struct atrack *track) {
+	int val=0;
+	int t;
 	for(;;)
 	{
 		t=readlimit(track);
@@ -115,9 +106,8 @@ int t;
 	}
 	return val;
 }
-void writevariable(struct atrack *track,int v)
-{
-int i,j,k;
+void writevariable(struct atrack *track,int v) {
+	int i,j;
 	i=1;
 	while(1<<i*7<=v) ++i;
 	while(i--)
@@ -128,22 +118,19 @@ int i,j,k;
 	}
 }
 int need;
-void keep(struct atrack *track)
-{
+void keep(struct atrack *track) {
 	track->dump=0;
 	track->lasttime=0;
 	need=0;
 }
-void toss(struct atrack *track)
-{
-need=0;
+void toss(struct atrack *track) {
+	need=0;
 	track->put-=track->dump;
 	track->dump=0;
 	need=0;
 }
-int fixtime(struct atrack *track)
-{
-int t;
+int fixtime(struct atrack *track) {
+	int t;
 
 //	track->dump=0;
 	t=readvariable(track);
@@ -156,17 +143,14 @@ int t;
 }
 
 
-dump(struct atrack *track,int len)
-{
+void dump(struct atrack *track,int len) {
 	while(len--) readlimit(track);
 }
-hex(struct atrack *track,int len)
-{
+void hex(struct atrack *track,int len) {
 	while(len--) midiprintf(" %x",readlimit(track));
 	midiprintf("\n");
 }
-text(struct atrack *track,int len)
-{
+void text(struct atrack *track,int len) {
 	midiprintf("%d:",len);
 	while(len--) midiprintf("%c",readlimit(track));
 	midiprintf("\n");
@@ -182,16 +166,13 @@ char *midinames[]={
 };
 
 int zzz=0;
-dotrack(struct atrack *track)
-{
-long time;
-int type;
-int sysexlen;
-int metalen;
-int id;
-int v1,v2,v3,v4;
-int laststatus;
-long val;
+void dotrack(struct atrack *track) {
+	int type;
+	int sysexlen;
+	int metalen;
+	int id;
+	int v1,v2;
+	int val;
 
 	need=0;
 	for(;;)
@@ -272,7 +253,7 @@ keep(track);
 					dump(track,metalen);
 				else
 				{
-					long b1,b2,b3;
+					int b1,b2,b3;
 					b1=readlimit(track);b2=readlimit(track);b3=readlimit(track);
 					while(metalen>3) readlimit(track);
 					val=(b1<<16)|(b2<<8)|b3;
@@ -318,7 +299,7 @@ if(need) toss(track);
 		case 0x80:
 			v2=readlimit(track);
 			id=(type&15) | (track->id<<4);
-			if((type>>4)==8 || (type>>4)==9 && !v2)
+			if(((type>>4)==8 || (type>>4)==9) && !v2)
 				midiup(v1,id);
 			else if((type>>4)==9)
 				mididown(v2,v1,id,track->programs[type&0x0f]);
@@ -338,13 +319,11 @@ if(need) toss(track);
 	}
 }
 
-int domidi(unsigned char *midistream,int size)
-{
-int i,j,k;
-int format,ntracks;
-long type,length;
-struct atrack *track;
-uchar doneflag;
+int domidi(unsigned char *midistream,int size) {
+	int i;
+	int format;
+	int type,length;
+	struct atrack *track;
 
 	mididowncount=0;
 	inpoint=midistream;
@@ -398,11 +377,10 @@ uchar doneflag;
 
 	return 0;
 }
-midiroutine()
-{
-struct atrack *track;
-int i;
-int doneflag;
+int midiroutine() {
+	struct atrack *track;
+	int i;
+	int doneflag;
 
 	track=tracks;
 	i=numtracks;
@@ -421,26 +399,26 @@ int doneflag;
 }
 
 
-int playsong(char *name)
-{
-int f;
-int len;
+int playsong(char *name) {
+	int f;
+	int len;
 
 	f=open(name,O_RDONLY);
-	if(f<0) return 1;
+	if(f<0) return -1;
 	len=read(f,songdata,sizeof(songdata));
 	close(f);
 	return domidi(songdata,len);
 }
 
-main(int argc,char **argv)
-{
-int i,j;
+int main(int argc,char **argv) {
+	int i,j;
+	int res;
+
 	for(i=1;i<argc;++i)
 	{
 		playsong(argv[i]);
 		while(!midiroutine());
-		write(1,songdata,14);
+		res=write(1,songdata,14);res=res;
 		for(j=0;j<numtracks;++j)
 		{
 			struct atrack* t;
@@ -451,8 +429,9 @@ int i,j;
 			t->start[-2]=len>>8;
 			t->start[-3]=len>>16;
 			t->start[-4]=len>>24;
-			write(1,t->start-8,len+8);
+			res=write(1,t->start-8,len+8);res=res;
 		}
 
 	}
+	return 0;
 }

@@ -1,5 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #define MAX 50
-main()
+int main(int argc, char **argv)
 {
 int n[MAX],i,j;
 
@@ -21,5 +24,5 @@ int n[MAX],i,j;
 		else printf(",");
 	}
 	printf("\n");
-
+	return  0;
 }

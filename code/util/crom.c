@@ -39,10 +39,10 @@ int i,j;
 		datalen-=i;
 	}
 	printf("};\n");
+	return 0;
 }
 
-main(int argc,char **argv)
-{
+int main(int argc,char **argv) {
 	process(argv[1]);
 	return 0;
 }

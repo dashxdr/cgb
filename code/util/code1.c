@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdarg.h>
+
 /* This program generates the CalcPlyrDirn function(s) */
 
 char *names1[]={
@@ -34,20 +37,22 @@ char *ynames[]={
 void tprintf(char *format, ...)
 {
 char buff[128],*p;
-	vsprintf(buff,format,&format+1);
+	va_list ap;
+	va_start(ap, format);
+	vsprintf(buff,format, ap);
+	va_end(ap);
 	p=buff;
 	while(*p)
 	{
 		if(*p==' ') *p='\t';
 		++p;
 	}
-	printf(buff);
+	printf("%s", buff);
 }
 
 
 
-calc(int p1,int p2)
-{
+void calc(int p1,int p2) {
 	tprintf("  LD HL,%s\n",xnames[p1]);
 	tprintf("  LD A,[HLI]\n");
 	tprintf("  LD C,A\n");
@@ -90,20 +95,17 @@ calc(int p1,int p2)
 }
 
 
-head(int n)
-{
+void head(int n) {
 	tprintf("CalcPlyrDirn%d_B::\n",n);
 }
-tail()
-{
+void tail() {
 	tprintf("  RET\n");
 }
 
 
 
-main()
-{
-int i,j,k;
+int main(int argc, char **argv) {
+	int i,j,k;
 
 	k=0;
 	for(i=0;i<6;++i)

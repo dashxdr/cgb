@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -69,21 +71,20 @@ void pcxciinit(void)
 	pcxileft=0;
 }
 
-int readpcx(char *name,surface *gs)
-{
-int xs,ys;
-int i,j,k,n,t;
-int totalsize;
-int width,height;
-int x,y;
-unsigned char *bm,*lp;
-char tname[256];
-int r,g,b;
-int numbpp;
-unsigned char map48[48];
-unsigned char arow[2048];
-int perrow;
-int pcxbyteswide;
+int readpcx(char *name,surface *gs) {
+	int xs,ys;
+	int i,j,k,n,t;
+	int totalsize;
+	int width,height;
+	int y;
+	unsigned char *bm,*lp;
+	int r,g,b;
+	int numbpp;
+	unsigned char map48[48];
+	unsigned char arow[2048];
+	int perrow;
+	int pcxbyteswide;
+
 	pcxciinit();
 	memset(gs,0,sizeof(surface));
 	gs->format=FORMAT8;
@@ -209,10 +210,9 @@ char *p;
 		}
 }
 
-int hashtile(unsigned char *tile)
-{
-unsigned long hashval;
-int i,j;
+int hashtile(unsigned char *tile) {
+	unsigned long hashval;
+	int i;
 	hashval=0;
 	for(i=0;i<32;++i)
 	{
@@ -226,21 +226,17 @@ int i,j;
 	return hashval;
 }
 
-int gettile(unsigned char *put,int px,int py)
-{
-int i,j,k,x,y;
-unsigned char b1,b2,*p,c,c0,c1;
-int err;
+int gettile(unsigned char *put,int px,int py) {
+	int x,y;
+	unsigned char *p,c,c0,c1;
 
 	c0=0;
 	c1=0xff;
 	memset(put,0,64);
-	if(pic.xsize<(px+1<<3) || pic.ysize<(py+1<<3)) return 0;
-	p=pic.pic+(py*pic.xsize+px<<3);
-	err=0;
+	if(pic.xsize<((px+1)<<3) || pic.ysize<((py+1)<<3)) return 0;
+	p=pic.pic+((py*pic.xsize+px)<<3);
 	for(y=0;y<8;++y)
 	{
-		b1=b2=0;
 		for(x=0;x<8;++x)
 		{
 			c=*put++=p[rot90 ? (y+(x^7)*pic.xsize) : (x+y*pic.xsize)];
@@ -258,12 +254,12 @@ unsigned char *tiles;
 int amap[WIDTH*HEIGHT];
 int numtiles;
 
-processmap(char *name,int w,int h)
-{
-unsigned char temp[WIDTH*HEIGHT*2],*p;
-char tname[128];
-int i,j,k;
-char t2[4];
+void processmap(char *name,int w,int h) {
+	unsigned char temp[WIDTH*HEIGHT*2],*p;
+	char tname[128];
+	int i,j,k;
+	char t2[4];
+	int res;
 
 	if(!rot90)
 	{
@@ -296,8 +292,8 @@ char t2[4];
 	}
 	sprintf(tname,"%s.map",name);
 	i=open(tname,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
-	write(i,t2,4);
-	write(i,temp,p-temp);
+	res=write(i,t2,4);res=res;
+	res=write(i,temp,p-temp);res=res;
 	close(i);
 }
 
@@ -311,26 +307,24 @@ int i;
 	return i<64;
 }
 
-processpicture()
-{
-int i,j,k,x,y;
-int mapnum;
-unsigned char *p,*p2;
-int *mp;
-unsigned char araw[64];
-int hashval,tilenum,hsave;
-	for(y=0;y<pic.ysize+7>>3;++y)
+void processpicture(void) {
+	int x,y;
+	int mapnum;
+	unsigned char *p;
+	int *mp;
+	int hashval,tilenum=0,hsave;
+	for(y=0;y<(pic.ysize+7)>>3;++y)
 	{
-		for(x=0;x<pic.xsize+7>>3;++x)
+		for(x=0;x<(pic.xsize+7)>>3;++x)
 		{
 			p=tiles+(numtiles<<6);
-			mapnum=gettile(p,x,y);
+			mapnum=gettile(p,x,y);mapnum=mapnum;
 			hsave=hashval=hashtile(p)+1;
 			while(hashval)
 			{
 				tilenum=hashes[hashval-1].tile;
 				if(!tilenum) break;
-				if(!compare(tiles+(tilenum-1<<6),p)) break;
+				if(!compare(tiles+((tilenum-1)<<6),p)) break;
 				tilenum=0;
 				hashval=hashes[hashval-1].next;
 			}
@@ -356,14 +350,14 @@ int hashval,tilenum,hsave;
 
 unsigned char colormap[768];
 
-void writetiles(int f)
-{
-int i,j,k;
-unsigned char t[32],*p;
+void writetiles(int f) {
+	int i,j;
+	unsigned char t[32],*p;
+	int res;
 
 	if(!use16)
 	{
-		write(f,tiles,numtiles<<6);
+		res=write(f,tiles,numtiles<<6);res=res;
 		return;
 	}
 	for(i=0;i<numtiles;++i)
@@ -373,17 +367,17 @@ unsigned char t[32],*p;
 		{
 			t[j>>1]=(p[j]&15) | ((p[j+1]&15)<<4);
 		}
-		write(f,t,32);
+		res=write(f,t,32);res=res;
 	}
 }
 
-void processcmap(char *name)
-{
-int ofile;
-int i,j;
-int r,g,b;
-char nametemp[256];
-unsigned short pal[256];
+void processcmap(char *name) {
+	int ofile;
+	int i,j;
+	int r,g,b;
+	char nametemp[256];
+	unsigned short pal[256];
+	int res;
 
 	sprintf(nametemp,"%s.rgb",name);
 	ofile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
@@ -396,19 +390,16 @@ unsigned short pal[256];
 		j=r | (g<<5) | (b<<10);
 		pal[i]=j;
 	}
-	write(ofile,pal,sizeof(pal));
+	res=write(ofile,pal,sizeof(pal));res=res;
 	close(ofile);
 
 }
 
-main(int argc,char **argv)
-{
-struct surface s;
-int i,j,k,t;
-char strippedname[128];
-char temp[256];
-unsigned char *p;
-char setoutputname;
+int main(int argc,char **argv) {
+	int i,j;
+	char strippedname[128];
+	char temp[256];
+	char setoutputname;
 
 	nexthash=MAXHASHES;
 	memset(hashes,0,sizeof(hashes));

@@ -16,6 +16,7 @@ font.o:	font.c font.h
 
 clean:
 	rm -f *.o $(EXE)
-	rm -f *.map *.chr *.rgb *.equ swd/* *.trg
+	rm -f *.map *.chr *.rgb *.equ *.trg
 	rm -f *.dm? *.ch? *.pn?
 	rm -f *.pmp *.chg
+	rm -rf swd
