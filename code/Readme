@@ -63,5 +63,11 @@ mentioned.
 ********* Beauty And The Beast: A Boardgame Adventure *********
 
 The gb/bb is source to this. This also seems to be closer to the Japanese
-version of the game. The USA version featured a spitting game that is
-disabled (at the moment). I think the artwork is all there though.
+version of the game.
+
+********* Thrillride Pinball *********
+
+The gb/thrill is source to this. The rom binary seems to byte for byte the
+released version of the game, which is nice for once.
+
+
