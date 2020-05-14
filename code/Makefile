@@ -1,4 +1,4 @@
-SUBDIRS:=john util gbasm gb mgb
+SUBDIRS:=john util gbasm gb mgb anim
 
 all: $(SUBDIRS)
 clean: $(SUBDIRS)
