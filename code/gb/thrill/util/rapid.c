@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int list1[]={
 14,3,2,
 31,14,1,
@@ -26,9 +28,8 @@ int list2[]={
 
 int count;
 
-step(int x1,int y1,int x2,int y2,int n)
-{
-int i;
+void step(int x1,int y1,int x2,int y2,int n) {
+	int i;
 	for(i=0;i<n;++i)
 	{
 		printf("\t\tdb\t%d,%d",x1+(x2-x1)*i/n,y1+(y2-y1)*i/n);
@@ -40,8 +41,7 @@ int i;
 }
 
 #define STEPS 8
-dump(int *p)
-{
+void dump(int *p) {
 	count=0;
 	while(p[2])
 	{
@@ -52,10 +52,10 @@ dump(int *p)
 
 
 
-main()
-{
+int main(int argc, char **argv) {
 	printf("rapidlist1:\n");
 	dump(list1);
 	printf("rapidlist2:\n");
 	dump(list2);
+	return 0;
 }

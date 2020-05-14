@@ -35,8 +35,7 @@ int numtiles=0;
 unsigned char *lastpic=0,*lastout=0;
 int lastxsize,lastysize;
 
-nomem(int val)
-{
+void nomem(int val) {
 	printf("No memory! %d\n",val);
 	exit(val);
 }
@@ -62,9 +61,8 @@ void setcolor(struct surface *gs,int num,int r,int g,int b)
 
 
 
-rainbow(int which,int num,int *r,int *g,int *b)
-{
-float v;
+void rainbow(int which,int num,int *r,int *g,int *b) {
+	float v;
 	v=(float)which/num;
 	if(v<.16666666666)
 	{
@@ -155,10 +153,10 @@ int i,j,r,g,b;
 }
 
 
-outtiles(char *basename)
-{
-int i,j,k,f,s;
-char name[128];
+void outtiles(char *basename) {
+	int i,j,k,f,s;
+	char name[128];
+	int res;
 
 	j=numtiles*64;
 	i=0;
@@ -171,7 +169,7 @@ char name[128];
 		f=open(name,O_WRONLY|O_CREAT|O_TRUNC,0644);
 		if(f>=0)
 		{
-			write(f,tiles+i,s);
+			res=write(f,tiles+i,s);res=res;
 			close(f);
 		}
 		i+=s;
@@ -181,25 +179,23 @@ char name[128];
 
 #define RADIUS 8
 #define FLUFF (RADIUS+1)
-fixboard(char *basename,int n)
-{
-int xsize,ysize;
-int i,j,k,u,v,v2;
-int iu,jv;
-unsigned char *in,*out,*ip,*op,*p1,*p2;
-int xtotal,ytotal;
-int closenum;
-int angle;
-float a;
-unsigned short map[64][24];
-char name[64];
-int f,s,t,d;
-int tx,ty;
-int type[4];
-unsigned short changes[8192];
-int xmin,xmax,ymin,ymax;
-
-
+void fixboard(char *basename,int n) {
+	int xsize,ysize;
+	int i,j,k,u,v,v2;
+	int iu,jv;
+	unsigned char *in,*out,*ip,*op,*p1,*p2;
+	int xtotal,ytotal;
+	int closenum;
+	int angle;
+	float a;
+	unsigned short map[64][24];
+	char name[64];
+	int f,s,t,d;
+	int tx,ty;
+	int type[4];
+	unsigned short changes[8192];
+	int xmin,xmax,ymin,ymax;
+	int res;
 
 	printf("Processing file name %s\n",basename);
 	if(!tiles)
@@ -352,7 +348,7 @@ printf("xsize=%d,ysize=%d\n",xsize,ysize);
 		f=open(name,O_WRONLY|O_CREAT|O_TRUNC,0644);
 		if(f<0)
 			{printf("could not open file %s for write\n",name);exit(10);}
-		write(f,map,sizeof(map));
+		res=write(f,map,sizeof(map));res=res;
 		close(f);
 	} else
 	{
@@ -372,7 +368,7 @@ printf("xsize=%d,ysize=%d\n",xsize,ysize);
 		f=open(name,O_WRONLY|O_CREAT|O_TRUNC,0644);
 		if(f<0)
 			{printf("could not open file %s for write\n",name);exit(10);}
-		write(f,changes,t<<1);
+		res=write(f,changes,t<<1);res=res;
 		close(f);
 	}
 
@@ -545,12 +541,11 @@ int pcxbyteswide;
 
 #define ABS(x) (((x)<0) ? -(x) : (x))
 
-writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsigned char *colors)
-{
-int file;
-unsigned char temp[2048],*p,temp2[2048],*p2;
-int i,j,k;
-
+int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsigned char *colors) {
+	int file;
+	unsigned char temp[2048],*p,temp2[2048],*p2;
+	int i,j,k;
+	int res;
 
 	file=open(name,O_WRONLY|O_TRUNC|O_CREAT,0644);
 	if(file<0) return 1;
@@ -581,7 +576,7 @@ int i,j,k;
 	*p++=1;		//palette info
 	*p++=0;
 	for(i=0;i<58;++i) *p++=0;
-	write(file,temp,p-temp);
+	res=write(file,temp,p-temp);res=res;
 	for(j=0;j<height;++j)
 	{
 		fetch(temp,j);
@@ -607,10 +602,10 @@ int i,j,k;
 			i-=k;
 			k=0;
 		}
-		write(file,temp2,p2-temp2);
+		res=write(file,temp2,p2-temp2);res=res;
 	}
-	write(file,"\014",1);
-	write(file,colors,0x300);
+	res=write(file,"\014",1);res=res;
+	res=write(file,colors,0x300);res=res;
 	close(file);
 }
 surface *pcxs;
@@ -620,22 +615,20 @@ void lfetch(unsigned char *buff,int line)
 	memmove(buff,pcxs->pic+line*pcxs->xsize,pcxs->xsize);
 }
 
-surfacetopcx(char *out,surface *s)
-{
-unsigned char tmap[768];
+void surfacetopcx(char *out,surface *s) {
+	unsigned char tmap[768];
 	initrainbow(tmap);
 	pcxs=s;
 	writepcx(out,s->xsize,s->ysize,lfetch,tmap);
 }
 
-main(int argc,char **argv)
-{
-int i,j,code,exitflag;
-int x=0,y=0;
-int time,newtime;
-char name[64];
-int count;
-char *first;
+void main(int argc,char **argv) {
+	int i,j,code,exitflag;
+	int x=0,y=0;
+	int time,newtime;
+	char name[64];
+	int count;
+	char *first;
 
 	if(argc<2)
 	{

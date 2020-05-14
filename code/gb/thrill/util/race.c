@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define X1A 3
 #define X1B 156
 #define YA 88
@@ -9,11 +10,10 @@
 #define SPREAD 7
 #define BOOST -12
 
-track(int xa,int xb,int ya,int yb)
-{
-int lena,lenb,lenc;
-int i,j;
-int x,y,f;
+void track(int xa,int xb,int ya,int yb) {
+	int lena,lenb,lenc;
+	int i,j;
+	int x,y,f;
 
 	lena=ya-yb;
 	lenb=lena+xb-xa;
@@ -47,12 +47,11 @@ int x,y,f;
 
 
 
-main()
-{
-int i,j,k;
+int main(int argc, char **argv) {
+	int i,j,k;
 	printf("racetrack1:\n");
 	track(X1A,X1B,YA,Y1B);
 	printf("racetrack2:\n");
 	track(X2A,X2B,YA,Y2B);
-
+	return 0;
 }

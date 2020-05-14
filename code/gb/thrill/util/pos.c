@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 struct row {
 	int sizex,sizey;
 	int sourcex,sourcey;
@@ -5,9 +7,9 @@ struct row {
 	char *name;
 } rows[];
 
-main()
+int main(int argc, char **argv)
 {
-int i;
+	int i;
 	i=0;
 	while(rows[i].sizex>0)
 	{
@@ -22,7 +24,7 @@ int i;
 			rows[i].name);
 		++i;
 	}
-
+	return 0;
 }
 
 struct row rows[]=

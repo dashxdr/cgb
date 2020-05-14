@@ -1,7 +1,9 @@
-main()
-{
-int i,j,k;
-char ramp[256];
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, char **argv) {
+	int i,j,k;
+	char ramp[256];
 
 	memset(ramp,0,sizeof(ramp));
 

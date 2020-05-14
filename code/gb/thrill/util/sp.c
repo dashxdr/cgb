@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
-
+#include <string.h>
+#include <unistd.h>
 
 #define SIZE 0x100000
 
-main(int argc,char **argv)
-{
-int i,j,f;
-unsigned char *p,*s;
-int av;
-int s2;
+int main(int argc,char **argv) {
+	int i,j,f;
+	unsigned char *p,*s;
+	int av;
+	int s2;
 
 	if(argc<2)
 	{
@@ -46,5 +46,5 @@ int s2;
 		av+=16384-j;
 	}
 	printf("Total space $%x,%d\n",av,av);
-
+	return 0;
 }
