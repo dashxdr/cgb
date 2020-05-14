@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
+#include <inttypes.h>
+#include <unistd.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -20,30 +23,6 @@ int bganimchrs;
 #define OBSIZE 4096
 unsigned char oblock[OBSIZE*4];
 
-main(int argc,char **argv)
-{
-int i,j,k;
-	if(argc<2)
-	{
-		printf("Use: tumerd <file.prj> ...\n");
-		exit(1);
-	}
-	for(i=0;i<256;++i)
-	{
-		k=0;
-		for(j=0;j<8;++j)
-		{
-			if(i&(0x01<<j))
-				k|=0x80>>j;
-		}
-		flipbits[i]=k;
-	}
-
-
-	i=1;
-	while(i<argc)
-		dumptume(argv[i++]);
-}
 
 /*
  .DM# structure
@@ -86,7 +65,7 @@ int i,j,k;
 
 
 unsigned char *tumeblock,*tumetake;
-long tumelen;
+int tumelen;
 unsigned char *cmap,*room,*tmgc[20];
 int numtmgc;
 int collisionmap[MAXTILES];
@@ -98,19 +77,18 @@ int nummasks;
 unsigned char tiles[MAXTILES*16];
 int numtiles=0;
 
-long getlong()
+int32_t getlong()
 {
-long val;
+	int32_t val;
 	val=(*tumetake<<24) | (tumetake[1]<<16) | (tumetake[2]<<8) | tumetake[3];
 	tumetake+=4;
 	return val;
 }
 
-gettile(int whichset,unsigned char *put,int tnum)
-{
-int i,j;
-unsigned char b1,b2,*p;
-int x,y;
+void gettile(int whichset,unsigned char *put,int tnum) {
+	int j;
+	unsigned char b1,b2,*p;
+	int x,y;
 
 	p=tmgc[whichset]+10+(tnum<<6);
 	for(y=0;y<8;++y)
@@ -130,10 +108,10 @@ int x,y;
 }
 
 
-flushob(unsigned char *p,int n,char *name,int cnt)
-{
-char nametemp[256];
-int ofile;
+void flushob(unsigned char *p,int n,char *name,int cnt) {
+	char nametemp[256];
+	int ofile;
+	int res;
 	sprintf(nametemp,"%s.dm%d",name,cnt);
 	ofile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
 	if(ofile<0)
@@ -141,14 +119,13 @@ int ofile;
 		printf("Could not open %s for write\n",nametemp);
 		return;
 	}
-	write(ofile,p,n);
+	res=write(ofile,p,n);res=res;
 	close(ofile);
 }
 
-domask(int ref,int num)
-{
-int i,j;
-unsigned char b,*p,tempmask[64],*src;
+void domask(int ref,int num) {
+	int i;
+	unsigned char tempmask[64];
 
 	memcpy(tempmask,tmgc[1]+10+(ref<<6),64);
 	for(i=0;i<64;++i) tempmask[i]&=63;
@@ -172,20 +149,412 @@ unsigned char b,*p,tempmask[64],*src;
 	collisionmap[num]=i;
 }
 
-processroom(char *name)
-{
-unsigned char *p;
-int i,j,k,t;
-int *map;
-int xflip,yflip,pri;
-int palette;
-unsigned char temptile[16];
-int oin;
-int ocnt;
-int xt;
-unsigned char v1,v2;
-char nametemp[256];
-unsigned char *tap;
+void doremap(int *remaptab,int docollision) {
+	int i,j,k;
+	unsigned char *p;
+	k=xsize*ysize;
+	p=temparray+16;
+	while(k--)
+	{
+		if(*p==255 && (p[1]&8)) {p+=2;continue;}
+		i=*p | ((p[1]&8) ? 256 : 0);
+		i=remaptab[i];
+		*p++=i;
+		*p=(*p&~8) | (i>=256 ? 8 : 0);
+		++p;
+	}
+	if(docollision)
+		for(i=0;i<numtiles+docollision;++i)
+		{
+			j=remaptab[i];
+			if(j<0 || i==j) continue;
+			collisionmap[j]=collisionmap[i];
+		}
+}
+
+void remaparray(void) {
+	int tilehist[1024];
+	int tilemap[1024];
+	int i,j,k,n;
+	unsigned char *p;
+
+	for(i=0;i<numtiles;++i) tilemap[i]=i;
+	n=0;
+	for(i=0;i<numtiles-1;++i)
+	{
+		if(tilemap[i]!=i) continue;
+		for(j=i+1;j<numtiles;++j)
+		{
+			if(tilemap[j]!=j) continue;
+			if(memcmp(tiles+(i<<4),tiles+(j<<4),16)) continue;
+			tilemap[j]=tilemap[i];
+			++n;
+		}
+	}
+	if(n)
+		doremap(tilemap,0);
+
+	memset(tilehist,0,sizeof(tilehist));
+	tilehist[0]=1;
+	k=xsize*ysize;
+	p=temparray+16;
+	while(k--)
+	{
+		i=*p++;
+		j=*p++;
+		if(i==255 && (j&8)) continue;
+		if(j&8) i+=256;
+		++tilehist[i];
+	}
+	n=0;
+	for(i=0;i<numtiles;++i) tilemap[i]=i;
+	for(i=0;i<numtiles;++i)
+	{
+		if(tilehist[i]) continue;
+		tilehist[i]=-1;
+		j=numtiles;
+		while(--j>i)
+		{
+			if(tilehist[j])
+			{
+				tilemap[j]=i;
+				memcpy(tiles+(i<<4),tiles+(j<<4),16);
+				break;
+			}
+		}
+		--numtiles;
+		++n;
+	}
+	if(n)
+	{
+		doremap(tilemap,n);
+		printf("Removed %d unused or redundant tiles.\n",n);
+	}
+}
+
+void writecan(char *name, unsigned char *from, int len) {
+	char nametemp[128];
+	int canfile;
+	int res;
+
+	sprintf(nametemp,"%s.can",name);
+	canfile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC,0644);
+	if(canfile<0)
+	{
+		printf("Could not open CAN file %s\n",nametemp);
+		return;
+	}
+	res=write(canfile,from,len);res=res;
+	close(canfile);
+}
+
+int findtile2(unsigned char *tile) {
+	int i;
+	i=0;
+	while(i<numtiles)
+		if(!memcmp(tile,tiles+(i<<4),16)) return i;
+		else ++i;
+	return -1;
+}
+
+int findtile(unsigned char *tile) {
+	int i;
+	unsigned char temp[16];
+
+	for(i=0;i<16;++i)
+		temp[i]=tile[i];
+	i=findtile2(temp);
+	if(i>=0) return i;
+
+	for(i=0;i<16;++i)
+		temp[i]=flipbits[tile[i]];
+	i=findtile2(temp);
+	if(i>=0) return i;
+
+	for(i=0;i<16;++i)
+		temp[i]=tile[15-i];
+	i=findtile2(temp);
+	if(i>=0) return i;
+
+	for(i=0;i<16;++i)
+		temp[i]=flipbits[tile[15-i]];
+	return findtile2(temp);
+}
+
+int locateinstances(int px,int py,int sx,int sy,int which) {
+	int x,y,i,j,k;
+	int instancemap[16][16];
+	unsigned char temptile[16],*p;
+	int used;
+	char first=1;
+	int t;
+
+	for(y=0;y<sy;++y)
+		for(x=0;x<sx;++x)
+		{
+			gettile(0,temptile,(px+x)+(py+y)*xsize2);
+			i=findtile(temptile);
+			if(i<0)
+			{
+				printf("Failed to find instance of bganim chr at (%d,%d)\n",px+x,py+y);
+				return 0;
+			}
+			instancemap[x][y]=i;
+		}
+	used=0;
+	for(j=0;j<=ysize-sy;++j)
+		for(i=0;i<=xsize-sx;++i)
+		{
+			for(y=0;y<sy;++y)
+			{
+				for(x=0;x<sx;++x)
+				{
+					p=temparray+16+((i+x+(j+y)*xsize)<<1);
+					k=*p | ((p[1]&8) ? 256 : 0);
+					if(k!=instancemap[x][y]) break;
+				}
+				if(x<sx) break;
+			}
+			if(y<sy) continue;
+//printf("Located instance at (%d,%d)\n",i,j);
+			instances[numinstances].x=i;
+			instances[numinstances].y=j;
+			instances[numinstances].px=px;
+			instances[numinstances].py=py;
+			instances[numinstances].sx=sx;
+			instances[numinstances].sy=sy;
+			instances[numinstances].which=which;
+			++numinstances;
+			++used;
+			t=0;
+			for(y=0;y<sy;++y)
+				for(x=0;x<sx;++x) {
+					p=temparray+16+((i+x+(j+y)*xsize)<<1);
+					if(first) {
+						k=*p | ((p[1]&8) ? 256 : 0);
+						bganimcollisions[which+t++]=collisionmap[k];
+					}
+					*p=255;
+					p[1]|=8;
+				}
+			first=0;
+		}
+	return used;
+}
+
+void processbganim(char *name) {
+	unsigned char *p,*base;
+	int numchr;
+	int width,height;
+	unsigned char borderchr[64];
+	int px,py,sx,sy,numframes;
+	unsigned char *o1,*o2;
+	int i,j,k;
+	unsigned char oblock1[8192*4];
+	unsigned char oblock2[8192*4];
+	unsigned char keytile[16];
+	int n,c;
+	int numcantiles;
+	int which;
+
+	bganimchrs=0;
+	numinstances=0;
+	o1=oblock1;
+	o2=oblock2;
+
+	p=tmgc[0];
+	numchr=p[0]*256+p[1];
+	p+=10;
+	base=p;
+	memset(borderchr,255,64);
+	i=0;
+	while(i<numchr)
+		if(!memcmp(p,borderchr,64)) break;
+		else i++,p+=64;
+	if(i==numchr)
+	{
+		writecan(name,(unsigned char *)"",1);
+		return;
+	}
+	i=(p-base)/64;
+	width=1;
+	while(!memcmp(p,borderchr,64))
+	{
+		p+=64;
+		++width;
+	}
+	height=numchr/width;
+	px=i%width+1;
+	py=i/width+1;
+	
+	xsize2=width;
+	ysize2=height;
+	numcantiles=0;
+	which=0;
+	while(py<height)
+	{
+		p=base+((px+py*width)<<6);
+		if(!memcmp(p,borderchr,64))
+			break;
+		sy=0;
+		while(py+sy<height)
+		{
+			p=base+((px+(py+sy)*width)<<6);
+			if(!memcmp(p,borderchr,64)) break;
+			++sy;
+		}
+		sx=0;
+		while(px+sx<width)
+		{
+			p=base+((px+sx+py*width)<<6);
+			if(!memcmp(p,borderchr,64)) break;
+			++sx;
+		}
+		numframes=0;
+		while(px+(sx+1)*numframes<width)
+		{
+			p=base+((px+(sx+1)*numframes+py*width)<<6);
+			if(!memcmp(p,borderchr,64)) break;
+			++numframes;
+		}
+		printf("At (%d,%d), size (%d,%d),  %d frames\n",px,py,sx,sy,numframes);
+		if(!locateinstances(px,py,sx,sy,which)) goto skip;
+		remaparray();
+		*o1++=numframes;
+		*o1++=sx*sy;
+		for(j=0;j<sy;++j)
+		{
+			for(i=0;i<sx;++i)
+			{
+				n=which++;
+				*o1++=n;
+				*o1++=n>>8;
+				for(k=0;k<numframes;++k)
+				{
+					gettile(0,keytile,k*(sx+1)+(px+i)+(py+j)*width);
+					for(n=0;n<numcantiles;++n)
+						if(!memcmp(oblock2+(n<<4),keytile,16)) break;
+					if(n==numcantiles)
+					{
+						++numcantiles;
+						memcpy(o2,keytile,16);
+						o2+=16;
+					}
+					n<<=4;
+					*o1++=n;
+					*o1++=n>>8;
+				}
+			}
+		}
+skip:
+		py+=sy+1;
+	}
+	bganimchrs=which;
+	for(k=0;k<numinstances;++k)
+	{
+		px=instances[k].x;
+		py=instances[k].y;
+		sx=instances[k].sx;
+		sy=instances[k].sy;
+		which=numtiles+instances[k].which;
+		for(j=0;j<sy;++j)
+			for(i=0;i<sx;++i)
+			{
+				p=temparray+16+((px+i+(py+j)*xsize)<<1);
+				*p=which;
+				p[1]=(p[1]&~8) | (which>=256 ? 8 : 0);
+				++which;
+			}
+	}
+
+	*o1++=0;
+	while((o1-oblock1)&15) *o1++=0;
+	k=o1-oblock1;
+	p=oblock1;
+	while((n=*p++))
+	{
+		c=*p++;
+		while(c--)
+		{
+			i=*p | (p[1]<<8);
+			i=(numtiles+i)<<4;
+			*p++=i;
+			*p++=i>>8;
+			i=n;
+			while(i--)
+			{
+				j=p[0] | (p[1]<<8);
+				j+=k;
+				*p++=j;
+				*p++=j>>8;
+			}
+		}
+	}
+	memcpy(o1,oblock2,o2-oblock2);
+	o1+=o2-oblock2;
+	writecan(name,oblock1,o1-oblock1);
+}
+
+void processtriggers(char *name) {
+	int i,j,n,n2;
+	unsigned char *p,*op;
+	char tname[128];
+	int res;
+
+	op=oblock;
+
+
+	p=room+0x10+xsize*ysize*4;
+	for(j=0;j<ysize;++j)
+	{
+		for(i=0;i<xsize;++i)
+		{
+			n=((p[2]<<8) | p[3]) & 0x3ff;
+			p+=4;
+			if(!n) continue;
+			if(i<xsize-1)
+				n2=((p[2]<<8) | p[3]) & 0x3ff;
+			else
+				n2=0;
+//printf("Trigger %d at (%d,%d)\n",n,i,j);
+			*op++=n;
+			*op++=n2;
+			*op++=i;
+			*op++=i>>8;
+			*op++=j;
+			*op++=j>>8;
+			if(n2)
+			{
+				++i;
+				p+=4;
+			}
+		}
+	}
+	*op++=0;
+	*op++=0;
+	sprintf(tname,"%s.trg",name);
+	i=open(tname,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
+	if(i<0)
+	{
+		printf("Failed to create trigger file %s\n",tname);
+		return;
+	}
+	res=write(i,oblock,op-oblock);res=res;
+	close(i);
+}
+
+void processroom(char *name) {
+	unsigned char *p;
+	int i,j,k;
+	int *map;
+	int xflip,yflip,pri;
+	int palette;
+	unsigned char temptile[16];
+	int oin;
+	int ocnt;
+	unsigned char v1;
+	char nametemp[256];
+	int res;
 
 	map=malloc(65536*sizeof(int));
 	if(!map) {printf("No memory for map\n");return;}
@@ -207,11 +576,10 @@ unsigned char *tap;
 	nummasks=1;
 	collisionmap[0]=0;
 	memset(collisionmasks,0,64); // collision mask 0 is all 0's
-	xt=0;
 	while(k--)
 	{
 		v1=*p++;
-		v2=*p++;
+		p++;
 		xflip=v1&0x40 ? ~0 : 0;
 		yflip=v1&0x20 ? ~0 : 0;
 		pri  =v1&0x10 ? ~0 : 0;
@@ -232,7 +600,7 @@ unsigned char *tap;
 			map[j]=i;
 		}
 		if(!(v1&0x80))
-			palette=j ? (tmgc[0][(j-1<<6)+10]>>4)&7 : 0;
+			palette=j ? ((tmgc[0][((j-1)<<6)+10])>>4)&7 : 0;
 		else
 			palette=v1&7;
 
@@ -296,7 +664,7 @@ unsigned char *tap;
 			printf("Could not open %s for write\n",nametemp);
 		else
 		{
-			write(i,oblock,p-oblock);
+			res=write(i,oblock,p-oblock);res=res;
 			close(i);
 		}
 	}
@@ -313,236 +681,13 @@ unsigned char *tap;
 		processtriggers(name);
 
 }
-processtriggers(char *name)
-{
-int i,j,k,n,n2;
-unsigned char *p,*op;
-char tname[128];
 
-	op=oblock;
-
-
-	p=room+0x10+xsize*ysize*4;
-	for(j=0;j<ysize;++j)
-	{
-		for(i=0;i<xsize;++i)
-		{
-			n=((p[2]<<8) | p[3]) & 0x3ff;
-			p+=4;
-			if(!n) continue;
-			if(i<xsize-1)
-				n2=((p[2]<<8) | p[3]) & 0x3ff;
-			else
-				n2=0;
-//printf("Trigger %d at (%d,%d)\n",n,i,j);
-			*op++=n;
-			*op++=n2;
-			*op++=i;
-			*op++=i>>8;
-			*op++=j;
-			*op++=j>>8;
-			if(n2)
-			{
-				++i;
-				p+=4;
-			}
-		}
-	}
-	*op++=0;
-	*op++=0;
-	sprintf(tname,"%s.trg",name);
-	i=open(tname,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
-	if(i<0)
-	{
-		printf("Failed to create trigger file %s\n",tname);
-		return;
-	}
-	write(i,oblock,op-oblock);
-	close(i);
-}
-
-
-processbganim(char *name)
-{
-unsigned char *p,*base;
-int numchr;
-int width,height;
-unsigned char borderchr[64];
-int px,py,sx,sy,numframes;
-unsigned char *o1,*o2,*o1save;
-int i,j,k;
-int chrcount=0;
-char nametemp[128];
-unsigned char oblock1[8192*4];
-unsigned char oblock2[8192*4];
-unsigned char keytile[16];
-int n,c;
-int numcantiles;
-int which;
-
-	bganimchrs=0;
-	numinstances=0;
-	o1=oblock1;
-	o2=oblock2;
-
-	p=tmgc[0];
-	numchr=p[0]*256+p[1];
-	p+=10;
-	base=p;
-	memset(borderchr,255,64);
-	i=0;
-	while(i<numchr)
-		if(!memcmp(p,borderchr,64)) break;
-		else i++,p+=64;
-	if(i==numchr)
-	{
-		writecan(name,"",1);
-		return;
-	}
-	i=(p-base)/64;
-	width=1;
-	while(!memcmp(p,borderchr,64))
-	{
-		p+=64;
-		++width;
-	}
-	height=numchr/width;
-	px=i%width+1;
-	py=i/width+1;
-	
-	xsize2=width;
-	ysize2=height;
-	chrcount=0;
-	numcantiles=0;
-	which=0;
-	while(py<height)
-	{
-		p=base+(px+py*width<<6);
-		if(!memcmp(p,borderchr,64))
-			break;
-		sy=0;
-		while(py+sy<height)
-		{
-			p=base+(px+(py+sy)*width<<6);
-			if(!memcmp(p,borderchr,64)) break;
-			++sy;
-		}
-		sx=0;
-		while(px+sx<width)
-		{
-			p=base+(px+sx+py*width<<6);
-			if(!memcmp(p,borderchr,64)) break;
-			++sx;
-		}
-		numframes=0;
-		while(px+(sx+1)*numframes<width)
-		{
-			p=base+(px+(sx+1)*numframes+py*width<<6);
-			if(!memcmp(p,borderchr,64)) break;
-			++numframes;
-		}
-		printf("At (%d,%d), size (%d,%d),  %d frames\n",px,py,sx,sy,numframes);
-		if(!locateinstances(px,py,sx,sy,which)) goto skip;
-		remaparray();
-		*o1++=numframes;
-		o1save=o1;
-		*o1++=sx*sy;
-		for(j=0;j<sy;++j)
-		{
-			for(i=0;i<sx;++i)
-			{
-				n=which++;
-				*o1++=n;
-				*o1++=n>>8;
-				for(k=0;k<numframes;++k)
-				{
-					gettile(0,keytile,k*(sx+1)+(px+i)+(py+j)*width);
-					for(n=0;n<numcantiles;++n)
-						if(!memcmp(oblock2+(n<<4),keytile,16)) break;
-					if(n==numcantiles)
-					{
-						++numcantiles;
-						memcpy(o2,keytile,16);
-						o2+=16;
-					}
-					n<<=4;
-					*o1++=n;
-					*o1++=n>>8;
-				}
-			}
-		}
-skip:
-		py+=sy+1;
-	}
-	bganimchrs=which;
-	for(k=0;k<numinstances;++k)
-	{
-		px=instances[k].x;
-		py=instances[k].y;
-		sx=instances[k].sx;
-		sy=instances[k].sy;
-		which=numtiles+instances[k].which;
-		for(j=0;j<sy;++j)
-			for(i=0;i<sx;++i)
-			{
-				p=temparray+16+(px+i+(py+j)*xsize<<1);
-				*p=which;
-				p[1]=(p[1]&~8) | (which>=256 ? 8 : 0);
-				++which;
-			}
-	}
-
-	*o1++=0;
-	while((o1-oblock1)&15) *o1++=0;
-	k=o1-oblock1;
-	p=oblock1;
-	while(n=*p++)
-	{
-		c=*p++;
-		while(c--)
-		{
-			i=*p | (p[1]<<8);
-			i=numtiles+i<<4;
-			*p++=i;
-			*p++=i>>8;
-			i=n;
-			while(i--)
-			{
-				j=p[0] | (p[1]<<8);
-				j+=k;
-				*p++=j;
-				*p++=j>>8;
-			}
-		}
-	}
-	memcpy(o1,oblock2,o2-oblock2);
-	o1+=o2-oblock2;
-	writecan(name,oblock1,o1-oblock1);
-}
-writecan(char *name,unsigned char *from,int len)
-{
-char nametemp[128];
-int canfile;
-
-	sprintf(nametemp,"%s.can",name);
-	canfile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC,0644);
-	if(canfile<0)
-	{
-		printf("Could not open CAN file %s\n",nametemp);
-		return;
-	}
-	write(canfile,from,len);
-	close(canfile);
-}
-
-
-
-processcmap(char *name)
-{
-int ofile;
-int i,j;
-int r,g,b;
-char nametemp[256];
+void processcmap(char *name) {
+	int ofile;
+	int i,j;
+	int r,g,b;
+	char nametemp[256];
+	int res;
 
 	sprintf(nametemp,"%s.rgb",name);
 	ofile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
@@ -557,24 +702,21 @@ char nametemp[256];
 		nametemp[i+i]=j;
 		nametemp[i+i+1]=j>>8;
 	}
-	write(ofile,nametemp,64);
+	res=write(ofile,nametemp,64);res=res;
 	close(ofile);
 
 }
-processtmgc(char *name)
-{
-int ofile;
-int i,j;
-unsigned char b1,b2,*p;
-int x,y;
-char nametemp[256];
-
+void processtmgc(char *name) {
+	int ofile;
+	int i,j;
+	char nametemp[256];
+	int res;
 	if((numtiles<<4)<=4096)
 	{
 		sprintf(nametemp,"%s.chr",name);
 		ofile=open(nametemp,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
 		if(ofile<0) {printf("Cannot open %s for write\n",nametemp);return;}
-		write(ofile,tiles,numtiles<<4);
+		res=write(ofile,tiles,numtiles<<4);res=res;
 		close(ofile);
 	} else
 	{
@@ -595,13 +737,13 @@ char nametemp[256];
 
 
 
-dumptume(char *name)
+int dumptume(char *name)
 {
-int file;
-int len;
-long type1,type2,size;
-char basename[256],*p;
-int i,j;
+	int file;
+	int len;
+	int type1,type2,size;
+	char basename[256],*p;
+	int res;
 
 	strcpy(basename,name);
 	p=basename+strlen(basename)-1;
@@ -623,7 +765,7 @@ int i,j;
 	if(!tumeblock) {close(file);return 3;}
 	tumelen=len;
 	lseek(file,0L,SEEK_SET);
-	read(file,tumeblock,len);
+	res=read(file,tumeblock,len);res=res;
 	close(file);
 	room=cmap=0;
 	tumetake=tumeblock;
@@ -655,7 +797,7 @@ back:
 		{
 			cmap=tumetake;
 		}
-		tumetake+=size+1 & ~1;
+		tumetake+=(size+1) & ~1;
 	}
 	if(!room || !numtmgc || !cmap)
 	{
@@ -673,187 +815,27 @@ back:
 	return 0;
 }
 
-doremap(int *remaptab,int docollision)
-{
-int i,j,k;
-unsigned char *p;
-	k=xsize*ysize;
-	p=temparray+16;
-	while(k--)
+int main(int argc,char **argv) {
+	int i,j,k;
+	if(argc<2)
 	{
-		if(*p==255 && (p[1]&8)) {p+=2;continue;}
-		i=*p | ((p[1]&8) ? 256 : 0);
-		i=remaptab[i];
-		*p++=i;
-		*p=(*p&~8) | (i>=256 ? 8 : 0);
-		++p;
+		printf("Use: tumerd <file.prj> ...\n");
+		exit(1);
 	}
-	if(docollision)
-		for(i=0;i<numtiles+docollision;++i)
-		{
-			j=remaptab[i];
-			if(j<0 || i==j) continue;
-			collisionmap[j]=collisionmap[i];
-		}
-}
-
-
-remaparray()
-{
-int tilehist[1024];
-int tilemap[1024];
-int i,j,k,n;
-unsigned char *p;
-
-	for(i=0;i<numtiles;++i) tilemap[i]=i;
-	n=0;
-	for(i=0;i<numtiles-1;++i)
+	for(i=0;i<256;++i)
 	{
-		if(tilemap[i]!=i) continue;
-		for(j=i+1;j<numtiles;++j)
+		k=0;
+		for(j=0;j<8;++j)
 		{
-			if(tilemap[j]!=j) continue;
-			if(memcmp(tiles+(i<<4),tiles+(j<<4),16)) continue;
-			tilemap[j]=tilemap[i];
-			++n;
+			if(i&(0x01<<j))
+				k|=0x80>>j;
 		}
+		flipbits[i]=k;
 	}
-	if(n)
-		doremap(tilemap,0);
 
-	memset(tilehist,0,sizeof(tilehist));
-	tilehist[0]=1;
-	k=xsize*ysize;
-	p=temparray+16;
-	while(k--)
-	{
-		i=*p++;
-		j=*p++;
-		if(i==255 && (j&8)) continue;
-		if(j&8) i+=256;
-		++tilehist[i];
-	}
-	n=0;
-	for(i=0;i<numtiles;++i) tilemap[i]=i;
-	for(i=0;i<numtiles;++i)
-	{
-		if(tilehist[i]) continue;
-		tilehist[i]=-1;
-		j=numtiles;
-		while(--j>i)
-		{
-			if(tilehist[j])
-			{
-				tilemap[j]=i;
-				memcpy(tiles+(i<<4),tiles+(j<<4),16);
-				break;
-			}
-		}
-		--numtiles;
-		++n;
-	}
-	if(n)
-	{
-		doremap(tilemap,n);
-		printf("Removed %d unused or redundant tiles.\n",n);
-	}
-}
 
-int findtile2(unsigned char *tile)
-{
-int i,j;
-	i=0;
-	while(i<numtiles)
-		if(!memcmp(tile,tiles+(i<<4),16)) return i;
-		else ++i;
-	return -1;
-}
-
-int findtile(unsigned char *tile)
-{
-int i,j;
-unsigned char temp[16];
-
-	for(i=0;i<16;++i)
-		temp[i]=tile[i];
-	i=findtile2(temp);
-	if(i>=0) return i;
-
-	for(i=0;i<16;++i)
-		temp[i]=flipbits[tile[i]];
-	i=findtile2(temp);
-	if(i>=0) return i;
-
-	for(i=0;i<16;++i)
-		temp[i]=tile[15-i];
-	i=findtile2(temp);
-	if(i>=0) return i;
-
-	for(i=0;i<16;++i)
-		temp[i]=flipbits[tile[15-i]];
-	return findtile2(temp);
-}
-
-locateinstances(int px,int py,int sx,int sy,int which)
-{
-int x,y,i,j,k,n;
-int instancemap[16][16];
-unsigned char temptile[16],*p;
-int used;
-char first=1;
-int t;
-
-	for(y=0;y<sy;++y)
-		for(x=0;x<sx;++x)
-		{
-			gettile(0,temptile,(px+x)+(py+y)*xsize2);
-			i=findtile(temptile);
-			if(i<0)
-			{
-				printf("Failed to find instance of bganim chr at (%d,%d)\n",px+x,py+y);
-				return;
-			}
-			instancemap[x][y]=i;
-		}
-	used=0;
-	for(j=0;j<=ysize-sy;++j)
-		for(i=0;i<=xsize-sx;++i)
-		{
-			for(y=0;y<sy;++y)
-			{
-				for(x=0;x<sx;++x)
-				{
-					p=temparray+16+(i+x+(j+y)*xsize<<1);
-					k=*p | ((p[1]&8) ? 256 : 0);
-					if(k!=instancemap[x][y]) break;
-				}
-				if(x<sx) break;
-			}
-			if(y<sy) continue;
-//printf("Located instance at (%d,%d)\n",i,j);
-			instances[numinstances].x=i;
-			instances[numinstances].y=j;
-			instances[numinstances].px=px;
-			instances[numinstances].py=py;
-			instances[numinstances].sx=sx;
-			instances[numinstances].sy=sy;
-			instances[numinstances].which=which;
-			++numinstances;
-			++used;
-			t=0;
-			for(y=0;y<sy;++y)
-				for(x=0;x<sx;++x)
-				{
-					p=temparray+16+(i+x+(j+y)*xsize<<1);
-					if(first)
-					{
-						k=*p | ((p[1]&8) ? 256 : 0);
-						bganimcollisions[which+t++]=collisionmap[k];
-					}
-					*p=255;
-					p[1]|=8;
-				}
-			first=0;
-		}
-	return used;
+	i=1;
+	while(i<argc)
+		dumptume(argv[i++]);
+	return 0;
 }
