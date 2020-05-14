@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <inttypes.h>
 #include "elmer.h"
 #include "data.h"
 #include "iff.h"
@@ -153,7 +154,7 @@ int colorbase;
 } animfiles[100];
 
 char rootname[128];
-long selected=0;
+int selected=0;
 int currentframe;
 
 #define NO_DRAW_BG 1
@@ -291,23 +292,19 @@ int inpaste=0;
 
 int numframes;
 
-
-dot(unsigned int x,unsigned int y,int c)
-{
+void dot(unsigned int x,unsigned int y,int c) {
 	if(x<(IXSIZE>>1) && y<(IYSIZE>>1))
 		video[y*(IXSIZE>>1)+x]=c;
 }
-unsigned getdot(unsigned int x,unsigned int y)
-{
+unsigned getdot(unsigned int x,unsigned int y) {
 	if(x<(IXSIZE>>1) && y<(IYSIZE>>1))
 		return video[y*(IXSIZE>>1)+x];
 	else return 0;
 }
 
-void clear(int color)
-{
-int i,j;
-unsigned short *p;
+void clear(int color) {
+	int i,j;
+	unsigned short *p;
 	p=video;
 	i=videowidth*videoheight;
 	while(i--) *p++=color;
@@ -483,8 +480,7 @@ int looklist(int code,int *list)
 unsigned stilldown=0;
 int downtime;
 int lastcode,lastqual;
-addkey(int code,int qual)
-{
+void addkey(int code,int qual) {
 	lastcode=code;
 	lastqual=qual;
 	keylist[keyput].code=code;
@@ -492,8 +488,7 @@ addkey(int code,int qual)
 	keyput=keyput+1&MAXKEYS-1;
 }
 
-processkey(int code,int qual)
-{
+void processkey(int code,int qual) {
 
 	if(qual & KMOD_SHIFT)
 		code=looklist(code,sdlinoutshifted);
@@ -508,12 +503,11 @@ processkey(int code,int qual)
 	stilldown=1;
 	downtime=SDL_GetTicks()+250;
 }
-scaninput()
-{
-SDL_Event event;
-int key,mod;
-static int bs=0;
-int newtime;
+void scaninput() {
+	SDL_Event event;
+	int key,mod;
+	static int bs=0;
+	int newtime;
 
 	SDL_Delay(1);
 	while(SDL_PollEvent(&event))
@@ -577,17 +571,15 @@ int scrlock()
 	}
 	return 0;
 }
-scrunlock()
-{
+void scrunlock() {
 	if(SDL_MUSTLOCK(thescreen))
 		SDL_UnlockSurface(thescreen);
 	SDL_UpdateRect(thescreen, 0, 0, 0, 0);
 }
 
-void doublex(unsigned short **dest,unsigned short *src)
-{
-int i;
-unsigned short c,*p;
+void doublex(unsigned short **dest,unsigned short *src) {
+	int i;
+	unsigned short c,*p;
 	i=IXSIZE>>1;
 	p=*dest;
 	while(i--)
@@ -598,10 +590,9 @@ unsigned short c,*p;
 	}
 	(*(unsigned char **)dest)+=stride;
 }
-void copyup(void)
-{
-int i,j;
-unsigned short *p1,*p2;
+void copyup(void) {
+	int i,j;
+	unsigned short *p1,*p2;
 
 	scrlock();
 	p1=(void *)videomem;
@@ -614,8 +605,7 @@ unsigned short *p1,*p2;
 	}
 	scrunlock();
 }
-void copyback(void)
-{
+void copyback(void) {
 	memmove(backbuffer,video,videosize);
 }
 
@@ -1789,6 +1779,15 @@ int i;
 
 }
 
+int celmax(int f) {
+	cel *acel;
+	int i;
+	acel=frames[f].cellist;
+	i=1;
+	while(acel) {++i;acel=acel->next;}
+	return i;
+}
+
 int where()
 {
 	if(mousex>=DX+20 && mousey<DY)
@@ -1798,6 +1797,43 @@ int where()
 	if(mousex<DX && mousey<DY)
 		return MOUSE_SCREEN;
 }
+int readmouse() {
+	mousedown=mouseb & ~mousebold;
+	mouseup=~mouseb & mousebold;
+	mousebold=mouseb;
+	mouseat=where();
+	if(mouseat==MOUSE_SCREEN)
+	{
+		mousedx=mousex-mouseoldx;
+		mousedy=mousey-mouseoldy;
+		mouseoldx=mousex;
+		mouseoldy=mousey;
+	} else
+		mousedx=mousedy=0;
+	if(mouseupordown) // mouse is down
+	{
+		if(mouseup)
+		{
+			mouseupx=mousex;
+			mouseupy=mousey;
+			mouseupordown=0;
+			mouseuppos=mouseat;
+		}
+	} else		// mouse is up
+	{
+		if(mousedown)
+		{
+			mousedownx=mousex;
+			mousedowny=mousey;
+			mouseupordown=1;
+			mousedownpos=mouseat;
+			if(mousedownpos==MOUSE_SCREEN)
+				mousepixelid=pixelid[mousedowny*IDX+mousedownx];
+		}
+	}
+	return mouseb;
+}
+
 int commandmap[]={
 CODE_NEWCEL,
 CODE_DUPFRAME,
@@ -1841,45 +1877,6 @@ int which,where;
 	return 0;
 }
 
-
-
-int readmouse()
-{
-	mousedown=mouseb & ~mousebold;
-	mouseup=~mouseb & mousebold;
-	mousebold=mouseb;
-	mouseat=where();
-	if(mouseat==MOUSE_SCREEN)
-	{
-		mousedx=mousex-mouseoldx;
-		mousedy=mousey-mouseoldy;
-		mouseoldx=mousex;
-		mouseoldy=mousey;
-	} else
-		mousedx=mousedy=0;
-	if(mouseupordown) // mouse is down
-	{
-		if(mouseup)
-		{
-			mouseupx=mousex;
-			mouseupy=mousey;
-			mouseupordown=0;
-			mouseuppos=mouseat;
-		}
-	} else		// mouse is up
-	{
-		if(mousedown)
-		{
-			mousedownx=mousex;
-			mousedowny=mousey;
-			mouseupordown=1;
-			mousedownpos=mouseat;
-			if(mousedownpos==MOUSE_SCREEN)
-				mousepixelid=pixelid[mousedowny*IDX+mousedownx];
-		}
-	}
-	return mouseb;
-}
 void mousedot(int x,int y,unsigned short **p,unsigned char c2,int on)
 {
 	if(on)
@@ -2059,6 +2056,70 @@ char *p,ch;
 	*dest=0;
 }
 
+void die(char *p,int val)
+{
+	printf("Dead, error code %d\n",val);
+	printf("%s", p);
+	exit(val);
+}
+
+char *getfile(char *name,int *size)
+{
+	int file;
+	int len;
+	char *p;
+	int res;
+
+	file=open(name,O_RDONLY|O_BINARY);
+	if(file<0)
+	{
+		sprintf(errstr,"Could not get file %s\n",name);
+		die(errstr,25);
+	}
+	*size=len=lseek(file,0L,SEEK_END);
+	p=malloc(len+1);
+	if(!p) {sprintf(errstr,"panic, no memory %d\n",len);die(errstr,22);}
+	lseek(file,0L,SEEK_SET);
+	res=read(file,p,len);res=res;
+	close(file);
+	p[len]=0;
+	return p;
+}
+void getanimfile(struct animfile *af,char *name,int colorbase)
+{
+unsigned char root[256];
+char temp[256];
+unsigned char *p1;
+int i,r,g,b,in;
+
+
+	strcpy(root,name);
+	p1=root+strlen(root);
+	while(p1>root)
+	{
+		if(*p1=='.') {*p1=0;break;}
+		--p1;
+	}
+	sprintf(temp,"%s.map",root);
+	af->map=getfile(temp,&af->mapsize);
+	sprintf(temp,"%s.chr",root);
+	af->chr=getfile(temp,&af->chrsize);
+	sprintf(temp,"%s.rgb",root);
+	af->rgb=getfile(temp,&af->rgbsize);
+	p1=af->rgb;
+	af->colorbase=colorbase;
+	for(i=colorbase;i<colorbase+32;i++)
+	{
+		in=*p1 | (p1[1]<<8);
+		p1+=2;
+		r=in&0x1f;
+		g=(in>>5) & 0x1f;
+		b=(in>>10) & 0x1f;
+		thecmap[i].red=r<<3;
+		thecmap[i].green=g<<3;
+		thecmap[i].blue=b<<3;
+	}
+}
 int parseinput(char *input)
 {
 char *p1,*p2;
@@ -2079,7 +2140,7 @@ int i,j;
 		fixname(fixednames[numfiles],filenames[numfiles]);
 		groups[numfiles].start=numgfx;
 		i=convert(filenames[numfiles],groups+numfiles,1);
-		if(i<0) {printf("xSerious error, %d, exiting\n",i);exit(50);}
+		if(i<0) {printf("Serious error, %d, exiting\n",i);exit(50);}
 		++numfiles;
 	}
 	while(*take)
@@ -2262,6 +2323,119 @@ void drawhelp()
 	drawstring(0,0,helptext);
 	drawstring(DX,0,helptext2);
 }
+int32_t getlong(unsigned char *p)
+{
+	return *p | (p[1]<<8) | (p[2]<<16) | (p[3]<<24);
+}
+
+void putchr(unsigned char *p1,int x,int y,int color)
+{
+int i,j;
+int a,b,c;
+int xt,yt;
+unsigned char *sz;
+
+	for(j=0;j<8;++j)
+	{
+		a=*p1++;
+		b=*p1++;
+		yt=y+j;
+		if(yt<16 || yt>=128) continue;
+		++perlines[yt];
+		if(perlines[yt]>10) continue;
+		sz=spritez+yt*DX;
+		for(i=0;i<8;i++)
+		{
+			xt=x+i;
+			c=(a&0x80) ? 1 : 0;
+			c|=(b&0x80) ? 2 : 0;
+			a<<=1;
+			b<<=1;
+			if(c && xt>=0 && xt<DX && !sz[xt])
+			{
+				dot(xt,yt,c+color);
+				sz[xt]=1;
+			}
+		}
+	}
+}
+
+void putsprite(struct animfile *af,int x,int y,int which)
+{
+unsigned char *p1;
+char gx,gy,tx,ty;
+unsigned char info1,info2;
+int h,n;
+int i,j,k;
+int color,colorbase;
+
+	if(getlong(af->map)>>2 <= which+1) return; // invalid sprite #
+	p1=af->map+getlong(af->map + (which+1<<2));
+	gx=*p1++;
+	gy=*p1++;
+	info1=*p1++;
+	info2=*p1++;
+	h=1+(info2&1);
+	n=info2>>1;
+	colorbase=af->colorbase;
+	while(n--)
+	{
+		tx=*p1++;
+		ty=*p1++;
+		++spritesused;
+		for(i=0;i<h;i++)
+		{
+			k=*p1 | (p1[1]<<8);
+			color=(k>>8) & 7;
+			color=colorbase + (color<<2);
+			k&=255;
+			p1+=2;
+//			if(spritesused<=40)
+				putchr(af->chr + (k<<4),x+gx+tx,y+gy+ty+(i<<3),color);
+
+		}
+	}
+}
+void forcpy(unsigned short *dest,unsigned short *src,int len)
+{
+	while(len--)
+		*dest++=*src++;
+}
+void putcelnoclip(int num,int xpos,int ypos) {
+	int i,j,k;
+	unsigned short *p1,*p2;
+	int offset;
+	int xt;
+	int dx,dy,cx,cy;
+
+	p1=compressed[num];
+	if(!p1) return;
+	for(;;)
+	{
+		dx=*p1++;
+		if(dx==0x8000) break;
+		dy=*p1++;
+		if(dx>0x7fff) dx-=0x10000L;
+		if(dy>0x7fff) dy-=0x10000L;
+		j=*p1++;
+		p2=p1;
+		p1+=j;
+		cx=xpos+dx;
+		cy=ypos+dy;
+		if(cy<0 || cy>=DY) continue;
+		if(cx+j<=0 || cx>=DX) continue;
+		if(cx<0)
+		{
+			j+=cx;
+			p2-=cx;
+			cx=0;
+		}
+		if(cx+j>DX)
+			j=DX-cx;
+		if(j>0)
+			forcpy(video+cy*videowidth+cx,p2,j);
+	}
+}
 
 void paint(int f,int sel1,int sel2,int flag)
 {
@@ -2329,46 +2503,28 @@ int overs,goods;
 	}
 }
 
-int celmax(int f)
-{
-cel *acel;
-int i;
-	acel=frames[f].cellist;
-	i=1;
-	while(acel) {++i;acel=acel->next;}
-	return i;
-}
-
-cel *getcel(int f,int which)
-{
-cel *acel;
+cel *getcel(int f,int which) {
+	cel *acel;
 	if(which<0) return 0;
 	acel=frames[f].cellist;
 	while(acel && which--) acel=acel->next;
 	return acel;
 }
 
-void revcpy(unsigned short *dest,unsigned short *src,int len)
-{
+void revcpy(unsigned short *dest,unsigned short *src,int len) {
 	while(len--)
 		*dest++=*--src;
 }
-void forcpy(unsigned short *dest,unsigned short *src,int len)
-{
-	while(len--)
-		*dest++=*src++;
-}
 
-void putcel(int num,int xpos,int ypos,int flags)
-{
-int i,j,k,len;
-unsigned short *p1,*p2;
-int offset;
-int clipymax;
-int clipymin;
-int xt;
-int dx,dy,cx,cy;
-int pixelidset;
+void putcel(int num,int xpos,int ypos,int flags) {
+	int i,j,k,len;
+	unsigned short *p1,*p2;
+	int offset;
+	int clipymax;
+	int clipymin;
+	int xt;
+	int dx,dy,cx,cy;
+	int pixelidset;
 
 	p1=compressed[num];
 	if(!p1) return;
@@ -2416,49 +2572,12 @@ int pixelidset;
 			memset(pixelid+pixelidset,pixelidval,j);
 	}
 }
-putcelnoclip(int num,int xpos,int ypos)
-{
-int i,j,k;
-unsigned short *p1,*p2;
-int offset;
-int xt;
-int dx,dy,cx,cy;
-
-	p1=compressed[num];
-	if(!p1) return;
-	for(;;)
-	{
-		dx=*p1++;
-		if(dx==0x8000) break;
-		dy=*p1++;
-		if(dx>0x7fff) dx-=0x10000L;
-		if(dy>0x7fff) dy-=0x10000L;
-		j=*p1++;
-		p2=p1;
-		p1+=j;
-		cx=xpos+dx;
-		cy=ypos+dy;
-		if(cy<0 || cy>=DY) continue;
-		if(cx+j<=0 || cx>=DX) continue;
-		if(cx<0)
-		{
-			j+=cx;
-			p2-=cx;
-			cx=0;
-		}
-		if(cx+j>DX)
-			j=DX-cx;
-		if(j>0)
-			forcpy(video+cy*videowidth+cx,p2,j);
-	}
-}
-putsimplecel(int num,int xpos,int ypos)
-{
-int i,j,k;
-unsigned short *p1,*p2;
-int offset;
-int xt;
-int dx,dy,cx,cy;
+void putsimplecel(int num,int xpos,int ypos) {
+	int i,j,k;
+	unsigned short *p1,*p2;
+	int offset;
+	int xt;
+	int dx,dy,cx,cy;
 
 	p1=compressed[num];
 	if(!p1) return;
@@ -2572,7 +2691,7 @@ struct acolor *ac;
 	return p1;
 }
 
-same(c1,c2)
+int same(int c1,int c2)
 {
 	c1-=c2;
 	if(c1<0) c1=-c1;
@@ -2606,6 +2725,7 @@ unsigned char colortrans[256];
 	pfile=fopen(name, "rb");
 	if(!pfile)
 	{
+		printf("Failed to open file %s\n", name);
 		return -1;
 	}
 	if (IffIdentify(pfile) == FILE_IFF)
@@ -2625,7 +2745,10 @@ unsigned char colortrans[256];
 		pfinitread = PcxInitRead;
 		pfreaddata = PcxReadData;
 		pfquitread = PcxQuitRead;
-	} else return -2;
+	} else {
+		printf("Unknown graphics file type %s\n", name);
+		return -2;
+	}
 
 	if ((*pfinitread)(&pvoid, pfile, DATA_BITMAP) != ERROR_NONE)
 		return -3;
@@ -2742,10 +2865,11 @@ unsigned char colortrans[256];
 }
 
 
-addline(int file,char *str)
+void addline(int file,char *str)
 {
-	write(file,str,strlen(str));
-	write(file,"\n",1);
+	int res;
+	res=write(file,str,strlen(str));res=res;
+	res=write(file,"\n",1);res=res;
 }
 
 int save(char *name)
@@ -3045,149 +3169,10 @@ cel *acel,**celp;
 	return acel;
 }
 
-copyframe(int dest,int src)
+void copyframe(int dest,int src)
 {
 	memcpy(frames+dest,frames+src,sizeof(struct frame));
 }
-long getlong(unsigned char *p)
-{
-	return *p | (p[1]<<8) | (p[2]<<16) | (p[3]<<24);
-}
-putchr(unsigned char *p1,int x,int y,int color)
-{
-int i,j;
-int a,b,c;
-int xt,yt;
-unsigned char *sz;
-
-	for(j=0;j<8;++j)
-	{
-		a=*p1++;
-		b=*p1++;
-		yt=y+j;
-		if(yt<16 || yt>=128) continue;
-		++perlines[yt];
-		if(perlines[yt]>10) continue;
-		sz=spritez+yt*DX;
-		for(i=0;i<8;i++)
-		{
-			xt=x+i;
-			c=(a&0x80) ? 1 : 0;
-			c|=(b&0x80) ? 2 : 0;
-			a<<=1;
-			b<<=1;
-			if(c && xt>=0 && xt<DX && !sz[xt])
-			{
-				dot(xt,yt,c+color);
-				sz[xt]=1;
-			}
-		}
-
-	}
-}
-putsprite(struct animfile *af,int x,int y,int which)
-{
-unsigned char *p1;
-char gx,gy,tx,ty;
-unsigned char info1,info2;
-int h,n;
-int i,j,k;
-int color,colorbase;
-
-	if(getlong(af->map)>>2 <= which+1) return; // invalid sprite #
-	p1=af->map+getlong(af->map + (which+1<<2));
-	gx=*p1++;
-	gy=*p1++;
-	info1=*p1++;
-	info2=*p1++;
-	h=1+(info2&1);
-	n=info2>>1;
-	colorbase=af->colorbase;
-	while(n--)
-	{
-		tx=*p1++;
-		ty=*p1++;
-		++spritesused;
-		for(i=0;i<h;i++)
-		{
-			k=*p1 | (p1[1]<<8);
-			color=(k>>8) & 7;
-			color=colorbase + (color<<2);
-			k&=255;
-			p1+=2;
-//			if(spritesused<=40)
-				putchr(af->chr + (k<<4),x+gx+tx,y+gy+ty+(i<<3),color);
-
-		}
-	}
-}
-
-void die(char *p,int val)
-{
-	printf("Dead, error code %d\n",val);
-	printf(p);
-	exit(val);
-}
-
-char *getfile(char *name,int *size)
-{
-int file;
-long len;
-char *p;
-
-	file=open(name,O_RDONLY|O_BINARY);
-	if(file<0)
-	{
-		sprintf(errstr,"Could not get file %s\n",name);
-		die(errstr,25);
-	}
-	*size=len=lseek(file,0L,SEEK_END);
-	p=malloc(len+1);
-	if(!p) {sprintf(errstr,"panic, no memory %d\n",len);die(errstr,22);}
-	lseek(file,0L,SEEK_SET);
-	read(file,p,len);
-	close(file);
-	p[len]=0;
-	return p;
-}
-
-getanimfile(struct animfile *af,char *name,int colorbase)
-{
-unsigned char root[256];
-char temp[256];
-unsigned char *p1;
-int i,r,g,b,in;
-
-
-	strcpy(root,name);
-	p1=root+strlen(root);
-	while(p1>root)
-	{
-		if(*p1=='.') {*p1=0;break;}
-		--p1;
-	}
-	sprintf(temp,"%s.map",root);
-	af->map=getfile(temp,&af->mapsize);
-	sprintf(temp,"%s.chr",root);
-	af->chr=getfile(temp,&af->chrsize);
-	sprintf(temp,"%s.rgb",root);
-	af->rgb=getfile(temp,&af->rgbsize);
-	p1=af->rgb;
-	af->colorbase=colorbase;
-	for(i=colorbase;i<colorbase+32;i++)
-	{
-		in=*p1 | (p1[1]<<8);
-		p1+=2;
-		r=in&0x1f;
-		g=(in>>5) & 0x1f;
-		b=(in>>10) & 0x1f;
-		thecmap[i].red=r<<3;
-		thecmap[i].green=g<<3;
-		thecmap[i].blue=b<<3;
-	}
-
-}
-
 
 int selectdowns[256]={0};
 
@@ -3548,8 +3533,8 @@ void closex()
 }
 void openx()
 {
-unsigned long videoflags;
-int i;
+	unsigned int videoflags;
+	int i;
 
 	for(i=0;i<256;++i)
 	{
@@ -3594,10 +3579,10 @@ void lfetch(unsigned char *buff,int line)
 }
 int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsigned char *colors)
 {
-int file;
-unsigned char temp[2048],*p,temp2[2048],*p2;
-int i,j,k;
-
+	int file;
+	unsigned char temp[2048],*p,temp2[2048],*p2;
+	int i,j,k;
+	int res;
 
 	sprintf(temp,"%s.pcx",name);
 	file=open(temp,O_BINARY|O_WRONLY|O_TRUNC|O_CREAT,0644);
@@ -3629,7 +3614,7 @@ int i,j,k;
 	*p++=1;		//palette info
 	*p++=0;
 	for(i=0;i<58;++i) *p++=0;
-	write(file,temp,p-temp);
+	res=write(file,temp,p-temp);res=res;
 	for(j=0;j<height;++j)
 	{
 		fetch(temp,j);
@@ -3655,14 +3640,13 @@ int i,j,k;
 			i-=k;
 			k=0;
 		}
-		write(file,temp2,p2-temp2);
+		res=write(file,temp2,p2-temp2);res=res;
 	}
-	write(file,"\014",1);
-	write(file,colors,0x300);
+	res=write(file,"\014",1);res=res;
+	res=write(file,colors,0x300);res=res;
 	close(file);
 }
-void savepcx(int fr)
-{
+void savepcx(int fr) {
 	char temp[256];
 	sprintf(temp,"%s%d",rootname,fr+1);
 	strcpy(errormsg,temp);
@@ -3670,21 +3654,20 @@ void savepcx(int fr)
 	writepcx(temp,DX,DY,lfetch,(unsigned char *)thecmap);
 }
 
-int main(int argc,char **argv)
-{
-int i,j,k;
-long t;
-char *p;
-int file;
-int err;
-int sel1,sel2,sel1want;
-UL * pul__Mem;
-UL   ul___Mem;
-cel *acel,*acel2;
-int code;
-cel **celp;
-int tryexit=0;
-int now;
+int main(int argc,char **argv) {
+	int i,j,k;
+	int t;
+	char *p;
+	int file;
+	int err;
+	int sel1,sel2,sel1want;
+	UL * pul__Mem;
+	UL   ul___Mem;
+	cel *acel,*acel2;
+	int code;
+	cel **celp;
+	int tryexit=0;
+	int now;
 
 	keyput=keytake=0;
 
