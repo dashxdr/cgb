@@ -128,6 +128,7 @@ $(OUT):	$(objs)
 
 clean: res
 	rm -f $(OUT) bb.map objs/*
+	rm -fd objs
 data:
 	make -C res
 
