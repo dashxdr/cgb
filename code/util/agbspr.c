@@ -388,9 +388,7 @@ int complook(unsigned char *at,int before,int after) {
 	if(bestlen>1) return 1;
 	return 0;
 }
-
-void dumpliteral(unsigned char *from,int len)
-{
+void dumpliteral(unsigned char *from,int len) {
 	if(!len) return;
 	while(len)
 	{
@@ -399,9 +397,7 @@ void dumpliteral(unsigned char *from,int len)
 		len--;
 	}
 }
-dumpcopy()
-{
-int t;
+void dumpcopy() {
 //printf("bestlen=%d\n",bestlen);
 	if(bestlen==2)
 		bitsout(2,1);
@@ -421,16 +417,16 @@ int t;
 	else
 		{bitsout(2,3);bitsout(10,bestoff-0x2a1);}
 }
-int docompress(char *to,char *from,int len)
-{
-int offset;
-int i,j,k;
-int literal;
-int val;
-int out;
+
+int docompress(unsigned char *to, unsigned char *from,int len) {
+	int offset;
+	int i;
+	int literal;
+	int val;
+
 	ocount=0;
-	obuff=(unsigned long *)to;
-	out=offset=literal=0;
+	obuff=(ULONG *)to;
+	offset=literal=0;
 	totalcost=0;
 	bitsin=0;
 	while(offset<len)
@@ -462,9 +458,9 @@ int out;
 	bitsout(32,0);
 	return ocount<<2;
 }
-initswd()
-{
-int i;
+
+void initswd() {
+	int i;
 	for(i=0;i<MAXOVERALL;++i)
 	{
 		if(i==2) costsize[i]=2;

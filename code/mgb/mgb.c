@@ -190,7 +190,7 @@ char namecopy[128];
 		if(file<0)
 			return -1;
 	}
-	res=read(file,romblock,ROMSIZE);
+	res=read(file,romblock,ROMSIZE);res=res;
 	close(file);
 	loadsymbols(name);
 	return 0;
@@ -523,7 +523,7 @@ int i,j,k;
 	*p++=1;		//palette info
 	*p++=0;
 	for(i=0;i<58;++i) *p++=0;
-	res=write(file,temp,p-temp);
+	res=write(file,temp,p-temp);res=res;
 	for(j=0;j<height;++j)
 	{
 		fetch(temp,j);
@@ -549,10 +549,10 @@ int i,j,k;
 			i-=k;
 			k=0;
 		}
-		res=write(file,temp2,p2-temp2);
+		res=write(file,temp2,p2-temp2);res=res;
 	}
-	res=write(file,"\014",1);
-	res=write(file,colors,0x300);
+	res=write(file,"\014",1);res=res;
+	res=write(file,colors,0x300);res=res;
 	close(file);
 	return 0;
 }
