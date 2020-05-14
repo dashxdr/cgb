@@ -1,6 +1,7 @@
-main()
-{
-int c;
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+	int c;
 	for(;;)
 	{
 		c=getchar();
@@ -8,4 +9,5 @@ int c;
 		if(c==13) continue;
 		putchar(c);
 	}
+	return 0;
 }
