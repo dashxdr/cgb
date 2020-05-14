@@ -33,10 +33,11 @@ Processes 2 files, the second being the black and white version.
 */
 
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 
 int nframes;
 
@@ -51,29 +52,26 @@ unsigned char amap[2048];
 
 int lastpos;
 
-readmap(int x,int y)
-{
-int index;
-int val;
+int readmap(int x,int y) {
+	int index;
+	int val;
 
-	index=8+(y*20+x<<1);
+	index=8+((y*20+x)<<1);
 	val=amap[index] | (amap[index+1]<<8);
 	return val;
 }
 
 
-dump(int num,int x,int y,int lohi)
-{
-int startpos;
-int i,j,k;
-int val;
+void dump(int num,int x,int y,int lohi) {
+	int startpos;
+	int val;
 
 	x-=num;
 	if(!num) return;
 	*opnt++=num;
 	startpos=y*32+x;
 	*opnt++=startpos-lastpos;
-	*opnt++=startpos-lastpos>>8;
+	*opnt++=(startpos-lastpos)>>8;
 	lastpos=startpos+num;
 	while(num--)
 	{
@@ -84,10 +82,9 @@ int val;
 	}
 }
 
-packmap(int lohi)
-{
-int i,j,k;
-int val;
+void packmap(int lohi) {
+	int i,j,k;
+	int val;
 
 	lastpos=0;
 
@@ -116,18 +113,18 @@ int val;
 	*opnt++=0;
 }
 
-packset(char *nameroot,int start)
-{
-int file;
-int i,j,k;
-char name[256];
+void packset(char *nameroot,int start) {
+	int file;
+	int i,j,k;
+	char name[256];
+	int res;
 
 	for(i=0;i<nframes;++i)
 	{
 		sprintf(name,"%s%03d.map",nameroot,i+1);
 		file=open(name,O_RDONLY|O_BINARY);
 		if(file<0) {printf("Couldn't open %s\n",name);continue;}
-		read(file,amap,20*18*2+8);
+		res=read(file,amap,20*18*2+8);res=res;
 		close(file);
 		j=i+i+start+start;
 		k=(opnt-output)-j-1;
@@ -138,10 +135,9 @@ char name[256];
 	}
 }
 
-main(int argc,char **argv)
-{
-int i,j,k;
-int file;
+int main(int argc,char **argv) {
+	int file;
+	int res;
 
 	if(argc<5 || sscanf(argv[3],"%d",&nframes)<1)
 	{
@@ -159,6 +155,7 @@ int file;
 		printf("Couldn't open output file %s\n",argv[4]);
 		return 1;
 	}
-	write(file,output,opnt-output);
+	res=write(file,output,opnt-output);res=res;
 	close(file);
+	return 0;
 }

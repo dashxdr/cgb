@@ -5,7 +5,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <regex.h>
-
+#include <string.h>
+#include <stdlib.h>
 
 #define MAXLINE 1024
 char line[MAXLINE];
@@ -25,10 +26,10 @@ int pid;
 
 int startapp(char *n)
 {
-int inout[2];
+	int inout[2];
 
-	pipe(inout);
-	if(pid=fork())
+	int res=pipe(inout);res=res;
+	if((pid=fork()))
 	{
 		close(inout[0]);
 		return inout[1];
@@ -36,32 +37,31 @@ int inout[2];
 	close(0);
 	close(1);
 	close(inout[1]);
-	dup(inout[0]);
+	res=dup(inout[0]);
 	open(n,O_WRONLY|O_CREAT|O_TRUNC,0644);
-	execlp("/usr/bin/mmencode","mmencode","-u",0);
+	execlp("/usr/bin/mmencode","mmencode","-u", NULL);
 	exit(0); //shouldn't get here
 }
-stopapp(int f)
-{
+void stopapp(int f) {
 	close(f);
 	wait(0);
 }
 
 
-main()
-{
-int mode;
-char *s;
-char *p,*p2;
-int out;
-regex_t precompiled[1024];
+int main(int argc, char **argv) {
+	int mode;
+	char *s;
+	char *p,*p2;
+	int out=-1;
+	regex_t precompiled[1024];
+	int res;
 
 	regcomp(precompiled,"filename=",0);
 	mode=0;
 	for(;;)
 	{
 		line[0]=0;
-		s=gets(line);
+		s=fgets(line, sizeof(line), stdin);
 		switch(mode)
 		{
 		case 0:
@@ -86,7 +86,7 @@ regex_t precompiled[1024];
 			break;
 		case 2:
 			sprintf(temp,"%s\n",line);
-			write(out,temp,strlen(temp));
+			res=write(out,temp,strlen(temp));res=res;
 			if(!line[0])
 			{
 				stopapp(out);
@@ -96,7 +96,5 @@ regex_t precompiled[1024];
 		}
 		if(!s) break;
 	}
-
-
-
+	return 0;
 }

@@ -1,20 +1,24 @@
 #include <stdio.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <inttypes.h>
 
-unsigned long input[20000];
+typedef int32_t LONG;
+typedef uint32_t ULONG;
+
+ULONG input[20000];
 unsigned char output[80000];
 
-unsigned long *swdtake,swdword;
+ULONG *swdtake,swdword;
 int swdbits;
 
-unsigned long swdmasks[]={0x0000,
+ULONG swdmasks[]={0x0000,
 0x0001,0x0003,0x0007,0x000f,0x001f,0x003f,0x007f,0x00ff,
 0x01ff,0x03ff,0x07ff};
 
-unsigned long swdbit(int num)
-{
-unsigned long r;
-int t1,t2,t3;
+ULONG swdbit(int num) {
+	ULONG r;
+	int t1;
 	if(num<=swdbits)
 	{
 		r=swdword&swdmasks[num];
@@ -32,15 +36,13 @@ int t1,t2,t3;
 	return r;
 }
 
-int SwdDecode(unsigned char *to,unsigned long *compressed)
-{
-int length;
-int copylen;
-int copyoffset;
-int t;
-unsigned char *put,*p;
+int SwdDecode(unsigned char *to, ULONG *compressed) {
+	int copylen;
+	int copyoffset=0;
+	int t;
+	unsigned char *put,*p;
 
-	length=*compressed++; // first long is uncompressed length
+	compressed++; // first LONG is uncompressed length, skip
 	swdtake=compressed;
 	put=to;
 	swdbits=0;
@@ -53,11 +55,11 @@ unsigned char *put,*p;
 		}
 		if(!swdbit(1))
 			copylen=2;
-		else if(t=swdbit(2))
+		else if((t=swdbit(2)))
 			copylen=t+2;
-		else if(t=swdbit(4))
+		else if((t=swdbit(4)))
 			copylen=t+5;
-		else if(t=swdbit(8))
+		else if((t=swdbit(8)))
 			copylen=t+20;
 		else break;
 		switch(swdbit(2))
@@ -81,16 +83,17 @@ unsigned char *put,*p;
 	return put-to;
 }
 
-main(int argc,char **argv)
-{
-int f;
-long len;
+int main(int argc,char **argv) {
+	int f;
+	int len;
+	int res;
 
-	if(argc<2) return;
+	if(argc<2) return -1;
 	f=open(argv[1],O_RDONLY);
-	if(f<0) return;
-	read(f,input,sizeof(input));
+	if(f<0) return -2;
+	res=read(f,input,sizeof(input));res=res;
 	close(f);
 	len=SwdDecode(output,input);
-	write(1,output,len);
-}
+	res=write(1,output,len);res=res;
+	return 0;}
+

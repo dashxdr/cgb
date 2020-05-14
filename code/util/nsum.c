@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #define BUFFERSIZE 2048
 
@@ -8,12 +9,11 @@
 #define O_BINARY 0
 #endif
 
-main(int argc,char **argv)
-{
-int sum,len;
-int i;
-int file;
-unsigned char buffer[BUFFERSIZE];
+int main(int argc,char **argv) {
+	int sum,len;
+	int i;
+	int file;
+	unsigned char buffer[BUFFERSIZE];
 
 	if(argc<2)
 	{
@@ -42,4 +42,6 @@ unsigned char buffer[BUFFERSIZE];
 	}
 	close(file);
 	printf("Nintendo sum is %04X\n",sum&0xffff);
+	return 0;
 }
+

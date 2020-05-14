@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
+#include <inttypes.h>
+#include <ctype.h>
 
 #define BUFFERSIZE 65536L
 #define MAXBANKS 32
@@ -20,15 +23,15 @@ int firstbank;
 #define O_BINARY 0
 #endif
 
-unsigned char *buffer1,*buffer2;
+char *buffer1,*buffer2;
 
 char *banks[MAXBANKS];
 int ins[MAXBANKS];
 int ins2[MAXBANKS];
-long starts[MAXBANKS];
+int starts[MAXBANKS];
 int allocated=0;
-long index[MAXITEMS];
-long lens[MAXITEMS];
+int indexes[MAXITEMS];
+int lens[MAXITEMS];
 char *filenames[MAXFILES];
 int bases[MAXFILES];
 char *nameput;
@@ -40,9 +43,9 @@ int mapsize,charsize;
 
 int numsprites;
 
-long getlong(int i)
+int32_t getlong(int i)
 {
-unsigned char *p;
+	unsigned char *p;
 	p=mapfile+(i<<2);
 	return *p | (p[1]<<8) | (p[2]<<16L) | (p[3]<<24L);
 }
@@ -71,10 +74,10 @@ top:
 	return *put;
 }
 
-dump(int n,char *rootname)
-{
-char name[64];
-int file;
+void dump(int n,char *rootname) {
+	char name[64];
+	int file;
+	int res;
 	sprintf(name,"%s.b%02x",rootname,n+firstbank);
 	file=open(name,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,0644);
 	if(file<0)
@@ -83,7 +86,7 @@ int file;
 		errorcode|=16;
 		return;
 	}
-	write(file,banks[n],ins[n]+ins2[n]);
+	res=write(file,banks[n],ins[n]+ins2[n]);res=res;
 	close(file);
 }
 
@@ -96,7 +99,7 @@ char *p,ch;
 		ch=*--p;
 		if(ch=='/' || ch=='\\' || ch==':') {++p;break;}
 	}
-	while(ch=*p++)
+	while((ch=*p++))
 		if(ch!='.') *dest++=toupper(ch);
 		else break;
 	*dest=0;
@@ -116,11 +119,11 @@ void allocbank(void)
 	++allocated;
 }
 
-char *getfile(char *name,int *size)
-{
-int file;
-long len;
-char *p;
+unsigned char *getfile(char *name,int *size) {
+	int file;
+	int len;
+	unsigned char *p;
+	int res;
 
 	file=open(name,O_RDONLY|O_BINARY);
 	if(file<0) return 0;
@@ -128,7 +131,7 @@ char *p;
 	p=malloc(len+1);
 	if(!p) {printf("panic, no memory %d\n",len);exit(22);}
 	lseek(file,0L,SEEK_SET);
-	read(file,p,len);
+	res=read(file,p,len);res=res;
 	close(file);
 	p[len]=0;
 	return p;
@@ -136,12 +139,11 @@ char *p;
 
 // return # of bytes this sprite will need in bits 0-15 (total),
 // # of bytes just for pointers in bits 16-31
-int spritelen(char *in)
-{
-int n;
-int height;
-int total;
-int charsize;
+int spritelen(unsigned char *in) {
+	int n;
+	int height;
+	int total;
+	int charsize;
 
 	n=in[3]>>1;
 	height=1+(in[3]&1);
@@ -150,15 +152,14 @@ int charsize;
 	return (charsize<<16) | total;
 }
 
-addsprite(int which,unsigned char *header,unsigned char *chardata,int charbase)
-{
-unsigned char *in,*take;
-int globalx,globaly;
-int info0,info1;
-int numpieces;
-int height;
-int thisx,thisy;
-int i,j,k;
+void addsprite(int which, char *header, char *chardata,int charbase) {
+	unsigned char *in;
+	int globalx,globaly;
+	int info0,info1;
+	int numpieces;
+	int height;
+	int thisx,thisy;
+	int i,j,k;
 
 	in=mapfile+getlong(which);
 	globalx=*in++;
@@ -166,7 +167,7 @@ int i,j,k;
 	info0=*in++;
 	info1=*in++;
 	numpieces=info1>>1;
-	height=1+(info1&1) << 4;
+	height=(1+(info1&1)) << 4;
 	*header++=info0;
 	*header++=info1;
 	while(numpieces--)
@@ -199,9 +200,8 @@ int i,j,k;
 	}
 }
 
-makeroot(char *dest,char *src)
-{
-char *p;
+void makeroot(char *dest,char *src) {
+	char *p;
 
 	strcpy(dest,src);
 	dest[strlen(dest)]=0;
@@ -216,13 +216,12 @@ char *p;
 
 // open the map file, find out # of sprites and size and fix up where it will
 // be loaded
-pass1(char *name,int base)
-{
-int i,j,k;
-int reuse;
-int len,len2;
-unsigned char *p;
-char tempname[256];
+void pass1(char *name,int base) {
+	int i,j,k;
+	int reuse;
+	int len,len2;
+	char *p;
+	char tempname[256];
 
 	sprintf(tempname,"%s.map",name);
 	mapfile=getfile(tempname,&mapsize);
@@ -245,13 +244,13 @@ cant:
 			len2=lens[i+base-1]>>16L;
 			for(j=0;j<allocated;j++)
 			{
-				if((starts[j]+ins[j]+len-len2+MASK & ~MASK ) +
+				if(((starts[j]+ins[j]+len-len2+MASK) & ~MASK ) +
 						ins2[j]+len2<=BANKSIZE)
 					break;
 			}
 			if(j==allocated)
 				allocbank();
-			index[i+base-1]=(j<<16) | starts[j]+ins[j];
+			indexes[i+base-1]=(j<<16) | (starts[j]+ins[j]);
 			ins[j]+=len-len2; // header portion
 			ins2[j]+=len2; // character portion
 		} else
@@ -261,7 +260,7 @@ cant:
 				if(k==getlong(j))
 					break;
 			if(j==i) goto cant;
-			index[i+base-1]=index[j+base-1];
+			indexes[i+base-1]=indexes[j+base-1];
 		}
 
 	}
@@ -269,7 +268,7 @@ cant:
 	p=banks[0]+(base<<2);
 	for(i=1;i<numsprites;i++)
 	{
-		j=index[i+base-1];
+		j=indexes[i+base-1];
 		*p++=j;
 		*p++=(j>>8) | 0x40;
 		*p++=(j>>16) + firstbank;
@@ -278,13 +277,10 @@ cant:
 	free(mapfile);
 }
 
-process(char *name,int base)
-{
-char *p;
-char tempname[256];
-int i,j,k;
-int len,len2;
-
+void process(char *name,int base) {
+	char *p;
+	char tempname[256];
+	int i,j,k;
 
 	sprintf(tempname,"%s.map",name);
 	mapfile=getfile(tempname,&mapsize);
@@ -306,23 +302,21 @@ int len,len2;
 	for(i=1;i<numsprites;++i)
 	{
 		if(!lens[i+base-1]) continue;
-		j=index[i+base-1];
+		j=indexes[i+base-1];
 		k=j>>16;
 		p=banks[k]+(j&0xffff)-starts[k]; // pointer to headers
 		j=lens[i+base-1]>>16;
-		addsprite(i,p,banks[k]+ins[k],starts[k]+ins[k]|0x4000);
+		addsprite(i,p,banks[k]+ins[k],(starts[k]+ins[k])|0x4000);
 		ins[k]+=j;
 		ins2[k]-=j;
 	}
 
 	free(mapfile);mapfile=0;
 	free(charfile);charfile=0;
-
 }
-cutext(char *p)
-{
-int i=0;
-char ch;
+void cutext(char *p) {
+	int i=0;
+	char ch;
 	i=strlen(p);
 	while(i>0)
 	{
@@ -333,12 +327,10 @@ char ch;
 	}
 //printf("Cut name '%s'\n",p);
 }
-addfiles(char *in)
-{
-char *p,ch,*b;
 
-int i;
-b=in;
+void addfiles(char *in) {
+	char *p,ch;
+
 	while(*in)
 	{
 		p=nameput;
@@ -367,16 +359,16 @@ b=in;
 	}
 }
 
-int howmany(char *name)
-{
-int file;
-unsigned char buff4[4];
-char tempname[256];
+int howmany(char *name) {
+	int file;
+	unsigned char buff4[4];
+	char tempname[256];
+	int res;
 
 	sprintf(tempname,"%s.map",name);
 	file=open(tempname,O_RDONLY|O_BINARY);
 	if(file<0) return 0;
-	read(file,buff4,4);
+	res=read(file,buff4,4);res=res;
 	close(file);
 	return (*buff4 | (buff4[1]<<8) | (buff4[2]<<16L) | (buff4[3]<<24L)) >> 2;
 }
@@ -395,18 +387,17 @@ char t1[256],*p,ch;
 
 
 
-main(int argc,char **argv)
-{
-int file;
-long i,j,k;
-char *p;
-char rootname[256];
-int totalnum;
-int size;
-char tempname[256];
-char temp[256];
-char item[256];
-
+int main(int argc,char **argv) {
+	int file;
+	int i,j;
+	char *p;
+	char rootname[256];
+	int totalnum;
+	int size;
+	char tempname[256];
+	char temp[256];
+	char item[256];
+	int res;
 
 	rootname[0]=0;
 	if(argc<2)
@@ -414,7 +405,7 @@ char item[256];
 		printf("GMBSPR2 utility version 2 (%s) by Dave Ashley\n",__DATE__);
 		printf("   USE: gmbspr2 [name] [filelist] [<file.map>] [-aBANK:OFFSET]\n");
 		printf("   outputs file.b?? files\n");
-		printf("   at start of data is index BB:HHLL stored as LLHHBB00 longwords\n");
+		printf("   at start of data is index BB:HHLL stored as LLHHBB00 32-bit words\n");
 		exit(1);
 	}
 
@@ -441,7 +432,7 @@ char item[256];
 			offset&=0x3fff;
 		} else if(item[0]=='@')
 		{
-			p=getfile(item+1,&size);
+			p=(char *)getfile(item+1,&size);
 			if(!p)
 				printf("Cannot open list file %s\n",item+1);
 			else
@@ -489,7 +480,7 @@ char item[256];
 		{
 			tossdir(tempname,filenames[i]);
 			sprintf(temp,"IDX_%s EQU %d\n",tempname,bases[i]);
-			write(file,temp,strlen(temp));
+			res=write(file,temp,strlen(temp));res=res;
 		}
 		close(file);
 	}
@@ -513,7 +504,7 @@ char item[256];
 		pass1(filenames[i],bases[i]);
 	}
 	for(i=0;i<allocated;i++)
-		while(starts[i]+ins[i] & MASK) banks[i][ins[i]++]=0;
+		while((starts[i]+ins[i]) & MASK) banks[i][ins[i]++]=0;
 	for(i=0;i<numinputfiles;++i)
 	{
 		process(filenames[i],bases[i]);
