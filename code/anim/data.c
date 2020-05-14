@@ -21,9 +21,6 @@
 #include	"elmer.h"
 #include	"data.h"
 
-ERRORCODE ErrorCode;
-char ErrorMessage[256];
-
 //
 // DEFINITIONS
 //

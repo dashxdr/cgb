@@ -114,8 +114,8 @@ Bank #0:
  $0877 = CgbChrDump.Sync0
  $087d = CgbChrDump.Wait0
  $08b1 = CgbChrDumpFinish
- $08b6 = CgbChrDumpFinishEnd
  $08b6 = CgbSingleSpeed
+ $08b6 = CgbChrDumpFinishEnd
  $08c3 = CgbDoubleSpeed
  $08d0 = CgbChangeSpeed
  $08e1 = CgbChangeWait
@@ -1133,8 +1133,8 @@ Bank #10:
  $4af0 = board2eject.leftnot2
  $4b0d = board2eject.nolockball2
  $4b11 = board2eject.thrill
- $4b14 = board2eject.done2
  $4b14 = board2eject.nosubs2
+ $4b14 = board2eject.done2
  $4b17 = board2eject.take3
  $4b2b = board2eject.happy3
  $4b33 = board2eject.nofantasy3
@@ -2066,8 +2066,8 @@ Bank #23:
  $761f = bearbumper.c2
  $7622 = bearbumper.c1
  $7630 = bearbumper.aok
- $7633 = bearbumper.already
  $7633 = bearbumper.soft
+ $7633 = bearbumper.already
  $7639 = beardid1
  $7653 = bearsteps
  $7656 = bearcollisions

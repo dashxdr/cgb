@@ -181,7 +181,11 @@ top:
 		while(tries1)
 		{
 			--tries1;
+			#ifdef _WIN32
+			start=rand()%stagetimefix;
+			#else
 			start=random()%stagetimefix;
+			#endif
 			for(type=0;type<16;++type)
 				if(counts[type]) break;
 			if(type==16) {printf("Critical error\n");exit(1);}
@@ -192,7 +196,11 @@ top:
 			}
 */
 			if(maxrate-minrate)
+				#ifdef _WIN32
+				rate=rand()%(maxrate-minrate)+minrate;
+				#else
 				rate=random()%(maxrate-minrate)+minrate;
+				#endif
 			else
 				rate=minrate;
 			if(start+(lens[type]<<6)/rate>stagetimefix) continue;

@@ -39,7 +39,11 @@
 #include	"xvert.h"
 #include	"xs.h"
 
-void _splitpath(char *in,char *drive,char *dir,char *name,char *ext)
+#ifdef _WIN32
+return 1; // Segfault using mingw64
+#endif
+
+void _splitpath(const char *in,char *drive,char *dir,char *name,char *ext)
 {
 	char *p;
 	int extsize,filesize,dirsize,len;
@@ -79,7 +83,7 @@ void _splitpath(char *in,char *drive,char *dir,char *name,char *ext)
 	memcpy(dir,in,dirsize);
 	dir[dirsize]=0;
 }
-void strupr(char *s)
+char* strupr(char *s)
 {
 	while(*s)
 	{
@@ -87,7 +91,7 @@ void strupr(char *s)
 		++s;
 	}
 }
-int strcmpi(char *s1,char *s2)
+int strcmpi(const char *s1,const char *s2)
 {
 	while(*s1 && tolower(*s1)==tolower(*s2)) ++s1,++s2;
 	return tolower(*s1)-tolower(*s2);

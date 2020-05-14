@@ -295,8 +295,9 @@ int historycount=0;
 	memset(&ifr,0,sizeof(ifr));
 	ioctl(promsock,SIOCGIFFLAGS,&ifr);
 	ifr.ifr_flags|=IFF_PROMISC;
+	#if defined(SIOCSIFFLAGS)
 	ioctl(promsock,SIOCSIFFLAGS,&ifr);
-
+        #endif
 	fcntl(promsock,F_SETFL,O_NONBLOCK);
 
 	iph=(struct iphdr *) (pbuffer+14);
