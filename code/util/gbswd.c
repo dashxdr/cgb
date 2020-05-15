@@ -189,8 +189,10 @@ void helptext(char *name) {
 	exit(-1);
 }
 
+#ifdef __STDC__
 void be32(char *p, int v) {p[3] = v;p[2] = v>>8;p[1] = v>>16;p[0] = v>>24;}
 void le32(char *p, int v) {p[0] = v;p[1] = v>>8;p[2] = v>>16;p[3] = v>>24;}
+#endif
 
 int main(int argc,char **argv) {
 	int file;
@@ -278,6 +280,10 @@ int main(int argc,char **argv) {
 			printf("Couldn't create %s\n",outname);
 			return 3;
 		}
+		#ifndef __STDC__
+		void be32(char *p, int v) {p[3] = v;p[2] = v>>8;p[1] = v>>16;p[0] = v>>24;}
+		void le32(char *p, int v) {p[0] = v;p[1] = v>>8;p[2] = v>>16;p[3] = v>>24;}
+		#endif
 		ocount=0;
 		if(!chunk2k) {
 			res=docompress(inputdata,inputlen);
