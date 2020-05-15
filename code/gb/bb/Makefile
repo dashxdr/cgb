@@ -127,7 +127,8 @@ $(OUT):	$(objs)
 	cd objs ; $(GBLINK) $(objs) -o ../$(OUT)
 
 clean: res
-	rm -rf $(OUT) bb.map objs
+	rm -f $(OUT) bb.map objs/*
+	rm -fd objs
 data:
 	make -C res
 

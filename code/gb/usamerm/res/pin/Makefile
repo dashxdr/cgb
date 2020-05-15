@@ -9,7 +9,7 @@ conv: conv.o gfx.o font.o
 	gcc -o $@ $^ $(shell sdl-config --libs) -lm
 
 pinmap: pinmap.c
-	gcc -o $@ $^ -lm
+	gcc -o $@ $^
 conv.o: conv.c gfx.h font.h
 gfx.o:	gfx.c gfx.h
 font.o:	font.c font.h

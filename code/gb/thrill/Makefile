@@ -95,8 +95,8 @@ $(OUT):	$(OBJS)
 $(SUBDIRS):
 	make -C $@ $(MAKECMDGOALS)
 clean: $(SUBDIRS)
-	rm -rf $(OUT) objs thrill.map
-
+	rm -f $(OUT) objs/*.obj thrill.map
+	rm -fd objs
 play:
 	../../mgb/mgb $(OUT)
 
