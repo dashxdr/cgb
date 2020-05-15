@@ -9,6 +9,10 @@ $(SUBDIRS):
 
 play:
 	mgb/mgb gb/usamerm/merm.gb
+play2:
+	mgb/mgb gb/bb/bb.gb
+play3:
+	mgb/mgb gb/thrill/thrill.gb
 
 fixpcx:
 	mkdir -p /tmp/x

@@ -72,6 +72,11 @@ Start compiling with 'make' in the mingw64 window and once it crashes requesting
 
 ********* LITTLE MERMAID II PINBALL FRENZY *********
 
+After build to run do:
+make play
+
+Then 'g' to go within the emulator
+
 There was a USA version that included 5 languages, and a Japanese version
 that had just english and japanese languages. The US version had a rumble pack
 but didn't support the gameboy printer. The Japanese version had no
@@ -90,12 +95,22 @@ mentioned.
 
 ********* Beauty And The Beast: A Boardgame Adventure *********
 
+After build to run do:
+make play2
+
+Then 'g' to go within the emulator
+
 The gb/bb is source to this. This also seems to be closer to the Japanese
 version of the game.
 
 ********* Thrillride Pinball *********
 
-The gb/thrill is source to this. The rom binary seems to byte for byte the
-released version of the game, which is nice for once.
+After build to run do:
+make play3
+
+Then 'g' to go within the emulator
+
+The gb/thrill is source to this. The rom binary seems to byte for byte match
+the released version of the game, which is nice for once.
 
 
