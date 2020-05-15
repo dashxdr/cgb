@@ -70,16 +70,16 @@ void _splitpath(const char *in,char *drive,char *dir,char *name,char *ext)
 	memcpy(dir,in,dirsize);
 	dir[dirsize]=0;
 }
-char* strupr(char *s)
-{
+char *strupr(char *s) {
+	char *p=s;
 	while(*s)
 	{
 		*s=toupper(*s);
 		++s;
 	}
+	return p;
 }
-int strcmpi(const char *s1,const char *s2)
-{
+int strcmpi(const char *s1,const char *s2) {
 	while(*s1 && tolower(*s1)==tolower(*s2)) ++s1,++s2;
 	return tolower(*s1)-tolower(*s2);
 }
