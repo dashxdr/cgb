@@ -278,7 +278,7 @@ int main(int argc,char **argv) {
 			dump(i,rootname);
 	int sorted[MAXRESOURCES];
 	#ifndef __STDC__
-        int comp(const void *a, const void *b) {
+	int comp(const void *a, const void *b) {
 		return indexes[*(int *)a] - indexes[*(int *)b];
 	}
 	#endif
