@@ -17,6 +17,10 @@ int x,y;
 int vx,vy;
 };
 
+#ifdef __CYGWIN__
+return 1; //conv.c doesn't write files with msys2 and cygwin, so not supported
+#endif
+
 #define EMPTY   0
 #define POWER   1
 #define FLIPPER 2

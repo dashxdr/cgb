@@ -8,6 +8,10 @@
 
 #define MAXOVERALL 2048
 
+#ifdef _WIN32
+	#define mkdir( D, M ) _mkdir( D )
+#endif
+
 #define co(x) obuff[ocount++]=x
 #define DIRNAME "swd"
 #define EXTNAME ".swd"

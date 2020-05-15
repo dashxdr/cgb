@@ -41,6 +41,34 @@ The emulator was used for development, it's much more convenient than an
 actual color gameboy.
 
 
+macOS compilation requirements:
+
+Run this in any macOS terminal:
+
+````
+brew install https://raw.githubusercontent.com/lpla/homebrew-core/patch-1/Formula/sdl.rb --HEAD
+curl https://gist.githubusercontent.com/lunaczp/1a2ee039ec36361a732e079037b08874/raw/74bbae0ddbe2e387eca077eb1af24dbafa374529/elf.h > /usr/local/include/elf.h
+```
+
+Windows compilation notes:
+
+It is tested to compile using msys2 + mingw64. You need to install msys2 and then run:
+
+```
+pacman -Syu
+#Restart the msys2 window
+pacman -Su
+
+pacman -S gcc
+pacman -S make
+pacman -S mingw-w64-x86_64-SDL
+pacman -S mingw-w64-x86_64-gcc
+````
+
+The issue here is that "sys/*" imports are only available in the msys2 gcc and SDL is only in the mingw64 gcc. So you need one window with the msys2 environment and another with the mingw64 one.
+
+Start compiling with 'make' in the mingw64 window and once it crashes requesting a 'sys/*' library or showing a compatibility error, run 'make' in the msys2 window. Once SDL is requested again or another compatibility error comes up, go back to the mingw64 windows to finish compilation with 'make' again.
+
 
 ********* LITTLE MERMAID II PINBALL FRENZY *********
 
