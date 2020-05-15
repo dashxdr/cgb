@@ -275,7 +275,6 @@ int main(int argc,char **argv) {
 		if(ins[i])
 			dump(i,rootname);
 	int sorted[MAXRESOURCES];
-	
 	for(i=0;i<filenum;++i) sorted[i]=i;
 	qsort(sorted, filenum, sizeof(*sorted), comp);
 	for(i=0;i<filenum;++i) {

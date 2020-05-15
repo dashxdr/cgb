@@ -538,6 +538,7 @@ int writepcx(unsigned char *name, int width, int height, void (*fetch)(), unsign
 	int i,j,k;
 	int res;
 
+
 	file=open(name,O_WRONLY|O_TRUNC|O_CREAT,0644);
 	if(file<0) return 1;
 	p=temp;

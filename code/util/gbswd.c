@@ -278,7 +278,6 @@ int main(int argc,char **argv) {
 			printf("Couldn't create %s\n",outname);
 			return 3;
 		}
-
 		ocount=0;
 		if(!chunk2k) {
 			res=docompress(inputdata,inputlen);
