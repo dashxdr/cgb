@@ -363,7 +363,7 @@ uchar *p;
         return p;
 }
 
-void setup(int argc,uchar **argv) {
+void setup(int argc, char **argv) {
 	int i,j,k,mode,sfile;
 	uchar ch;
 
@@ -409,7 +409,7 @@ void makefilename(void) {
 }
 
 
-int main(int argc,char **argv) {
+int main(int argc, char **argv) {
 	uchar temp[80];
 	uchar *pntr,ch,*outoffsave;
 	int i,j;
